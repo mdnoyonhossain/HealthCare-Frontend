@@ -44,7 +44,7 @@ const Navbar = () => {
               open={drawerOpen}
               onClose={() => setDrawerOpen(false)}
             >
-              <Stack p={2} width={250} spacing={2}>
+              <Stack p={2} width={250} height="100%" spacing={2} className="bg-blue-50">
                 {navLinks.map((link) => (
                   <Typography
                     key={link.label}
