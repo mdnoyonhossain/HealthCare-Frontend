@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles';
 export const theme = createTheme({
     palette: {
         primary: {
-            main: '#1586FD',
+            main: '#2CB0ED',
         },
         secondary: {
             main: '#666f73',
@@ -19,6 +19,11 @@ export const theme = createTheme({
             styleOverrides: {
                 root: {
                     padding: '8px 24px',
+                    textTransform: "capitalize",
+                    boxShadow: "none",
+                    '&:hover': {
+                        backgroundColor: '#E5FAE5'
+                    },
                 },
             },
         },

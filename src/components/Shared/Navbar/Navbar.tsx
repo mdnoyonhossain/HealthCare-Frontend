@@ -1,5 +1,5 @@
 "use client"
-import { Box, Button, Container, Drawer, IconButton, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, Drawer, IconButton, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -16,7 +16,7 @@ const Navbar = () => {
   ];
 
   return (
-    <Container>
+    <div className="max-w-7xl mx-auto px-6">
       <Stack
         py={2}
         direction="row"
@@ -57,12 +57,28 @@ const Navbar = () => {
                   </Typography>
                 ))}
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   LinkComponent={Link}
                   href="/login"
                   onClick={() => setDrawerOpen(false)}
                 >
                   Login
+                </Button>
+                <Button
+                  variant="contained"
+                  LinkComponent={Link}
+                  href="/login"
+                  onClick={() => setDrawerOpen(false)}
+                  sx={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: '#2CB0ED',
+                      boxShadow: "none"
+                    },
+                  }}
+                >
+                  Sign Up
                 </Button>
               </Stack>
             </Drawer>
@@ -74,18 +90,42 @@ const Navbar = () => {
                 key={link.label}
                 component={Link}
                 href={link.href}
-                sx={{ textDecoration: "none" }}
+                sx={{
+                  textDecoration: "none",
+                  padding: '8px 10px',
+                  '&:hover': {
+                    backgroundColor: '#E5FAE5',
+                    boxShadow: "none",
+                    padding: '8px 10px',
+                    borderRadius: "5px"
+                  }
+                }}
               >
                 {link.label}
               </Typography>
             ))}
-            <Button LinkComponent={Link} href="/login">
+            <Button variant="outlined" style={{ marginRight: "-15px", padding: '7px 15px', color: "black" }} LinkComponent={Link} href="/login">
               Login
+            </Button>
+            <Button
+              sx={{
+                padding: '7px 15px',
+                color: 'white',
+                fontWeight: 'bold',
+                '&:hover': {
+                  backgroundColor: '#2CB0ED',
+                  boxShadow: "none"
+                },
+              }}
+              LinkComponent={Link}
+              href="/signup"
+            >
+              Sign Up
             </Button>
           </Stack>
         )}
       </Stack>
-    </Container>
+    </div>
   );
 };
 
