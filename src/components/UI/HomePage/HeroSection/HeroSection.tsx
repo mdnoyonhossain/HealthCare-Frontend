@@ -1,7 +1,6 @@
 import Link from "next/link";
-import Pill from "@/assets/landing_page/pill.webp";
+import { Pill } from "lucide-react"
 import { Button } from "@mui/material";
-import Image from "next/image";
 
 const HeroSection = () => {
     return (
@@ -45,7 +44,7 @@ const HeroSection = () => {
                             <div className="p-4 bg-white rounded-2xl shadow-xl border border-gray-100">
                                 <div className="bg-blue-50 p-6 rounded-xl flex flex-col items-center">
                                     <div className="h-16 w-16 rounded-full flex items-center justify-center" style={{ background: "#2CB0ED" }}>
-                                        <Image src={Pill} height={35} width={35} alt="Pill" />
+                                        <Pill className="h-8 w-8 text-white" />
                                     </div>
                                     <h3 className="mt-6 text-lg font-medium text-gray-900">
                                         Healthcare Redefined
