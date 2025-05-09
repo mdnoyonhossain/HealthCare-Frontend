@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Pill } from "lucide-react";
 import { Button } from "@mui/material";
-import './heroSection.module.css';
+import './heroSection.css';
 
 const HeroSection = () => {
     return (
