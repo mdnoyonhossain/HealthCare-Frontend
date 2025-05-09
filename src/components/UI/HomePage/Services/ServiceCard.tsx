@@ -1,4 +1,4 @@
-import { cn } from "@/utils/utils";
+import { cn } from "@/components/ReusableUI/cn";
 import { TServiceCard } from "./Services.interface";
 
 const ServiceCard = ({ title, description, icon: Icon, className }: TServiceCard) => {
