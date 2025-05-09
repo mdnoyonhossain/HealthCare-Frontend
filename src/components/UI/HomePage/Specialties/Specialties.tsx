@@ -16,8 +16,8 @@ const Specialties = async () => {
         <section className="bg-gray-50  px-4 py-10 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900">Explore Treatments Across Specialties</h2>
-                    <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+                    <h2 className="text-4xl font-bold text-gray-900">Explore Treatments Across Specialties</h2>
+                    <p className="mt-4 text-gray-600 text-lg max-w-2xl mx-auto">
                         Discover our comprehensive range of medical specialties offered by our expert healthcare professionals.
                     </p>
                 </div>

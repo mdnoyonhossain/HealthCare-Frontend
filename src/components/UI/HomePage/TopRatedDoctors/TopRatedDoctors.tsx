@@ -14,9 +14,9 @@ const TopRatedDoctors = async () => {
         <section className="bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900">Our Top Rated Doctors</h2>
-                    <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-                        Access to expert physicians and surgeons, advanced technologies and top-quality surgery facilities right here.
+                    <h2 className="text-4xl font-bold text-gray-900">Meet Our Top-Rated Medical Specialists</h2>
+                    <p className="mt-4 text-gray-600 text-lg max-w-2xl mx-auto">
+                        Gain access to leading physicians and surgeons equipped with cutting-edge technologies and world-class surgical facilities—all in one place.
                     </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,0 +1,42 @@
+/* HeroSection.css */
+
+/* Fade in animation */
+.fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.fade-in-up.delay-100 {
+    animation-delay: 0.1s;
+}
+
+.fade-in-up.delay-200 {
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Float animation for the background */
+.animate-float {
+    animation: floatAnimation 6s ease-in-out infinite;
+}
+
+@keyframes floatAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
