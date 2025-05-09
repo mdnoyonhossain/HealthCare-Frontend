@@ -4,6 +4,7 @@ import Specialties from "@/components/UI/HomePage/Specialties/Specialties";
 import TopRatedDoctors from "@/components/UI/HomePage/TopRatedDoctors/TopRatedDoctors";
 import WhyChooseUs from "../../components/UI/HomePage/WhyChooseUs/WhyChooseUs";
 import HowItWork from "@/components/UI/HomePage/HowItWork/HowItWork";
+import Testimonials from "@/components/UI/HomePage/Testimonials/Testimonials";
 
 const HomePage = () => {
     return (
@@ -14,6 +15,7 @@ const HomePage = () => {
             <TopRatedDoctors />
             <WhyChooseUs />
             <HowItWork />
+            <Testimonials />
         </>
     );
 };
