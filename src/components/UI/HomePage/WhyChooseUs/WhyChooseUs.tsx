@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import assets from "@/assets";
 import chooseUsImg from "@/assets/choose-us.png";
 import Image from "next/image";
@@ -62,7 +62,9 @@ const WhyChooseUs = () => {
                         {servicesData.map((service, index) => (
                             <motion.div
                                 key={index}
-                                className={`flex items-start gap-4 bg-[#E5FAE5] p-5 rounded-[10px] shadow-md hover:shadow-xl transition hover:scale-[1.02] ${index % 2 === 0 ? "rounded-tl-[100px]" : "rounded-tr-[100px]"
+                                className={`flex items-start gap-4 bg-[#E5FAE5] p-5 rounded-[10px] shadow-md hover:shadow-xl transition hover:scale-[1.02] ${index % 2 === 0
+                                        ? "rounded-tl-[100px]"
+                                        : "rounded-tr-[100px]"
                                     }`}
                                 custom={index}
                                 initial="hidden"
@@ -90,7 +92,7 @@ const WhyChooseUs = () => {
                         ))}
                     </div>
                     <motion.div
-                        className="flex justify-center"
+                        className="hidden md:flex justify-center"
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
