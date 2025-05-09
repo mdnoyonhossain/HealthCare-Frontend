@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import defaultDoctorImg from "@/assets/images/defautlDoctor.jpg"
+import defaultDoctorImg from "@/assets/images/defautlDoctor.jpg";
 import { TDoctor } from "./doctor.interface";
 import { ArrowRight, MapPin } from "lucide-react";
 
@@ -23,7 +23,7 @@ const TopRatedDoctors = async () => {
                     {doctors?.map((doctor: TDoctor) => (
                         <div
                             key={doctor.id}
-                            className="bg-white p-3 rounded-md shadow hover:shadow-md transition duration-300"
+                            className="bg-white p-3 rounded-md shadow hover:shadow-lg transition-transform transform hover:scale-105 duration-300"
                         >
                             <div className="relative w-full aspect-[4/3]">
                                 <Image
@@ -72,7 +72,7 @@ const TopRatedDoctors = async () => {
                         </div>
                     ))}
                 </div>
-                <div className="text-center mt-10">
+                <div className="text-center mt-12">
                     <Button
                         LinkComponent={Link}
                         href="/doctors"
