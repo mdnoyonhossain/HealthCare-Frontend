@@ -2,9 +2,10 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { TSpecialties } from "./Specialties.interface";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const Specialties = async () => {
-    const res = await fetch("http://localhost:5000/api/v1/specialties", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/specialties`, {
         next: {
             revalidate: 30
         }
@@ -60,10 +61,21 @@ const Specialties = async () => {
                         </Box>
                     ))}
                 </Stack>
-                <div className="text-center mt-6">
-                <Button LinkComponent={Link} href="/specialties" style={{ fontWeight: "bold", color: "black" }} variant="outlined" >
-                    View Specialties
-                </Button>
+                <div className="text-center mt-10">
+                    <Button
+                        LinkComponent={Link}
+                        href="/specialties"
+                        variant="outlined"
+                        className="group border border-gray-400 px-6 py-2 rounded-md text-black font-semibold text-[17px] hover:border-blue-500 transition"
+                    >
+                        <span className="flex items-center gap-2">
+                            View Specialties
+                            <ArrowRight
+                                className="transition-transform duration-300 group-hover:translate-x-1"
+                                size={18}
+                            />
+                        </span>
+                    </Button>
                 </div>
             </div>
         </section>
