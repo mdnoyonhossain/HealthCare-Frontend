@@ -67,7 +67,7 @@ const Navbar = () => {
                 <Button
                   variant="contained"
                   LinkComponent={Link}
-                  href="/login"
+                  href="/register"
                   onClick={() => setDrawerOpen(false)}
                   sx={{
                     color: 'white',
@@ -78,7 +78,7 @@ const Navbar = () => {
                     },
                   }}
                 >
-                  Sign Up
+                  REGISTER
                 </Button>
               </Stack>
             </Drawer>
@@ -118,9 +118,9 @@ const Navbar = () => {
                 },
               }}
               LinkComponent={Link}
-              href="/signup"
+              href="/register"
             >
-              Sign Up
+              REGISTER
             </Button>
           </Stack>
         )}

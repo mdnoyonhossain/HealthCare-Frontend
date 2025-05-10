@@ -22,8 +22,17 @@ export const theme = createTheme({
                     textTransform: "capitalize",
                     boxShadow: "none",
                     '&:hover': {
-                        backgroundColor: '#E5FAE5'
+                        backgroundColor: '#E5FAE5',
                     },
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#2CB0ED',
+                    }
                 },
             },
         },
