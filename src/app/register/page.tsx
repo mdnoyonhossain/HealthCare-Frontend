@@ -5,8 +5,8 @@ import Link from "next/link";
 const RegisterPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
-            <div className="w-full max-w-[650px]">
-                <div className="bg-white shadow-lg rounded-sm overflow-hidden border border-gray-200">
+            <div className="w-full max-w-[600px]">
+                <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
                     <Stack sx={{
                         justifyContent: "center",
                         alignItems: "center"
@@ -35,7 +35,7 @@ const RegisterPage = () => {
                                     </Typography>
                                 </Box>
                                 <Box>
-                                    <Typography variant="body2" color="text.secondary" mt={1}>
+                                    <Typography variant="body2" color="text.secondary" mt={0.3}>
                                         Sign up to access healthcare services
                                     </Typography>
                                 </Box>
@@ -43,19 +43,19 @@ const RegisterPage = () => {
                             <Box>
                                 <form>
                                     <Grid container spacing={2} my={2}>
-                                        <Grid size={{ md: 12, xs: 12 }}>
+                                        <Grid size={{ sm: 12, md: 12, xs: 12 }}>
                                             <TextField label="Name" variant="outlined" size="small" fullWidth />
                                         </Grid>
-                                        <Grid size={{ md: 6, xs: 12 }}>
+                                        <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                                             <TextField type="email" label="Email" variant="outlined" size="small" fullWidth />
                                         </Grid>
-                                        <Grid size={{ md: 6, xs: 12 }}>
+                                        <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                                             <TextField type="password" label="Password" variant="outlined" size="small" fullWidth />
                                         </Grid>
-                                        <Grid size={{ md: 6, xs: 12 }}>
+                                        <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                                             <TextField type="tel" label="Contact Number" variant="outlined" size="small" fullWidth />
                                         </Grid>
-                                        <Grid size={{ md: 6, xs: 12 }}>
+                                        <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                                             <TextField type="text" label="Address" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                     </Grid>
