@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import "./globals.css";
 import Providers from "@/lib/Providers/Providers";
+import { Toaster } from 'sonner'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <html lang="en">
         <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <AppRouterCacheProvider>
-            {children}
+            <>
+              <Toaster position="top-center" />
+              {children}
+            </>
           </AppRouterCacheProvider>
         </body>
       </html>

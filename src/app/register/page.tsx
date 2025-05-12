@@ -1,9 +1,13 @@
 "use client"
+import registerPatient from "@/services/actions/registerPatient";
 import { modifyPayload } from "@/utils/modifyPayload";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
-import { UserPlus } from "lucide-react";
+import { AlertCircle, Check, UserPlus } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
 
 type TPatientRegisterData = {
     password: string;
@@ -17,10 +21,40 @@ type TPatientRegisterData = {
 
 const RegisterPage = () => {
     const { register, handleSubmit } = useForm<TPatientRegisterData>();
+    const navigate = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit: SubmitHandler<TPatientRegisterData> = (data) => {
+    const onSubmit: SubmitHandler<TPatientRegisterData> = async (data) => {
         const patientData = modifyPayload(data);
-        console.log(patientData);
+        setIsLoading(true);
+
+        try {
+            const res = await registerPatient(patientData);
+            if (res?.data?.id) {
+                toast.success("Account created successfully", {
+                    description: res?.message,
+                    duration: 4000,
+                    icon: <Check className="h-4 w-4 text-green-500" />,
+                    style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
+                });
+
+                setIsLoading(false);
+                navigate.push("/login");
+            }
+            else if (!res?.success) {
+                toast.error("Account created failed", {
+                    description: `${res?.error?.target} ${res?.message}`,
+                    position: "top-center",
+                    duration: 4000,
+                    icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+                    style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+                });
+                setIsLoading(false)
+            }
+        }
+        catch (err: any) {
+            console.log(err.message);
+        }
     }
 
     return (
@@ -79,25 +113,52 @@ const RegisterPage = () => {
                                             <TextField type="text" {...register("patient.address")} label="Address" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                     </Grid>
-                                    <Button
-                                        fullWidth
-                                        type="submit"
-                                        startIcon={<UserPlus size={18} />}
-                                        sx={{
-                                            color: 'white',
-                                            backgroundColor: '#2CB0ED',
-                                            padding: { xs: "6px 16px", sm: "6px 50px" },
-                                            fontSize: "15px",
-                                            margin: "10px 0 8px 0",
-                                            '&:hover': {
-                                                backgroundColor: '#2196f3',
-                                                boxShadow: "none"
-                                            },
-                                        }}
-                                    >
-                                        Sign Up
-                                    </Button>
-
+                                    {isLoading ? (
+                                        <Button
+                                            fullWidth
+                                            type="submit"
+                                            startIcon={
+                                                isLoading ? (
+                                                    <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                ) : (
+                                                    <UserPlus size={18} />
+                                                )
+                                            }
+                                            disabled={isLoading}
+                                            sx={{
+                                                color: 'white',
+                                                backgroundColor: '#2CB0ED',
+                                                padding: { xs: "6px 16px", sm: "6px 50px" },
+                                                fontSize: "15px",
+                                                margin: "10px 0 8px 0",
+                                                '&:hover': {
+                                                    backgroundColor: '#2196f3',
+                                                    boxShadow: "none"
+                                                },
+                                            }}
+                                        >
+                                            {isLoading ? 'Creating account...' : 'Sign Up'}
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            fullWidth
+                                            type="submit"
+                                            startIcon={<UserPlus size={18} />}
+                                            sx={{
+                                                color: 'white',
+                                                backgroundColor: '#2CB0ED',
+                                                padding: { xs: "6px 16px", sm: "6px 50px" },
+                                                fontSize: "15px",
+                                                margin: "10px 0 8px 0",
+                                                '&:hover': {
+                                                    backgroundColor: '#2196f3',
+                                                    boxShadow: "none"
+                                                },
+                                            }}
+                                        >
+                                            Sign Up
+                                        </Button>
+                                    )}
                                     <Typography variant="body2" color="text.secondary" align="center" mt={0.3}>
                                         Already have an account?{" "}
                                         <Link href="/login" className="text-[#2CB0ED] hover:underline">
