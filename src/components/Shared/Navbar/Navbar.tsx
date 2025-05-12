@@ -1,5 +1,7 @@
 "use client"
+import { getUserInfo } from "@/services/auth.service";
 import { Box, Button, Drawer, IconButton, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { AlignJustify, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -7,6 +9,7 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const userInfo = getUserInfo();
 
   const navLinks = [
     { label: "Consultation", href: "/consultation" },
@@ -37,7 +40,7 @@ const Navbar = () => {
         {isMobile ? (
           <>
             <IconButton onClick={() => setDrawerOpen(true)}>
-              =
+              <AlignJustify strokeWidth={3} />
             </IconButton>
             <Drawer
               anchor="right"
@@ -56,30 +59,56 @@ const Navbar = () => {
                     {link.label}
                   </Typography>
                 ))}
-                <Button
-                  variant="outlined"
-                  LinkComponent={Link}
-                  href="/login"
-                  onClick={() => setDrawerOpen(false)}
-                >
-                  Login
-                </Button>
-                <Button
-                  variant="contained"
-                  LinkComponent={Link}
-                  href="/register"
-                  onClick={() => setDrawerOpen(false)}
-                  sx={{
-                    color: 'white',
-                    fontWeight: 'bold',
-                    '&:hover': {
+                {
+                  userInfo?.email ? (<Button
+                    variant="outlined"
+                    sx={{
+                      padding: '7px 15px',
                       backgroundColor: '#2CB0ED',
-                      boxShadow: "none"
-                    },
-                  }}
-                >
-                  Sign Up
-                </Button>
+                      color: "white",
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        backgroundColor: '#2CB0ED',
+                        boxShadow: "none"
+                      },
+                    }}
+                    LinkComponent={Link}
+                    href="/dashboard"
+                  >
+                    <Box display="flex" alignItems="center" gap="7px">
+                      <LayoutDashboard size={15} strokeWidth={2.25} />
+                      Dashboard
+                    </Box>
+                  </Button>)
+                    : (
+                      <>
+                        <Button
+                          variant="outlined"
+                          LinkComponent={Link}
+                          href="/login"
+                          onClick={() => setDrawerOpen(false)}
+                        >
+                          Login
+                        </Button>
+                        <Button
+                          variant="contained"
+                          LinkComponent={Link}
+                          href="/register"
+                          onClick={() => setDrawerOpen(false)}
+                          sx={{
+                            color: 'white',
+                            fontWeight: 'bold',
+                            '&:hover': {
+                              backgroundColor: '#2CB0ED',
+                              boxShadow: "none"
+                            },
+                          }}
+                        >
+                          Sign Up
+                        </Button>
+                      </>
+                    )
+                }
               </Stack>
             </Drawer>
           </>
@@ -104,24 +133,49 @@ const Navbar = () => {
                 {link.label}
               </Typography>
             ))}
-            <Button variant="outlined" style={{ marginRight: "-15px", padding: '7px 15px', color: "black" }} LinkComponent={Link} href="/login">
-              Login
-            </Button>
-            <Button
-              sx={{
-                padding: '7px 15px',
-                color: 'white',
-                fontWeight: 'bold',
-                '&:hover': {
+            {
+              userInfo?.email ? (<Button
+                variant="outlined"
+                sx={{
+                  padding: '7px 15px',
                   backgroundColor: '#2CB0ED',
-                  boxShadow: "none"
-                },
-              }}
-              LinkComponent={Link}
-              href="/register"
-            >
-              Sign Up
-            </Button>
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  '&:hover': {
+                    backgroundColor: '#2CB0ED',
+                    boxShadow: "none"
+                  },
+                }}
+                LinkComponent={Link}
+                href="/dashboard"
+              >
+                <Box display="flex" alignItems="center" gap="7px">
+                  <LayoutDashboard size={15} strokeWidth={2.25} />
+                  Dashboard
+                </Box>
+              </Button>)
+                : (<>
+                  <Button variant="outlined" style={{ marginRight: "-15px", padding: '7px 15px', color: "black" }} LinkComponent={Link} href="/login">
+                    Login
+                  </Button>
+                  <Button
+                    sx={{
+                      padding: '7px 15px',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        backgroundColor: '#2CB0ED',
+                        boxShadow: "none"
+                      },
+                    }}
+                    LinkComponent={Link}
+                    href="/register"
+                  >
+                    Sign Up
+                  </Button>
+                </>)
+            }
           </Stack>
         )}
       </Stack>

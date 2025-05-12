@@ -33,7 +33,7 @@ const RegisterPage = () => {
             if (res?.data?.id) {
                 toast.success("Account created successfully", {
                     description: res?.message,
-                    duration: 5000,
+                    duration: 4000,
                     icon: <Check className="h-4 w-4 text-green-500" />,
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
                 });
