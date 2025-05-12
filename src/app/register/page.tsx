@@ -43,9 +43,9 @@ const RegisterPage = () => {
             }
             else if (!res?.success) {
                 toast.error("Account created failed", {
-                    description: `${res?.error?.target} ${res?.message}`,
+                    description: `This email is already registered. Please try logging in or use a different email address.`,
                     position: "top-center",
-                    duration: 4000,
+                    duration: 6000,
                     icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
                     style: { background: '#FDF1F1', border: "1px solid #FECACA" }
                 });

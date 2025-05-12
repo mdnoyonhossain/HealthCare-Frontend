@@ -1,5 +1,6 @@
 "use client";
 import loginUser from "@/services/actions/loginUser";
+import { storeUserInfo } from "@/services/auth.service";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { AlertCircle, Check, LogIn } from "lucide-react";
 import Link from "next/link";
@@ -31,8 +32,12 @@ const LoginPage = () => {
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
                 });
 
+                if (res?.data?.accessToken) {
+                    storeUserInfo({ accessToken: res?.data?.accessToken })
+                }
+
                 setIsLoading(false);
-                navigate.push("/");
+                // navigate.push("/");
             }
             else if (!res?.success) {
                 toast.error("Login failed", {
@@ -155,24 +160,6 @@ const LoginPage = () => {
                                             Login
                                         </Button>
                                     )}
-                                    {/* <Button
-                                        fullWidth
-                                        type="submit"
-                                        startIcon={<LogIn size={18} />}
-                                        sx={{
-                                            color: 'white',
-                                            backgroundColor: '#2CB0ED',
-                                            padding: { xs: "6px 16px", sm: "6px 50px" },
-                                            fontSize: "15px",
-                                            margin: "10px 0 8px 0",
-                                            '&:hover': {
-                                                backgroundColor: '#2196f3',
-                                                boxShadow: "none"
-                                            },
-                                        }}
-                                    >
-                                        Login
-                                    </Button> */}
                                     <Typography variant="body2" color="text.secondary" align="center" mt={0.3}>
                                         Don&apos;t have an account?{" "}
                                         <Link href="/register" className="text-[#2CB0ED] hover:underline">
