@@ -1,4 +1,5 @@
 "use client"
+import { modifyPayload } from "@/utils/modifyPayload";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { UserPlus } from "lucide-react";
 import Link from "next/link";
@@ -16,7 +17,11 @@ type TPatientRegisterData = {
 
 const RegisterPage = () => {
     const { register, handleSubmit } = useForm<TPatientRegisterData>();
-    const onSubmit: SubmitHandler<TPatientRegisterData> = data => console.log(data);
+
+    const onSubmit: SubmitHandler<TPatientRegisterData> = (data) => {
+        const patientData = modifyPayload(data);
+        console.log(patientData);
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
