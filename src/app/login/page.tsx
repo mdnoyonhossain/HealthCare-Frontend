@@ -37,7 +37,7 @@ const LoginPage = () => {
                 }
 
                 setIsLoading(false);
-                // navigate.push("/");
+                navigate.push("/");
             }
             else if (!res?.success) {
                 toast.error("Login failed", {
