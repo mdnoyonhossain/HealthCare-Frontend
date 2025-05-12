@@ -33,7 +33,7 @@ const RegisterPage = () => {
             if (res?.data?.id) {
                 toast.success("Account created successfully", {
                     description: res?.message,
-                    duration: 4000,
+                    duration: 5000,
                     icon: <Check className="h-4 w-4 text-green-500" />,
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
                 });
@@ -49,11 +49,20 @@ const RegisterPage = () => {
                     icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
                     style: { background: '#FDF1F1', border: "1px solid #FECACA" }
                 });
+
                 setIsLoading(false)
             }
         }
         catch (err: any) {
-            console.log(err.message);
+            toast.error("Something went wrong", {
+                description: err?.message || "Unable to create account at this time.",
+                position: "top-center",
+                duration: 4000,
+                icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+                style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+            });
+
+            setIsLoading(false);
         }
     }
 
