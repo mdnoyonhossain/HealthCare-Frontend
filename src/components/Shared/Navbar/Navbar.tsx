@@ -78,7 +78,7 @@ const Navbar = () => {
                     },
                   }}
                 >
-                  REGISTER
+                  Sign Up
                 </Button>
               </Stack>
             </Drawer>
@@ -120,7 +120,7 @@ const Navbar = () => {
               LinkComponent={Link}
               href="/register"
             >
-              REGISTER
+              Sign Up
             </Button>
           </Stack>
         )}

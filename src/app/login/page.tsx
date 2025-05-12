@@ -35,7 +35,7 @@ const LoginPage = () => {
                                     </Typography>
                                 </Box>
                                 <Box>
-                                    <Typography variant="body2" color="text.secondary" mt={0.3}>
+                                    <Typography variant="body2" color="text.secondary" mt={0.3} mb={0.5}>
                                         Enter your credentials to access your account
                                     </Typography>
                                 </Box>
@@ -71,7 +71,7 @@ const LoginPage = () => {
                                     >
                                         Login
                                     </Button>
-                                    <Typography variant="body2" color="text.secondary" align="center">
+                                    <Typography variant="body2" color="text.secondary" align="center" mt={0.3}>
                                         Don&apos;t have an account?{" "}
                                         <Link href="/register" className="text-[#2CB0ED] hover:underline">
                                             Create account

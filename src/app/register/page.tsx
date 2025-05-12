@@ -1,8 +1,23 @@
+"use client"
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { UserPlus } from "lucide-react";
 import Link from "next/link";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type TPatientRegisterData = {
+    password: string;
+    patient: {
+        name: string;
+        email: string;
+        contactNumber: string;
+        address: string;
+    }
+};
 
 const RegisterPage = () => {
+    const { register, handleSubmit } = useForm<TPatientRegisterData>();
+    const onSubmit: SubmitHandler<TPatientRegisterData> = data => console.log(data);
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
             <div className="w-full max-w-[600px]">
@@ -35,28 +50,28 @@ const RegisterPage = () => {
                                     </Typography>
                                 </Box>
                                 <Box>
-                                    <Typography variant="body2" color="text.secondary" mt={0.3}>
+                                    <Typography variant="body2" color="text.secondary" mt={0.3} mb={0.5}>
                                         Sign up to access healthcare services
                                     </Typography>
                                 </Box>
                             </Stack>
                             <Box>
-                                <form>
+                                <form onSubmit={handleSubmit(onSubmit)}>
                                     <Grid container spacing={2} my={2}>
                                         <Grid size={{ sm: 12, md: 12, xs: 12 }}>
-                                            <TextField label="Name" variant="outlined" size="small" fullWidth />
+                                            <TextField {...register("patient.name")} label="Name" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="email" label="Email" variant="outlined" size="small" fullWidth />
+                                            <TextField type="email" {...register("patient.email")} label="Email" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="password" label="Password" variant="outlined" size="small" fullWidth />
+                                            <TextField type="password" {...register("password")} label="Password" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="tel" label="Contact Number" variant="outlined" size="small" fullWidth />
+                                            <TextField type="tel" {...register("patient.contactNumber")} label="Contact Number" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="text" label="Address" variant="outlined" size="small" fullWidth />
+                                            <TextField type="text" {...register("patient.address")} label="Address" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                     </Grid>
                                     <Button
@@ -75,10 +90,10 @@ const RegisterPage = () => {
                                             },
                                         }}
                                     >
-                                        REGISTER
+                                        Sign Up
                                     </Button>
 
-                                    <Typography variant="body2" color="text.secondary" align="center">
+                                    <Typography variant="body2" color="text.secondary" align="center" mt={0.3}>
                                         Already have an account?{" "}
                                         <Link href="/login" className="text-[#2CB0ED] hover:underline">
                                             Login
