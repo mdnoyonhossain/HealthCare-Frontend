@@ -1,4 +1,6 @@
 "use client"
+import HCForm from "@/components/Forms/HCForm";
+import HCInput from "@/components/Forms/HCInput";
 import loginUser from "@/services/actions/loginUser";
 import registerPatient from "@/services/actions/registerPatient";
 import { storeUserInfo } from "@/services/auth.service";
@@ -8,25 +10,14 @@ import { AlertCircle, Check, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
-type TPatientRegisterData = {
-    password: string;
-    patient: {
-        name: string;
-        email: string;
-        contactNumber: string;
-        address: string;
-    }
-};
-
 const RegisterPage = () => {
-    const { register, handleSubmit } = useForm<TPatientRegisterData>();
     const navigate = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit: SubmitHandler<TPatientRegisterData> = async (data) => {
+    const handleRegister = async (data: FieldValues) => {
         const patientData = modifyPayload(data);
         setIsLoading(true);
 
@@ -115,22 +106,22 @@ const RegisterPage = () => {
                                 </Box>
                             </Stack>
                             <Box>
-                                <form onSubmit={handleSubmit(onSubmit)}>
+                                <HCForm onSubmit={handleRegister}>
                                     <Grid container spacing={2} my={2}>
                                         <Grid size={{ sm: 12, md: 12, xs: 12 }}>
-                                            <TextField {...register("patient.name")} label="Name" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="text" name="patient.name" label="Name" variant="outlined" size="small" required={true} fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="email" {...register("patient.email")} label="Email" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="email" name="patient.email" label="Email" variant="outlined" size="small" required={true} fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="password" {...register("password")} label="Password" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="password" name="password" label="Password" variant="outlined" size="small" required={true} fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="tel" {...register("patient.contactNumber")} label="Contact Number" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="tel" name="patient.contactNumber" label="Contact Number" variant="outlined" required={true} size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="text" {...register("patient.address")} label="Address" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="text" name="patient.address" label="Address" variant="outlined" size="small" required={true} fullWidth />
                                         </Grid>
                                     </Grid>
                                     {isLoading ? (
@@ -185,7 +176,7 @@ const RegisterPage = () => {
                                             Login
                                         </Link>
                                     </Typography>
-                                </form>
+                                </HCForm>
                             </Box>
                         </Box>
                     </Stack>

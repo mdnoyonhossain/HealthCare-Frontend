@@ -101,10 +101,10 @@ const LoginPage = () => {
                                 <HCForm onSubmit={handleLogin}>
                                     <Grid container spacing={2} mt={2} mb={1}>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="email" name="email" label="Email" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="email" name="email" label="Email" variant="outlined" size="small" required={true} fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="password" name="password" label="Password" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="password" name="password" label="Password" variant="outlined" size="small" required={true} fullWidth />
                                         </Grid>
                                     </Grid>
                                     <Typography variant="body2" align="right" className="text-[#2CB0ED] hover:underline cursor-pointer" mb={1}>
