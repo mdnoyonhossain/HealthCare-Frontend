@@ -5,6 +5,7 @@ import loginUser from "@/services/actions/loginUser";
 import registerPatient from "@/services/actions/registerPatient";
 import { storeUserInfo } from "@/services/auth.service";
 import { modifyPayload } from "@/utils/modifyPayload";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { AlertCircle, Check, UserPlus } from "lucide-react";
 import Link from "next/link";
@@ -12,6 +13,27 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
+const userRegistrationValidationSchema = z.object({
+    password: z.string().min(6, "Password must be at least 6 characters long"),
+    patient: z.object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().min(1, "Email is required").regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Enter a valid email address"),
+        contactNumber: z.string().min(6, "Contact number must be at least 6 digits").regex(/^\+?[0-9]{6,15}$/, "Enter a valid contact number"),
+        address: z.string().min(1, "Address is required")
+    })
+});
+
+const defaultValues = {
+    password: "",
+    patient: {
+        name: "",
+        email: "",
+        contactNumber: "",
+        address: "",
+    }
+}
 
 const RegisterPage = () => {
     const navigate = useRouter();
@@ -106,22 +128,22 @@ const RegisterPage = () => {
                                 </Box>
                             </Stack>
                             <Box>
-                                <HCForm onSubmit={handleRegister}>
+                                <HCForm onSubmit={handleRegister} resolver={zodResolver(userRegistrationValidationSchema)} defaultValues={defaultValues}>
                                     <Grid container spacing={2} my={2}>
                                         <Grid size={{ sm: 12, md: 12, xs: 12 }}>
-                                            <HCInput type="text" name="patient.name" label="Name" variant="outlined" size="small" required={true} fullWidth />
+                                            <HCInput type="text" name="patient.name" label="Name" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="email" name="patient.email" label="Email" variant="outlined" size="small" required={true} fullWidth />
+                                            <HCInput type="email" name="patient.email" label="Email" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="password" name="password" label="Password" variant="outlined" size="small" required={true} fullWidth />
+                                            <HCInput type="password" name="password" label="Password" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="tel" name="patient.contactNumber" label="Contact Number" variant="outlined" required={true} size="small" fullWidth />
+                                            <HCInput type="tel" name="patient.contactNumber" label="Contact Number" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="text" name="patient.address" label="Address" variant="outlined" size="small" required={true} fullWidth />
+                                            <HCInput type="text" name="patient.address" label="Address" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                     </Grid>
                                     {isLoading ? (

@@ -13,8 +13,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const loginValidationSchema = z.object({
-    email: z.string().min(1, "Email is required").regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Enter a valid email address"),
+const userLoginValidationSchema = z.object({
+    email: z.string().min(1, "Email is required").email("Enter a valid email address"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
 });
 
@@ -105,7 +105,7 @@ const LoginPage = () => {
                                 </Box>
                             </Stack>
                             <Box>
-                                <HCForm onSubmit={handleLogin} resolver={zodResolver(loginValidationSchema)} defaultValues={{ email: "", password: "" }}>
+                                <HCForm onSubmit={handleLogin} resolver={zodResolver(userLoginValidationSchema)} defaultValues={{ email: "", password: "" }}>
                                     <Grid container spacing={2} mt={2} mb={1}>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                                             <HCInput type="email" name="email" label="Email" variant="outlined" size="small" fullWidth />
