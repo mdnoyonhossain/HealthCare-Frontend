@@ -1,4 +1,5 @@
 "use client";
+import HCForm from "@/components/Forms/HCForm";
 import loginUser from "@/services/actions/loginUser";
 import { storeUserInfo } from "@/services/auth.service";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
@@ -6,20 +7,14 @@ import { AlertCircle, Check, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
-export type TUserLogin = {
-    email: string;
-    password: string;
-}
-
 const LoginPage = () => {
-    const { register, handleSubmit } = useForm<TUserLogin>();
     const navigate = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit: SubmitHandler<TUserLogin> = async (data) => {
+    const handleLogin = async (data: FieldValues) => {
         setIsLoading(true);
 
         try {
@@ -102,7 +97,7 @@ const LoginPage = () => {
                                 </Box>
                             </Stack>
                             <Box>
-                                <form onSubmit={handleSubmit(onSubmit)}>
+                                <HCForm onSubmit={handleLogin}>
                                     <Grid container spacing={2} mt={2} mb={1}>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                                             <TextField type="email" {...register("email")} label="Email" variant="outlined" size="small" fullWidth />
@@ -166,7 +161,7 @@ const LoginPage = () => {
                                             Create account
                                         </Link>
                                     </Typography>
-                                </form>
+                                </HCForm>
                             </Box>
                         </Box>
                     </Stack>
