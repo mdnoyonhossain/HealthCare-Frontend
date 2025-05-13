@@ -1,5 +1,7 @@
 "use client"
+import loginUser from "@/services/actions/loginUser";
 import registerPatient from "@/services/actions/registerPatient";
+import { storeUserInfo } from "@/services/auth.service";
 import { modifyPayload } from "@/utils/modifyPayload";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { AlertCircle, Check, UserPlus } from "lucide-react";
@@ -38,8 +40,17 @@ const RegisterPage = () => {
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
                 });
 
+                const result = await loginUser({
+                    email: data.patient.email,
+                    password: data.password
+                });
+
+                if (result?.data?.accessToken) {
+                    storeUserInfo({ accessToken: result?.data?.accessToken });
+                    navigate.push("/");
+                }
+
                 setIsLoading(false);
-                navigate.push("/login");
             }
             else if (!res?.success) {
                 toast.error("Account created failed", {
