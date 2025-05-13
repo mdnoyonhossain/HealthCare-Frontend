@@ -7,10 +7,11 @@ type THCFormProvider = {
 
 const HCForm = ({ children, onSubmit }: THCFormProvider) => {
     const methods = useForm();
-    const { handleSubmit } = methods;
+    const { handleSubmit, reset } = methods;
 
     const submitHandler: SubmitHandler<FieldValues> = (data) => {
         onSubmit(data);
+        reset();
     }
 
     return (

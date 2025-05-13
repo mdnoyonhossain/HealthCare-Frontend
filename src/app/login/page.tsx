@@ -1,8 +1,9 @@
 "use client";
 import HCForm from "@/components/Forms/HCForm";
+import HCInput from "@/components/Forms/HCInput";
 import loginUser from "@/services/actions/loginUser";
 import { storeUserInfo } from "@/services/auth.service";
-import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { AlertCircle, Check, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -100,10 +101,10 @@ const LoginPage = () => {
                                 <HCForm onSubmit={handleLogin}>
                                     <Grid container spacing={2} mt={2} mb={1}>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="email" {...register("email")} label="Email" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="email" name="email" label="Email" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <TextField type="password" {...register("password")} label="Password" variant="outlined" size="small" fullWidth />
+                                            <HCInput type="password" name="password" label="Password" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                     </Grid>
                                     <Typography variant="body2" align="right" className="text-[#2CB0ED] hover:underline cursor-pointer" mb={1}>
