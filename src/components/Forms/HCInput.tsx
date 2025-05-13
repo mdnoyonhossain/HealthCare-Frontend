@@ -10,7 +10,7 @@ type THCInput = {
     fullWidth?: boolean;
     sx?: SxProps;
     placeholder?: string;
-    required: boolean;
+    required?: boolean;
 }
 
 const HCInput = ({ name, type = "text", label, variant = "outlined", size = "small", fullWidth, sx, placeholder, required }: THCInput) => {
@@ -20,7 +20,7 @@ const HCInput = ({ name, type = "text", label, variant = "outlined", size = "sma
         <Controller
             control={control}
             name={name}
-            render={({ field }) => (
+            render={({ field, fieldState: { error } }) => (
                 <TextField
                     {...field}
                     type={type}
@@ -32,6 +32,8 @@ const HCInput = ({ name, type = "text", label, variant = "outlined", size = "sma
                     placeholder={placeholder}
                     required={required}
                     value={field.value ?? ""}
+                    error={!!error?.message}
+                    helperText={error?.message}
                 />
             )}
         />

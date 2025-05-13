@@ -2,6 +2,7 @@ import { FieldValues, FormProvider, SubmitHandler, useForm } from "react-hook-fo
 
 type TFormConfig = {
     resolver?: any;
+    defaultValues?: Record<string, any>
 }
 
 type THCFormProvider = {
@@ -9,10 +10,13 @@ type THCFormProvider = {
     onSubmit: SubmitHandler<FieldValues>;
 } & TFormConfig;
 
-const HCForm = ({ children, onSubmit, resolver }: THCFormProvider) => {
+const HCForm = ({ children, onSubmit, resolver, defaultValues }: THCFormProvider) => {
     const formConfig: TFormConfig = {};
     if (resolver) {
         formConfig["resolver"] = resolver;
+    }
+    if (defaultValues) {
+        formConfig["defaultValues"] = defaultValues;
     }
 
     const methods = useForm(formConfig);
