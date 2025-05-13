@@ -1,9 +1,9 @@
 "use client";
 import { getUserInfo, removeUser } from "@/services/auth.service";
-import { Box, Button, Drawer, IconButton, Menu, MenuItem, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, Drawer, IconButton, Menu, MenuItem, Skeleton, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { AlignJustify, LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Navbar = () => {
@@ -11,10 +11,15 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const menuOpen = Boolean(anchorEl);
+  const [userInfo, setUserInfo] = useState<{ email?: string } | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false); // Prevent hydration mismatch
   const navigate = useRouter();
 
-  const userInfo = getUserInfo();
+  useEffect(() => {
+    setIsHydrated(true);
+    const user = getUserInfo();
+    setUserInfo(user);
+  }, []);
 
   const navLinks = [
     { label: "Consultation", href: "/consultation" },
@@ -33,13 +38,34 @@ const Navbar = () => {
 
   const handleLogout = () => {
     removeUser();
+    setUserInfo(null);
     navigate.refresh();
-    // navigate.push("/login");
   };
+
+  if (!isHydrated) {
+    return (
+      <div className="max-w-7xl mx-auto px-6">
+        <Stack
+          py={2}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Skeleton variant="text" width={120} height={30} />
+          <Skeleton variant="rectangular" width={40} height={40} />
+        </Stack>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-6">
-      <Stack py={2} direction="row" justifyContent="space-between" alignItems="center">
+      <Stack
+        py={2}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Typography
           component={Link}
           href="/"
@@ -47,8 +73,14 @@ const Navbar = () => {
           fontWeight={600}
           sx={{ textDecoration: "none" }}
         >
-          <Box component="span" color="primary.main">H</Box>ealth
-          <Box component="span" color="primary.main">C</Box>are
+          <Box component="span" color="primary.main">
+            H
+          </Box>
+          ealth
+          <Box component="span" color="primary.main">
+            C
+          </Box>
+          are
         </Typography>
 
         {isMobile ? (
@@ -61,7 +93,13 @@ const Navbar = () => {
               open={drawerOpen}
               onClose={() => setDrawerOpen(false)}
             >
-              <Stack p={2} width={250} height="100%" spacing={2} className="bg-blue-50">
+              <Stack
+                p={2}
+                width={250}
+                height="100%"
+                spacing={2}
+                className="bg-blue-50"
+              >
                 {navLinks.map((link) => (
                   <Typography
                     key={link.label}
@@ -169,7 +207,7 @@ const Navbar = () => {
 
                 <Menu
                   anchorEl={anchorEl}
-                  open={menuOpen}
+                  open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                   slotProps={{
                     paper: {
