@@ -6,101 +6,63 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider, Navigation, Router } from '@toolpad/core/AppProvider';
+import { AppProvider, Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
+import { usePathname, useRouter } from 'next/navigation';
+import SkeletonLoading from '@/components/Loading/SkeletonLoading';
 import { Box, Typography } from '@mui/material';
-import Link from 'next/link';
 
 const NAVIGATION: Navigation = [
-    {
-        kind: 'header',
-        title: 'Main items',
-    },
-    {
-        segment: 'dashboard',
-        title: 'Dashboard',
-        icon: <DashboardIcon />,
-    },
-    {
-        segment: 'orders',
-        title: 'Orders',
-        icon: <ShoppingCartIcon />,
-    },
-    {
-        kind: 'divider',
-    },
-    {
-        kind: 'header',
-        title: 'Analytics',
-    },
+    { kind: 'header', title: 'Main items' },
+    { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
+    { segment: 'orders', title: 'Orders', icon: <ShoppingCartIcon /> },
+    { kind: 'divider' },
+    { kind: 'header', title: 'Analytics' },
     {
         segment: 'reports',
         title: 'Reports',
         icon: <BarChartIcon />,
         children: [
-            {
-                segment: 'sales',
-                title: 'Sales',
-                icon: <DescriptionIcon />,
-            },
-            {
-                segment: 'traffic',
-                title: 'Traffic',
-                icon: <DescriptionIcon />,
-            },
+            { segment: 'sales', title: 'Sales', icon: <DescriptionIcon /> },
+            { segment: 'traffic', title: 'Traffic', icon: <DescriptionIcon /> },
         ],
     },
-    {
-        segment: 'integrations',
-        title: 'Integrations',
-        icon: <LayersIcon />,
-    },
+    { segment: 'integrations', title: 'Integrations', icon: <LayersIcon /> },
 ];
 
-const demoTheme = createTheme({
+const dashboardHCTheme = createTheme({
     colorSchemes: { light: true, dark: true },
-    cssVariables: {
-        colorSchemeSelector: 'class',
-    },
+    cssVariables: { colorSchemeSelector: 'class' },
     breakpoints: {
-        values: {
-            xs: 0,
-            sm: 600,
-            md: 600,
-            lg: 1200,
-            xl: 1536,
-        },
+        values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 },
     },
 });
 
-function useDemoRouter(initialPath: string): Router {
-    const [pathname, setPathname] = React.useState(initialPath);
-
-    const router = React.useMemo(() => {
-        return {
-            pathname,
-            searchParams: new URLSearchParams(),
-            navigate: (path: string | URL) => setPathname(String(path)),
-        };
-    }, [pathname]);
-
-    return router;
-}
-
 const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
-    const router = useDemoRouter('/dashboard');
+    const pathname = usePathname();
+    const nextRouter = useRouter();
+
+    const router = React.useMemo(() => ({
+        pathname,
+        searchParams: new URLSearchParams(),
+        navigate: (path: string | URL) => nextRouter.push(path.toString()),
+    }), [pathname, nextRouter]);
+
+    const [isHydrated, setIsHydrated] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsHydrated(true);
+    }, []);
 
     return (
         <AppProvider
             navigation={NAVIGATION}
             router={router}
-            theme={demoTheme}
+            theme={dashboardHCTheme}
             branding={{
                 logo: (
                     <Typography
-                        component={Link}
-                        href="/"
                         variant="h4"
                         fontWeight={600}
                         sx={{ textDecoration: "none", display: "flex", alignItems: "center" }}
@@ -110,12 +72,12 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
                     </Typography>
                 ),
                 title: '',
-                homeUrl: '',
+                homeUrl: '/',
             }}
         >
             <DashboardLayout>
                 <PageContainer>
-                    {children}
+                    {isHydrated ? children : <SkeletonLoading />}
                 </PageContainer>
             </DashboardLayout>
         </AppProvider>
