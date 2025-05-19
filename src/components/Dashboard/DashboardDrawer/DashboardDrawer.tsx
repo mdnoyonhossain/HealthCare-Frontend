@@ -1,35 +1,13 @@
 "use client"
 import * as React from 'react';
-import { createTheme, styled } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
+import { createTheme } from '@mui/material/styles';
 import { AppProvider, Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import { usePathname, useRouter } from 'next/navigation';
 import SkeletonLoading from '@/components/Loading/SkeletonLoading';
 import { Box, Typography } from '@mui/material';
-
-const NAVIGATION: Navigation = [
-    { kind: 'header', title: 'Main items' },
-    { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
-    { segment: 'orders', title: 'Orders', icon: <ShoppingCartIcon /> },
-    { kind: 'divider' },
-    { kind: 'header', title: 'Analytics' },
-    {
-        segment: 'reports',
-        title: 'Reports',
-        icon: <BarChartIcon />,
-        children: [
-            { segment: 'sales', title: 'Sales', icon: <DescriptionIcon /> },
-            { segment: 'traffic', title: 'Traffic', icon: <DescriptionIcon /> },
-        ],
-    },
-    { segment: 'integrations', title: 'Integrations', icon: <LayersIcon /> },
-];
+import getNavigationByRole from '@/utils/getNavigationByRole';
 
 const dashboardHCTheme = createTheme({
     colorSchemes: { light: true, dark: true },
@@ -54,6 +32,8 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
     React.useEffect(() => {
         setIsHydrated(true);
     }, []);
+
+    const NAVIGATION: Navigation = getNavigationByRole("SUPER_ADMIN");
 
     return (
         <AppProvider
