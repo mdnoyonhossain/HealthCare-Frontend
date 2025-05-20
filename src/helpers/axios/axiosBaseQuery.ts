@@ -1,7 +1,7 @@
 import { TMeta } from '@/types'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
-import axios from 'axios'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
+import axiosInstance from './axiosInstance'
 
 type TBaseQueryFn = {
     url: string
@@ -10,16 +10,19 @@ type TBaseQueryFn = {
     params?: AxiosRequestConfig['params']
     headers?: AxiosRequestConfig['headers']
     meta?: TMeta
+    contentType?: string
 }
 
-export const axiosBaseQuery = ({ baseUrl }: { baseUrl: string } = { baseUrl: '' }): BaseQueryFn<TBaseQueryFn, unknown, unknown> => async ({ url, method, data, params, headers }) => {
+export const axiosBaseQuery = ({ baseUrl }: { baseUrl: string } = { baseUrl: '' }): BaseQueryFn<TBaseQueryFn, unknown, unknown> => async ({ url, method, data, params, headers, contentType }) => {
     try {
-        const result = await axios({
+        const result = await axiosInstance({
             url: baseUrl + url,
             method,
             data,
             params,
-            headers,
+            headers: {
+                "Content-Type": contentType || "application/json"
+            },
         })
 
         return result;

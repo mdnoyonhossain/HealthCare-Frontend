@@ -7,3 +7,19 @@ export type TMeta = {
 }
 
 export type TUserRole = keyof typeof USER_ROLE;
+
+export type TResponseSuccessData = {
+    data: any;
+    meta?: TMeta;
+};
+
+export type TGenericErrorMessage = {
+    path: string | number;
+    message: string;
+};
+
+export type TGenericErrorResponse = {
+    statusCode: number;
+    message: string;
+    errorMessages: TGenericErrorMessage[];
+};
