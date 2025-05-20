@@ -60,7 +60,7 @@ const RegisterPage = () => {
 
                 if (result?.data?.accessToken) {
                     storeUserInfo({ accessToken: result?.data?.accessToken });
-                    navigate.push("/");
+                    navigate.push("/dashboard");
                 }
 
                 setIsLoading(false);

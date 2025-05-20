@@ -40,7 +40,7 @@ const LoginPage = () => {
                 }
 
                 setIsLoading(false);
-                navigate.push("/");
+                navigate.push("/dashboard");
             }
             else if (!res?.success) {
                 toast.error("Login failed", {

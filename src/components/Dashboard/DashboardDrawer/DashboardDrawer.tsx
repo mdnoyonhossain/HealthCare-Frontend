@@ -8,6 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import SkeletonLoading from '@/components/Loading/SkeletonLoading';
 import { Box, Typography } from '@mui/material';
 import getNavigationByRole from '@/utils/getNavigationByRole';
+import { TUserRole } from '@/types';
 
 const dashboardHCTheme = createTheme({
     colorSchemes: { light: true, dark: true },
@@ -33,7 +34,7 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
         setIsHydrated(true);
     }, []);
 
-    const NAVIGATION: Navigation = getNavigationByRole("SUPER_ADMIN");
+    const NAVIGATION: Navigation = getNavigationByRole("admin" as TUserRole);
 
     return (
         <AppProvider

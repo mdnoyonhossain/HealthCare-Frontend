@@ -40,6 +40,7 @@ const Navbar = () => {
     removeUser();
     setUserInfo(null);
     navigate.refresh();
+    navigate.push('/login');
   };
 
   if (!isHydrated) {
