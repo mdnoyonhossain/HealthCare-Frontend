@@ -3,7 +3,7 @@ import HCForm from "@/components/Forms/HCForm";
 import HCInput from "@/components/Forms/HCInput";
 import loginUser from "@/services/actions/loginUser";
 import registerPatient from "@/services/actions/registerPatient";
-import { storeUserInfo } from "@/services/auth.service";
+import { getUserInfo, storeUserInfo } from "@/services/auth.service";
 import { modifyPayload } from "@/utils/modifyPayload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
@@ -60,7 +60,11 @@ const RegisterPage = () => {
 
                 if (result?.data?.accessToken) {
                     storeUserInfo({ accessToken: result?.data?.accessToken });
-                    navigate.push("/dashboard");
+                }
+
+                const userRoleLocalDecoded = getUserInfo();
+                if (userRoleLocalDecoded?.role) {
+                    navigate.push(`/dashboard/${userRoleLocalDecoded?.role}`);
                 }
 
                 setIsLoading(false);

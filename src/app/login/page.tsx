@@ -2,7 +2,7 @@
 import HCForm from "@/components/Forms/HCForm";
 import HCInput from "@/components/Forms/HCInput";
 import loginUser from "@/services/actions/loginUser";
-import { storeUserInfo } from "@/services/auth.service";
+import { getUserInfo, storeUserInfo } from "@/services/auth.service";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { AlertCircle, Check, LogIn } from "lucide-react";
 import Link from "next/link";
@@ -39,8 +39,12 @@ const LoginPage = () => {
                     storeUserInfo({ accessToken: res?.data?.accessToken })
                 }
 
+                const userRoleLocalDecoded = getUserInfo();
                 setIsLoading(false);
-                navigate.push("/dashboard");
+
+                if (userRoleLocalDecoded?.role) {
+                    navigate.push(`/dashboard/${userRoleLocalDecoded?.role}`);
+                }
             }
             else if (!res?.success) {
                 toast.error("Login failed", {

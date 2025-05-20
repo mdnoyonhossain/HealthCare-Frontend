@@ -9,6 +9,7 @@ import SkeletonLoading from '@/components/Loading/SkeletonLoading';
 import { Box, Typography } from '@mui/material';
 import getNavigationByRole from '@/utils/getNavigationByRole';
 import { TUserRole } from '@/types';
+import { getUserInfo } from '@/services/auth.service';
 
 const dashboardHCTheme = createTheme({
     colorSchemes: { light: true, dark: true },
@@ -29,12 +30,15 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
     }), [pathname, nextRouter]);
 
     const [isHydrated, setIsHydrated] = React.useState(false);
+    const [userRole, setUserRole] = React.useState("");
 
     React.useEffect(() => {
         setIsHydrated(true);
+        const { role } = getUserInfo();
+        setUserRole(role);
     }, []);
 
-    const NAVIGATION: Navigation = getNavigationByRole("admin" as TUserRole);
+    const NAVIGATION: Navigation = getNavigationByRole(userRole as TUserRole);
 
     return (
         <AppProvider
