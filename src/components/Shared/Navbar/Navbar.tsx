@@ -5,13 +5,17 @@ import { AlignJustify, LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [userInfo, setUserInfo] = useState<{ email?: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<{ email?: string, role?: string } | null>(null);
   const [isHydrated, setIsHydrated] = useState(false); // Prevent hydration mismatch
   const navigate = useRouter();
 
@@ -74,14 +78,8 @@ const Navbar = () => {
           fontWeight={600}
           sx={{ textDecoration: "none" }}
         >
-          <Box component="span" color="primary.main">
-            H
-          </Box>
-          ealth
-          <Box component="span" color="primary.main">
-            C
-          </Box>
-          are
+          <Box component="span" color="primary.main">H</Box>ealth
+          <Box component="span" color="primary.main">C</Box>are
         </Typography>
 
         {isMobile ? (
@@ -117,20 +115,16 @@ const Navbar = () => {
                     variant="outlined"
                     sx={{
                       padding: "7px 15px",
-                      backgroundColor: "#2CB0ED",
-                      color: "white",
+                      color: "black",
+                      background: "#E5FAE5",
                       fontWeight: "bold",
-                      "&:hover": {
-                        backgroundColor: "#2CB0ED",
-                        boxShadow: "none",
-                      },
                     }}
                     LinkComponent={Link}
-                    href="/dashboard"
+                    href={`/dashboard/${userInfo?.role}`}
                   >
                     <Box display="flex" alignItems="center" gap="7px">
-                      <LayoutDashboard size={15} strokeWidth={2.25} />
-                      Dashboard
+                      <AccountCircleIcon sx={{ fontSize: 20 }} />
+                      My Account
                     </Box>
                   </Button>
                 ) : (
@@ -140,23 +134,34 @@ const Navbar = () => {
                       LinkComponent={Link}
                       href="/login"
                       onClick={() => setDrawerOpen(false)}
+                      sx={{
+                        textTransform: 'none',
+                        fontWeight: 'bold',
+                        padding: '6px 12px',
+                      }}
                     >
+                      <LoginIcon sx={{ fontSize: 18, mr: 1 }} />
                       Login
                     </Button>
+
                     <Button
                       variant="contained"
                       LinkComponent={Link}
                       href="/register"
                       onClick={() => setDrawerOpen(false)}
                       sx={{
-                        color: "white",
-                        fontWeight: "bold",
-                        "&:hover": {
-                          backgroundColor: "#2CB0ED",
-                          boxShadow: "none",
+                        color: 'white',
+                        fontWeight: 'bold',
+                        textTransform: 'none',
+                        padding: '6px 12px',
+                        backgroundColor: '#2CB0ED',
+                        '&:hover': {
+                          backgroundColor: '#2CB0ED',
+                          boxShadow: 'none',
                         },
                       }}
                     >
+                      <HowToRegIcon sx={{ fontSize: 18, mr: 1 }} />
                       Sign Up
                     </Button>
                   </>
@@ -190,19 +195,16 @@ const Navbar = () => {
                   onClick={handleMenuOpen}
                   sx={{
                     padding: "7px 15px",
-                    backgroundColor: "#2CB0ED",
-                    color: "white",
+                    color: "black",
+                    border: "none",
                     fontSize: "14px",
                     fontWeight: "bold",
-                    "&:hover": {
-                      backgroundColor: "#2CB0ED",
-                      boxShadow: "none",
-                    },
                   }}
                 >
                   <Box display="flex" alignItems="center" gap="7px">
-                    <LayoutDashboard size={15} strokeWidth={2.25} />
-                    Dashboard
+                    <AccountCircleIcon sx={{ fontSize: 20 }} />
+                    My Account
+                    <KeyboardArrowDownIcon sx={{ fontSize: 18 }} />
                   </Box>
                 </Button>
 
@@ -225,7 +227,7 @@ const Navbar = () => {
                 >
                   <MenuItem
                     component={Link}
-                    href="/dashboard"
+                    href={`/dashboard/${userInfo?.role}`}
                     onClick={handleMenuClose}
                     sx={{ gap: 1, borderRadius: 1 }}
                   >
@@ -265,30 +267,39 @@ const Navbar = () => {
                 <Button
                   variant="outlined"
                   sx={{
-                    marginRight: "-15px",
-                    padding: "7px 15px",
-                    color: "black",
+                    marginRight: '-15px',
+                    padding: '7px 15px',
+                    color: 'black',
+                    textTransform: 'none',
+                    fontWeight: 'bold',
                   }}
                   LinkComponent={Link}
                   href="/login"
                 >
-                  Login
+                  <Box display="flex" alignItems="center" gap="6px">
+                    <LoginIcon sx={{ fontSize: 18 }} />
+                    Login
+                  </Box>
                 </Button>
                 <Button
                   sx={{
-                    padding: "7px 15px",
-                    color: "white",
-                    fontWeight: "bold",
-                    backgroundColor: "#2CB0ED",
-                    "&:hover": {
-                      backgroundColor: "#2CB0ED",
-                      boxShadow: "none",
+                    padding: '7px 15px',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    backgroundColor: '#2CB0ED',
+                    textTransform: 'none',
+                    '&:hover': {
+                      backgroundColor: '#2CB0ED',
+                      boxShadow: 'none',
                     },
                   }}
                   LinkComponent={Link}
                   href="/register"
                 >
-                  Sign Up
+                  <Box display="flex" alignItems="center" gap="6px">
+                    <HowToRegIcon sx={{ fontSize: 18 }} />
+                    Sign Up
+                  </Box>
                 </Button>
               </>
             )}

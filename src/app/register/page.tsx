@@ -6,7 +6,8 @@ import registerPatient from "@/services/actions/registerPatient";
 import { getUserInfo, storeUserInfo } from "@/services/auth.service";
 import { modifyPayload } from "@/utils/modifyPayload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { AlertCircle, Check, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -180,12 +181,11 @@ const RegisterPage = () => {
                                         <Button
                                             fullWidth
                                             type="submit"
-                                            startIcon={<UserPlus size={18} />}
+                                            startIcon={<HowToRegIcon sx={{ fontSize: 18 }} />}
                                             sx={{
                                                 color: 'white',
                                                 backgroundColor: '#2CB0ED',
                                                 padding: { xs: "6px 16px", sm: "6px 50px" },
-                                                fontSize: "15px",
                                                 margin: "10px 0 8px 0",
                                                 '&:hover': {
                                                     backgroundColor: '#2196f3',
