@@ -38,6 +38,10 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
         setUserRole(role);
     }, []);
 
+    if (!userRole) {
+        return <SkeletonLoading />;
+    }
+
     const NAVIGATION: Navigation = getNavigationByRole(userRole as TUserRole);
 
     return (

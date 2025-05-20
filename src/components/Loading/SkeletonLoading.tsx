@@ -43,6 +43,15 @@ const SkeletonLoading = () => {
             <Grid size={3}>
                 <SkeletonBox height={100} />
             </Grid>
+            <Grid size={6}>
+                <SkeletonBox height={100} />
+            </Grid>
+            <Grid size={6}>
+                <SkeletonBox height={100} />
+            </Grid>
+            <Grid size={12}>
+                <SkeletonBox height={100} />
+            </Grid>
         </Grid>
     );
 };
