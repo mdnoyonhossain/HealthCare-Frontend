@@ -2,11 +2,12 @@ import HCFileUploader from "@/components/Forms/HCFileUploader";
 import HCForm from "@/components/Forms/HCForm";
 import HCInput from "@/components/Forms/HCInput";
 import HCModal from "@/components/Shared/HCModal/HCModal"
+import { useCreateSpecialtiesMutation } from "@/redux/api/specialtiesApi";
 import { modifyPayload } from "@/utils/modifyPayload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import { Button, Grid } from "@mui/material";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Check } from "lucide-react";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
@@ -24,48 +25,36 @@ const createSpecialistValidationSchema = z.object({
 
 const SpecialistModal = ({ open, setOpen }: TSpecialisModal) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [createSpicialist] = useCreateSpecialtiesMutation();
 
     const handleCreateSpicialist = async (data: FieldValues) => {
         const spicialistData = modifyPayload(data);
         setIsLoading(true);
 
         try {
-            // const res = await registerPatient(patientData);
-            // if (res?.data?.id) {
-            //     toast.success("Account created successfully", {
-            //         description: res?.message,
-            //         duration: 5000,
-            //         icon: <Check className="h-4 w-4 text-green-500" />,
-            //         style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
-            //     });
+            const res = await createSpicialist(spicialistData).unwrap();
+            if (res?.id) {
+                toast.success("Spicialist created successfully", {
+                    description: `Specialist Title: ${res?.title}`,
+                    duration: 5000,
+                    icon: <Check className="h-4 w-4 text-green-500" />,
+                    style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
+                });
 
-            //     const result = await loginUser({
-            //         email: data.patient.email,
-            //         password: data.password
-            //     });
+                setIsLoading(false);
+                setOpen(false);
+            }
+            else if (!res?.id) {
+                toast.error("Spicialist created failed", {
+                    description: "An unexpected error occurred while creating the specialist. Please try again.",
+                    position: "top-center",
+                    duration: 6000,
+                    icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+                    style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+                });
 
-            //     if (result?.data?.accessToken) {
-            //         storeUserInfo({ accessToken: result?.data?.accessToken });
-            //     }
-
-            //     const userRoleLocalDecoded = getUserInfo();
-            //     if (userRoleLocalDecoded?.role) {
-            //         navigate.push(`/dashboard/${userRoleLocalDecoded?.role}`);
-            //     }
-
-            //     setIsLoading(false);
-            // }
-            // else if (!res?.success) {
-            //     toast.error("Account created failed", {
-            //         description: `This email is already registered. Please try logging in or use a different email address.`,
-            //         position: "top-center",
-            //         duration: 6000,
-            //         icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
-            //         style: { background: '#FDF1F1', border: "1px solid #FECACA" }
-            //     });
-
-            //     setIsLoading(false)
-            // }
+                setIsLoading(false)
+            }
         }
         catch (err: any) {
             toast.error("Something went wrong", {
