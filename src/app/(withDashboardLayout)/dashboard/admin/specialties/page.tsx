@@ -10,16 +10,36 @@ const SpecialtiesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <Box display="flex" flexDirection="column" gap={2}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+        <Box
+            display="flex"
+            flexDirection="column"
+            gap={2}
+            sx={{
+                p: 0,
+                m: 0,
+                width: "100%",
+            }}
+        >
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                flexWrap="wrap"
+                gap={2}
+                sx={{
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: { xs: "flex-start", sm: "center" },
+                }}
+            >
                 <Box>
                     <Typography variant="h4" fontWeight="bold">
                         Specialties Management
                     </Typography>
-                    <Typography color="textSecondary">
+                    <Typography color="textSecondary" fontSize={{ xs: 14, sm: 16 }}>
                         View and manage medical specialties
                     </Typography>
                 </Box>
+
                 <Button
                     sx={{
                         padding: '7px 15px',
@@ -28,6 +48,7 @@ const SpecialtiesPage = () => {
                         backgroundColor: '#2CB0ED',
                         textTransform: 'none',
                         transition: 'all 0.3s ease',
+                        whiteSpace: 'nowrap',
                         '&:hover': {
                             backgroundColor: '#1995cf',
                             boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
@@ -45,7 +66,16 @@ const SpecialtiesPage = () => {
                 </Button>
                 <SpecialistModal open={isModalOpen} setOpen={setIsModalOpen} />
             </Box>
-            <Box display="flex" gap={2} flexWrap="wrap">
+
+            <Box
+                display="flex"
+                gap={2}
+                flexWrap="wrap"
+                sx={{
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: { xs: "stretch", sm: "center" },
+                }}
+            >
                 <TextField
                     placeholder="Search specialties..."
                     value={searchTerm}
@@ -63,7 +93,7 @@ const SpecialtiesPage = () => {
                     }}
                     sx={{
                         flexGrow: 1,
-                        minWidth: 250,
+                        minWidth: { xs: '100%', sm: 250 },
                         '& .MuiInputBase-root': {
                             padding: '0 8px',
                             height: '36px',
@@ -82,6 +112,8 @@ const SpecialtiesPage = () => {
                         height: '36px',
                         borderColor: '#ccc',
                         transition: 'all 0.3s ease',
+                        minWidth: { xs: '100%', sm: 'auto' },
+                        backgroundColor: '#f0f0f0',
                         '&:hover': {
                             backgroundColor: '#f0f0f0',
                             borderColor: '#999',
@@ -92,13 +124,16 @@ const SpecialtiesPage = () => {
                         },
                     }}
                 >
-                    <Box display="flex" alignItems="center" gap="6px">
+                    <Box display="flex" justifyContent="center" alignItems="center" gap="6px" width="100%">
                         <SearchIcon className="search-icon" sx={{ transition: 'transform 0.3s, color 0.3s' }} />
                         Search
                     </Box>
                 </Button>
             </Box>
-            Here Will Tabele Section Coming
+
+            <Box>
+                Here Will Table Section Coming
+            </Box>
         </Box>
     );
 };

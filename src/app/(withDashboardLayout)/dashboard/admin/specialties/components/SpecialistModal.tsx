@@ -35,7 +35,7 @@ const SpecialistModal = ({ open, setOpen }: TSpecialisModal) => {
                         <HCInput type="text" name="title" label="Title" variant="outlined" size="small" fullWidth />
                     </Grid>
                     <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                        <HCFileUploader type="file" name="file" label="Upload Specialist Photo" variant="contained" sx={{ width: "100%", boxShadow: "none", borderRadius: 1, textTransform: "capitalize" }} />
+                        <HCFileUploader type="file" name="file" label="Upload Specialist File" variant="contained" sx={{ width: "100%", boxShadow: "none", borderRadius: 1, textTransform: "capitalize" }} />
                     </Grid>
                 </Grid>
                 {isLoading ? (
