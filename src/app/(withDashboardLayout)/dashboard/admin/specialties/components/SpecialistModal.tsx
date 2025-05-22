@@ -2,11 +2,14 @@ import HCFileUploader from "@/components/Forms/HCFileUploader";
 import HCForm from "@/components/Forms/HCForm";
 import HCInput from "@/components/Forms/HCInput";
 import HCModal from "@/components/Shared/HCModal/HCModal"
+import { modifyPayload } from "@/utils/modifyPayload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import { Button, Grid } from "@mui/material";
+import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 type TSpecialisModal = {
@@ -22,9 +25,59 @@ const createSpecialistValidationSchema = z.object({
 const SpecialistModal = ({ open, setOpen }: TSpecialisModal) => {
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleCreateSpicialist = (data: FieldValues) => {
+    const handleCreateSpicialist = async (data: FieldValues) => {
+        const spicialistData = modifyPayload(data);
         setIsLoading(true);
-        console.log(data);
+
+        try {
+            // const res = await registerPatient(patientData);
+            // if (res?.data?.id) {
+            //     toast.success("Account created successfully", {
+            //         description: res?.message,
+            //         duration: 5000,
+            //         icon: <Check className="h-4 w-4 text-green-500" />,
+            //         style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
+            //     });
+
+            //     const result = await loginUser({
+            //         email: data.patient.email,
+            //         password: data.password
+            //     });
+
+            //     if (result?.data?.accessToken) {
+            //         storeUserInfo({ accessToken: result?.data?.accessToken });
+            //     }
+
+            //     const userRoleLocalDecoded = getUserInfo();
+            //     if (userRoleLocalDecoded?.role) {
+            //         navigate.push(`/dashboard/${userRoleLocalDecoded?.role}`);
+            //     }
+
+            //     setIsLoading(false);
+            // }
+            // else if (!res?.success) {
+            //     toast.error("Account created failed", {
+            //         description: `This email is already registered. Please try logging in or use a different email address.`,
+            //         position: "top-center",
+            //         duration: 6000,
+            //         icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+            //         style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+            //     });
+
+            //     setIsLoading(false)
+            // }
+        }
+        catch (err: any) {
+            toast.error("Something went wrong", {
+                description: err?.message || "Unable to create specialist at this time.",
+                position: "top-center",
+                duration: 4000,
+                icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+                style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+            });
+
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -83,7 +136,7 @@ const SpecialistModal = ({ open, setOpen }: TSpecialisModal) => {
                             },
                         }}
                     >
-                        Specialist
+                        Create Specialist
                     </Button>
                 )}
             </HCForm>
