@@ -26,7 +26,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export default function HCModal({ open, setOpen, title, children, sx }: THCModal) {
+export default function HCModal({ open = false, setOpen, title = "", children, sx }: THCModal) {
     const handleClose = () => {
         setOpen(false);
     };
@@ -39,7 +39,7 @@ export default function HCModal({ open, setOpen, title, children, sx }: THCModal
                 open={open}
                 sx={{ ...sx }}
             >
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                <DialogTitle sx={{ m: 0, p: 2,}} id="customized-dialog-title">
                     {title}
                 </DialogTitle>
                 <IconButton
