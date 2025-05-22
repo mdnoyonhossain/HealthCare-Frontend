@@ -65,7 +65,7 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
             }}
         >
             <DashboardLayout>
-                <PageContainer>
+                <PageContainer breadcrumbs={[]} title="">
                     {isHydrated ? children : <SkeletonLoading />}
                 </PageContainer>
             </DashboardLayout>
