@@ -1,28 +1,63 @@
 "use client";
-import React, { useState } from "react";
-import { Box, Typography, Button, TextField, InputAdornment } from "@mui/material";
+import React, { useMemo, useState } from "react";
+import { Box, Typography, Button, TextField, InputAdornment, IconButton, Paper, List, ListItem, ClickAwayListener, CircularProgress, ListItemButton, ListItemText } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import SpecialistModal from "./components/SpecialistModal";
 import { useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
 
 const SpecialtiesPage = () => {
+    const [searchInput, setSearchInput] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { data: getAllSpecialties, isLoading } = useGetAllSpecialtiesQuery({});
-    console.log(getAllSpecialties);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [resetSpinning, setResetSpinning] = useState(false);
+
+    const { data: getAllSpecialties = [], isLoading } = useGetAllSpecialtiesQuery({});
+
+    const filteredSpecialties = useMemo(() => {
+        return getAllSpecialties?.filter((item: any) =>
+            item.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [getAllSpecialties, searchTerm]);
+
+    const columns: GridColDef[] = [
+        { field: "title", headerName: "Title", minWidth: 150, flex: 1 },
+        { field: "icon", headerName: "Icon", minWidth: 100, flex: 1 },
+        {
+            field: "actions",
+            headerName: "Actions",
+            minWidth: 120,
+            flex: 0.5,
+            sortable: false,
+            renderCell: (params) => (
+                <Box display="flex" gap={1}>
+                    <IconButton color="primary" size="small">
+                        <VisibilityIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton color="secondary" size="small">
+                        <EditIcon fontSize="small" />
+                    </IconButton>
+                </Box>
+            ),
+        },
+    ];
+
+    const handleReset = () => {
+        setResetSpinning(true);
+        setTimeout(() => {
+            setSearchInput("");
+            setSearchTerm("");
+            setResetSpinning(false);
+        }, 500);
+    };
 
     return (
-        <Box
-            display="flex"
-            flexDirection="column"
-            gap={2}
-            sx={{
-                p: 0,
-                m: 0,
-                width: "100%",
-            }}
-        >
+        <Box display="flex" flexDirection="column" gap={2} sx={{ p: 0, m: 0, width: "100%" }}>
             <Box
                 display="flex"
                 justifyContent="space-between"
@@ -45,25 +80,25 @@ const SpecialtiesPage = () => {
 
                 <Button
                     sx={{
-                        padding: '7px 15px',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        backgroundColor: '#2CB0ED',
-                        textTransform: 'none',
-                        transition: 'all 0.3s ease',
-                        whiteSpace: 'nowrap',
-                        '&:hover': {
-                            backgroundColor: '#1995cf',
-                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                            '.icon': {
-                                transform: 'rotate(90deg)',
-                            }
+                        padding: "10px 15px",
+                        color: "white",
+                        fontWeight: "bold",
+                        backgroundColor: "#2CB0ED",
+                        textTransform: "none",
+                        transition: "all 0.3s ease",
+                        whiteSpace: "nowrap",
+                        "&:hover": {
+                            backgroundColor: "#1995cf",
+                            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                            ".icon": {
+                                transform: "rotate(90deg)",
+                            },
                         },
                     }}
                     onClick={() => setIsModalOpen(true)}
                 >
                     <Box display="flex" alignItems="center" gap="6px">
-                        <AddCircleOutlineIcon className="icon" sx={{ transition: 'transform 0.3s ease' }} />
+                        <AddCircleOutlineIcon className="icon" sx={{ transition: "transform 0.3s ease" }} />
                         Create New Specialty
                     </Box>
                 </Button>
@@ -79,63 +114,149 @@ const SpecialtiesPage = () => {
                     alignItems: { xs: "stretch", sm: "center" },
                 }}
             >
-                <TextField
-                    placeholder="Search specialties..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon color="action" />
-                            </InputAdornment>
-                        ),
-                        sx: {
-                            padding: '4px 8px',
-                            height: '36px',
-                        },
-                    }}
-                    sx={{
-                        flexGrow: 1,
-                        minWidth: { xs: '100%', sm: 250 },
-                        '& .MuiInputBase-root': {
-                            padding: '0 8px',
-                            height: '36px',
-                            fontSize: '14px',
-                        },
-                    }}
-                />
+                <Box position="relative" width={{ xs: "100%", sm: 550 }}>
+                    <TextField
+                        placeholder="Search specialties..."
+                        value={searchInput}
+                        onChange={(e) => {
+                            setSearchInput(e.target.value);
+                            setShowSuggestions(true);
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon color="action" />
+                                </InputAdornment>
+                            ),
+                            sx: {
+                                padding: "4px 8px",
+                                height: "36px",
+                            },
+                        }}
+                        sx={{
+                            width: "100%",
+                            "& .MuiInputBase-root": {
+                                padding: "0 8px",
+                                height: "36px",
+                                fontSize: "14px",
+                            },
+                        }}
+                    />
+                    {showSuggestions && searchInput && (
+                        <ClickAwayListener onClickAway={() => setShowSuggestions(false)}>
+                            <Paper
+                                sx={{
+                                    position: "absolute",
+                                    zIndex: 10,
+                                    mt: "4px",
+                                    width: "100%",
+                                    maxHeight: 200,
+                                    overflowY: "auto",
+                                    boxShadow: 3,
+                                }}
+                            >
+                                <List dense>
+                                    {getAllSpecialties
+                                        ?.filter((item: any) =>
+                                            item.title.toLowerCase().includes(searchInput.toLowerCase())
+                                        )
+                                        .slice(0, 10)
+                                        .map((item: any) => (
+                                            <ListItem key={item.id} disablePadding>
+                                                <ListItemButton
+                                                    onClick={() => {
+                                                        setSearchInput(item.title);
+                                                        setShowSuggestions(false);
+                                                    }}
+                                                    sx={{
+                                                        cursor: "pointer",
+                                                        "&:hover": {
+                                                            backgroundColor: "#f0f0f0",
+                                                        },
+                                                    }}
+                                                >
+                                                    <ListItemText primary={item.title} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))}
+                                </List>
+                            </Paper>
+                        </ClickAwayListener>
+                    )}
+                </Box>
+
                 <Button
                     variant="outlined"
+                    onClick={() => {
+                        setSearchTerm(searchInput);
+                        setShowSuggestions(false);
+                    }}
                     sx={{
-                        color: 'black',
-                        textTransform: 'none',
-                        fontWeight: 'bold',
-                        padding: '4px 10px',
-                        fontSize: '14px',
-                        height: '36px',
-                        borderColor: '#ccc',
-                        transition: 'all 0.3s ease',
-                        minWidth: { xs: '100%', sm: 'auto' },
-                        backgroundColor: '#f0f0f0',
-                        '&:hover': {
-                            backgroundColor: '#f0f0f0',
-                            borderColor: '#999',
-                            '.search-icon': {
-                                transform: 'scale(1.2)',
-                                color: '#2CB0ED',
+                        color: "black",
+                        textTransform: "none",
+                        fontWeight: "bold",
+                        padding: "4px 10px",
+                        fontSize: "14px",
+                        height: "36px",
+                        borderColor: "#ccc",
+                        backgroundColor: "#f0f0f0",
+                        "&:hover": {
+                            backgroundColor: "#f0f0f0",
+                            borderColor: "#999",
+                            ".search-icon": {
+                                transform: "scale(1.2)",
+                                color: "#2CB0ED",
                             },
                         },
                     }}
                 >
                     <Box display="flex" justifyContent="center" alignItems="center" gap="6px" width="100%">
-                        <SearchIcon className="search-icon" sx={{ transition: 'transform 0.3s, color 0.3s' }} />
+                        <SearchIcon className="search-icon" sx={{ transition: "transform 0.3s, color 0.3s" }} />
                         Search
                     </Box>
                 </Button>
+
+                <Button
+                    variant="outlined"
+                    onClick={handleReset}
+                    sx={{
+                        textTransform: "none",
+                        color: "white",
+                        border: "2px solid black",
+                        background: "black",
+                        height: "36px",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
+                    {resetSpinning ? (
+                        <CircularProgress size={16} sx={{ mr: 1 }} />
+                    ) : (
+                        <RefreshIcon
+                            sx={{
+                                mr: 1,
+                                animation: resetSpinning ? "spin 0.5s linear infinite" : "none",
+                            }}
+                        />
+                    )}
+                    Reset
+                </Button>
             </Box>
 
-            <Box>
-                Here Will Table Section Coming
+            <Box sx={{ width: "100%", overflowX: "auto" }}>
+                <DataGrid
+                    rows={filteredSpecialties}
+                    columns={columns}
+                    loading={isLoading}
+                    autoHeight
+                    sx={{
+                        minWidth: 600,
+                        "& .MuiDataGrid-columnHeaders": {
+                            backgroundColor: "#f4f4f4",
+                            fontWeight: "bold",
+                        },
+                    }}
+                />
             </Box>
         </Box>
     );

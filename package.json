@@ -16,6 +16,7 @@
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
     "@mui/material-nextjs": "^7.1.0",
+    "@mui/x-data-grid": "^8.4.0",
     "@radix-ui/react-slot": "^1.2.2",
     "@reduxjs/toolkit": "^2.8.1",
     "@toolpad/core": "^0.15.0",
