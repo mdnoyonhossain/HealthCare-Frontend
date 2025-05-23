@@ -4,10 +4,13 @@ import { Box, Typography, Button, TextField, InputAdornment } from "@mui/materia
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SpecialistModal from "./components/SpecialistModal";
+import { useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
 
 const SpecialtiesPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { data: getAllSpecialties, isLoading } = useGetAllSpecialtiesQuery({});
+    console.log(getAllSpecialties);
 
     return (
         <Box
