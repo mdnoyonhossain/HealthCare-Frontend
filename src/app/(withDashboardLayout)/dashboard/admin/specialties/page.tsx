@@ -4,8 +4,8 @@ import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListIt
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import SpecialistModal from "./components/SpecialistModal";
 import { useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
@@ -49,17 +49,67 @@ const SpecialtiesPage = () => {
     {
       field: "actions",
       headerName: "Actions",
-      minWidth: 120,
-      flex: 0.5,
+      minWidth: 180,
+      flex: 0.6,
       sortable: false,
       renderCell: (params) => (
-        <Box display="flex" gap={1}>
-          <IconButton color="primary" size="small">
-            <VisibilityIcon fontSize="small" />
-          </IconButton>
-          <IconButton color="secondary" size="small">
-            <EditIcon fontSize="small" />
-          </IconButton>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 1,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              px: 1.5,
+              py: 0.5,
+              color: '#22C55E',
+              border: '1px solid #22C55E',
+              textTransform: 'none',
+              fontWeight: 600,
+              minWidth: '70px',
+              backgroundColor: 'transparent',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                backgroundColor: '#22C55E',
+                color: '#fff',
+                boxShadow: '0 4px 10px rgba(34, 197, 94, 0.4)',
+              },
+            }}
+          >
+            <EditIcon sx={{ fontSize: 18, mr: 0.5 }} />
+            Edit
+          </Button>
+
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              px: 1.5,
+              py: 0.5,
+              color: '#EF4444',
+              border: '1px solid #EF4444',
+              textTransform: 'none',
+              fontWeight: 600,
+              minWidth: '70px',
+              backgroundColor: 'transparent',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                backgroundColor: '#EF4444',
+                color: '#fff',
+                boxShadow: '0 4px 10px rgba(239, 68, 68, 0.4)',
+              },
+            }}
+          >
+            <DeleteIcon sx={{ fontSize: 18, mr: 0.5 }} />
+            Delete
+          </Button>
         </Box>
       ),
     },
