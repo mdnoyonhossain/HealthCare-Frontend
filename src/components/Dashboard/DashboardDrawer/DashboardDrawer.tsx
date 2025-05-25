@@ -22,7 +22,7 @@ const dashboardHCTheme = createTheme({
                 text: {
                     primary: '#333',
                     secondary: '#555',
-                },
+                }
             },
         },
     },
