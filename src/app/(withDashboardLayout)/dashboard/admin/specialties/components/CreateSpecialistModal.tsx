@@ -23,7 +23,7 @@ const createSpecialistValidationSchema = z.object({
     file: z.any().refine((file) => file instanceof File, "File is required"),
 });
 
-const SpecialistModal = ({ open, setOpen }: TSpecialisModal) => {
+const CreateSpecialistModal = ({ open, setOpen }: TSpecialisModal) => {
     const [isLoading, setIsLoading] = useState(false);
     const [createSpicialist] = useCreateSpecialtiesMutation();
 
@@ -133,4 +133,4 @@ const SpecialistModal = ({ open, setOpen }: TSpecialisModal) => {
     );
 };
 
-export default SpecialistModal;
+export default CreateSpecialistModal;

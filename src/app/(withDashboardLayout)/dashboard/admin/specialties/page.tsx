@@ -7,7 +7,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import SpecialistModal from "./components/SpecialistModal";
+import CreateSpecialistModal from "./components/CreateSpecialistModal";
 import { useDeleteSpecialistMutation, useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
 import { toast } from "sonner";
 import { AlertCircle, Check } from "lucide-react";
@@ -239,7 +239,7 @@ const SpecialtiesPage = () => {
             Create New Specialty
           </Box>
         </Button>
-        <SpecialistModal open={isModalOpen} setOpen={setIsModalOpen} />
+        <CreateSpecialistModal open={isModalOpen} setOpen={setIsModalOpen} />
       </Box>
 
       <Box
