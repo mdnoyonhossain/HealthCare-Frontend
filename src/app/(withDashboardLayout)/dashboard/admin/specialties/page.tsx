@@ -8,7 +8,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import SpecialistModal from "./components/SpecialistModal";
-import { useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
+import { useDeleteSpecialistMutation, useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
+import { toast } from "sonner";
+import { AlertCircle, Check } from "lucide-react";
 
 const SpecialtiesPage = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -18,12 +20,45 @@ const SpecialtiesPage = () => {
   const [resetSpinning, setResetSpinning] = useState(false);
 
   const { data: getAllSpecialties = [], isLoading } = useGetAllSpecialtiesQuery({});
+  const [deleteSpecialist] = useDeleteSpecialistMutation();
 
   const filteredSpecialties = useMemo(() => {
     return getAllSpecialties?.filter((item: any) =>
       item.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [getAllSpecialties, searchTerm]);
+
+  const handleSpecialistDelete = async (id: string) => {
+    try {
+      const res = await deleteSpecialist(id).unwrap();
+      if (res?.id) {
+        toast.success("Specialist Deletion Successful", {
+          description: "The specialist record has been successfully deleted.",
+          duration: 5000,
+          icon: <Check className="h-4 w-4 text-green-500" />,
+          style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
+        });
+      }
+      else if (!res?.id) {
+        toast.error("Specialist Deletion Faild", {
+          description: "The system could not verify the deletion of the specialist. Please refresh and try again.",
+          position: "top-center",
+          duration: 4000,
+          icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+          style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+        });
+      }
+    }
+    catch (err) {
+      toast.error("Specialist Deletion Failed", {
+        description: "An unexpected error occurred while attempting to delete the specialist. Please try again later or contact support.",
+        position: "top-center",
+        duration: 4000,
+        icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+        style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+      });
+    }
+  }
 
   const columns: GridColDef[] = [
     {
@@ -52,7 +87,7 @@ const SpecialtiesPage = () => {
       minWidth: 180,
       flex: 0.6,
       sortable: false,
-      renderCell: (params) => (
+      renderCell: ({ row }) => (
         <Box
           sx={{
             display: 'flex',
@@ -105,6 +140,40 @@ const SpecialtiesPage = () => {
                 color: '#fff',
                 boxShadow: '0 4px 10px rgba(239, 68, 68, 0.4)',
               },
+            }}
+            onClick={() => {
+              toast.custom(() => (
+                <Box sx={{ p: 2, borderRadius: 1, backgroundColor: '#fff', boxShadow: 2, width: '300px', textAlign: "center", py: 2 }}>
+                  <strong>Are you sure you want to delete?</strong>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 2 }}>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => toast.dismiss()}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="error"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: '#EF4444',
+                          color: '#fff',
+                          boxShadow: '0 4px 10px rgba(239, 68, 68, 0.4)',
+                        },
+                      }}
+                      onClick={() => {
+                        handleSpecialistDelete(row?.id);
+                        toast.dismiss();
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </Box>
+                </Box>
+              ));
             }}
           >
             <DeleteIcon sx={{ fontSize: 18, mr: 0.5 }} />
@@ -289,9 +358,9 @@ const SpecialtiesPage = () => {
           onClick={handleReset}
           sx={{
             textTransform: "none",
-            color: "white",
-            border: "2px solid black",
-            background: "black",
+            color: "black",
+            border: "2px solid #E1F1F9",
+            background: "#E5FAE5",
             height: "36px",
             display: "flex",
             alignItems: "center",
@@ -310,12 +379,14 @@ const SpecialtiesPage = () => {
           Reset
         </Button>
       </Box>
-      <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", mt: 2 }}>
+
+      <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", mt: 2, mb: 4 }}>
         <DataGrid
           rows={filteredSpecialties}
           columns={columns}
           loading={isLoading}
           autoHeight
+          getRowHeight={() => 'auto'}
           disableRowSelectionOnClick
           hideFooter
           sx={{
@@ -325,12 +396,13 @@ const SpecialtiesPage = () => {
             fontSize: "15px",
             fontFamily: "sans-serif",
             px: 2,
-            py: 1,
+            pt: 1,
+            pb: 3,
             "& .MuiDataGrid-cell": {
               whiteSpace: "normal",
               lineHeight: "1.6",
-              paddingTop: "35px",
-              paddingBottom: "35px",
+              paddingTop: "15px",
+              paddingBottom: "15px",
               display: "flex",
               alignItems: "center",
               wordBreak: "break-word",
@@ -344,6 +416,7 @@ const SpecialtiesPage = () => {
 
             "& .MuiDataGrid-row": {
               maxHeight: "none !important",
+              color: "black",
             },
 
             "& .MuiDataGrid-cellContent": {
@@ -354,6 +427,10 @@ const SpecialtiesPage = () => {
               backgroundColor: "#f8fafc",
               color: "black"
             },
+
+            "& .MuiDataGrid-cell:focus-within": {
+              outline: "none",
+            }
           }}
         />
       </Box>
