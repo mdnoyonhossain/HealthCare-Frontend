@@ -401,8 +401,8 @@ const SpecialtiesPage = () => {
             "& .MuiDataGrid-cell": {
               whiteSpace: "normal",
               lineHeight: "1.6",
-              paddingTop: "15px",
-              paddingBottom: "15px",
+              paddingTop: "14px",
+              paddingBottom: "14px",
               display: "flex",
               alignItems: "center",
               wordBreak: "break-word",

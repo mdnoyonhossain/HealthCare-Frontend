@@ -23,3 +23,5 @@ export type TGenericErrorResponse = {
     message: string;
     errorMessages: TGenericErrorMessage[];
 };
+
+export const genderItems = ["MALE", "FEMALE"];
