@@ -12,6 +12,7 @@ import { AlertCircle, Check } from "lucide-react";
 import CreateDoctorModal from "./components/CreateDoctorModal";
 import { useDeleteDoctorMutation, useGetAllDoctorsQuery } from "@/redux/api/doctorApi";
 import { TDoctor } from "@/types/doctor";
+import { TMeta } from "@/types";
 
 const DoctorsPage = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -20,17 +21,27 @@ const DoctorsPage = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [resetSpinning, setResetSpinning] = useState(false);
 
-    const { data: getAllDoctors = [], isLoading } = useGetAllDoctorsQuery({});
+    const query: Record<string, any> = {};
+    query["searchTerm"] = searchTerm;
+
+    const { data: getAllDoctors = [], isLoading } = useGetAllDoctorsQuery({ ...query });
     const [deleteDoctor] = useDeleteDoctorMutation();
 
-    const doctros = getAllDoctors?.doctors;
-    const meta = getAllDoctors?.meta;
+    let doctors: TDoctor[] = [];
+    let meta: TMeta | undefined = undefined;
 
-    const filteredDoctors = useMemo(() => {
-        return doctros?.filter((item: TDoctor) =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [getAllDoctors, searchTerm]);
+    if (!Array.isArray(getAllDoctors)) {
+        doctors = getAllDoctors?.doctors ?? [];
+        meta = getAllDoctors?.meta;
+    }
+
+    const suggestions = useMemo(() => {
+        return doctors?.filter((d: TDoctor) =>
+            d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            d.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            d.contactNumber.toLowerCase().includes(searchTerm.toLowerCase())
+        ) || [];
+    }, [doctors, searchTerm]);
 
     const handleDoctorDelete = async (id: string) => {
         try {
@@ -75,28 +86,47 @@ const DoctorsPage = () => {
             ),
         },
         { field: "designaton", headerName: "Designation", minWidth: 170, flex: 1 },
-        { field: "gender", headerName: "Gender", minWidth: 150, flex: 1 },
+        {
+            field: "gender",
+            headerName: "Gender",
+            minWidth: 80,
+            flex: 1,
+            renderCell: ({ value }) => (
+                <Chip
+                    label={value}
+                    size="small"
+                    sx={{
+                        backgroundColor: "#F3E2E3",
+                        color: "#EF4444",
+                        fontWeight: 500,
+                        height: 24,
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                    }}
+                />
+            ),
+        },
         {
             field: "averageRating",
             headerName: "Rating",
-            minWidth: 60,
+            minWidth: 130,
             flex: 1,
             renderCell: ({ value }) => (
                 <Rating name="half-rating-read" defaultValue={value.averageRating} precision={value.averageRating} readOnly />
             ),
         },
         {
-            field: "isDeleted",
-            headerName: "Status",
+            field: "appointmentFee",
+            headerName: "AppointmentFee",
             minWidth: 100,
             flex: 1,
             renderCell: ({ value }) => (
                 <Chip
-                    label={value ? "Deactive" : "Active"}
+                    label={value}
                     size="small"
                     sx={{
-                        backgroundColor: value ? "#F3E2E3" : "#E1E8F5",
-                        color: value ? "#EF4444" : "#3B82F6",
+                        backgroundColor: "#E1E8F5",
+                        color: "#3B82F6",
                         fontWeight: 500,
                         height: 24,
                         fontSize: "12px",
@@ -133,10 +163,11 @@ const DoctorsPage = () => {
                             textTransform: 'none',
                             fontWeight: 600,
                             minWidth: '70px',
-                            backgroundColor: 'transparent',
+                            backgroundColor: '#E5FAE5',
                             transition: 'all 0.3s ease',
                             '&:hover': {
                                 backgroundColor: '#E5FAE5',
+                                border: '1px solid #1E7BA5',
                                 boxShadow: '0 4px 10px rgba(34, 197, 94, 0.4)',
                             },
                         }}
@@ -304,44 +335,28 @@ const DoctorsPage = () => {
                     />
                     {showSuggestions && searchInput && (
                         <ClickAwayListener onClickAway={() => setShowSuggestions(false)}>
-                            <Paper
-                                sx={{
-                                    position: "absolute",
-                                    zIndex: 10,
-                                    mt: "4px",
-                                    width: "100%",
-                                    maxHeight: 200,
-                                    overflowY: "auto",
-                                    boxShadow: 3,
-                                }}
-                            >
+                            <Paper sx={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10, maxHeight: 200, overflowY: "auto" }}>
                                 <List dense>
-                                    {doctros?.filter((item: TDoctor) =>
-                                        item.name.toLowerCase().includes(searchInput.toLowerCase())
-                                    )
-                                        .slice(0, 10)
-                                        .map((item: any) => (
-                                            <ListItem key={item.id} disablePadding>
-                                                <ListItemButton
-                                                    onClick={() => {
-                                                        setSearchInput(item.title);
-                                                        setShowSuggestions(false);
-                                                    }}
-                                                    sx={{
-                                                        cursor: "pointer",
-                                                        "&:hover": {
-                                                            backgroundColor: "#f0f0f0",
-                                                        },
-                                                    }}
-                                                >
-                                                    <ListItemText primary={item.title} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        ))}
+                                    {suggestions.map((suggestion: TDoctor, index: number) => (
+                                        <ListItem disablePadding key={index}>
+                                            <ListItemButton
+                                                onClick={() => {
+                                                    setSearchInput(suggestion.name);
+                                                    setShowSuggestions(false);
+                                                }}
+                                            >
+                                                <ListItemText
+                                                    primary={suggestion.name}
+                                                    secondary={`${suggestion.email} | ${suggestion.contactNumber}`}
+                                                />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    ))}
                                 </List>
                             </Paper>
                         </ClickAwayListener>
                     )}
+
                 </Box>
 
                 <Button
@@ -404,7 +419,7 @@ const DoctorsPage = () => {
 
             <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", mt: 2, mb: 4 }}>
                 <DataGrid
-                    rows={filteredDoctors}
+                    rows={doctors}
                     columns={columns}
                     loading={isLoading}
                     autoHeight

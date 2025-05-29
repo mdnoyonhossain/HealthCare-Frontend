@@ -1,17 +1,29 @@
 export type TDoctor = {
     id: string;
+    email: string;
     name: string;
     profilePhoto: string;
     contactNumber: string;
     address: string;
     registrationNumber: string;
-    experience: number | undefined;
+    experience: number;
     gender: 'MALE' | 'FEMALE';
-    apointmentFee: number | undefined;
+    appointmentFee: number;
     qualification: string;
     currentWorkingPlace: string;
-    designation: string;
-    specialties?: TSpecialties[];
+    designaton: string;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    averageRating: number;
+    review: any[];
+    doctorSpecialties: TDoctorSpecialty[];
+}
+
+export type TDoctorSpecialty = {
+    specialtiesId: string;
+    doctorId: string;
+    specialties: any;
 }
 
 export type TSpecialties = {
