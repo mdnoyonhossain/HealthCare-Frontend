@@ -10,9 +10,10 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { toast } from "sonner";
 import { AlertCircle, Check } from "lucide-react";
 import CreateDoctorModal from "./components/CreateDoctorModal";
-import { useDeleteDoctorMutation, useGetAllDoctorsQuery } from "@/redux/api/doctorApi";
+import { useGetAllDoctorsQuery, useSoftDeleteDoctorMutation } from "@/redux/api/doctorApi";
 import { TDoctor } from "@/types/doctor";
 import { TMeta } from "@/types";
+import { useDebounced } from "@/redux/hooks";
 
 const DoctorsPage = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -21,11 +22,14 @@ const DoctorsPage = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [resetSpinning, setResetSpinning] = useState(false);
 
+    const debouncedTerm = useDebounced({ searchQuery: searchInput, delay: 600 });
     const query: Record<string, any> = {};
-    query["searchTerm"] = searchTerm;
+    if (!!debouncedTerm) {
+        query["searchTerm"] = searchTerm;
+    }
 
     const { data: getAllDoctors = [], isLoading } = useGetAllDoctorsQuery({ ...query });
-    const [deleteDoctor] = useDeleteDoctorMutation();
+    const [deleteDoctor] = useSoftDeleteDoctorMutation();
 
     let doctors: TDoctor[] = [];
     let meta: TMeta | undefined = undefined;

@@ -23,7 +23,30 @@ const doctorApi = baseApi.injectEndpoints({
             transformResponse: (response: TDoctor[], meta: TMeta) => ({ doctors: response, meta }),
             providesTags: [tagTypes.doctor]
         }),
+        getSingleDoctor: build.query({
+            query: (id) => ({
+                url: `/doctor/${id}`,
+                method: "GET"
+            }),
+            providesTags: [tagTypes.doctor]
+        }),
+        updateDoctor: build.mutation({
+            query: ({ id, data }) => ({
+                url: `/doctor/${id}`,
+                method: "PATCH",
+                contentType: "application/json",
+                data
+            }),
+            invalidatesTags: [tagTypes.doctor]
+        }),
         deleteDoctor: build.mutation({
+            query: (id) => ({
+                url: `/doctor/${id}`,
+                method: "DELETE"
+            }),
+            invalidatesTags: [tagTypes.doctor]
+        }),
+        softDeleteDoctor: build.mutation({
             query: (id) => ({
                 url: `/doctor/soft/${id}`,
                 method: "DELETE"
@@ -33,4 +56,11 @@ const doctorApi = baseApi.injectEndpoints({
     })
 });
 
-export const { useCreateDoctorMutation, useGetAllDoctorsQuery, useDeleteDoctorMutation } = doctorApi;
+export const {
+    useCreateDoctorMutation,
+    useGetAllDoctorsQuery,
+    useGetSingleDoctorQuery,
+    useUpdateDoctorMutation,
+    useDeleteDoctorMutation,
+    useSoftDeleteDoctorMutation
+} = doctorApi;
