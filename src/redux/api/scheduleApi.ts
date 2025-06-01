@@ -2,6 +2,7 @@ import { TDoctor } from "@/types/doctor";
 import { tagTypes } from "../tagTypes";
 import baseApi from "./baseApi";
 import { TMeta } from "@/types";
+import { TGetAllSchedulesResponse, TGetSchedule, TScheduleFrom } from "@/types/schedule";
 
 const scheduleApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -9,7 +10,6 @@ const scheduleApi = baseApi.injectEndpoints({
             query: (data) => ({
                 url: "/schedule",
                 method: "POST",
-                contentType: "application/json",
                 data
             }),
             invalidatesTags: [tagTypes.schedule]
@@ -20,7 +20,7 @@ const scheduleApi = baseApi.injectEndpoints({
                 method: "GET",
                 params: arg
             }),
-            transformResponse: (response: TDoctor[], meta: TMeta) => ({ doctors: response, meta }),
+            transformResponse: (response: { data: TGetAllSchedulesResponse[] }, meta: TMeta) => ({ schedules: response, meta }),
             providesTags: [tagTypes.schedule]
         }),
         getSingleSchedule: build.query({
