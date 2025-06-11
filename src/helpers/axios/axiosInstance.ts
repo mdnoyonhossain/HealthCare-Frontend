@@ -1,6 +1,7 @@
 import { authKey } from "@/constants/authKey";
+import { getNewAccessToken } from "@/services/auth.service";
 import { TGenericErrorResponse, TResponseSuccessData } from "@/types";
-import { getFromLocalStorage } from "@/utils/localStorage";
+import { getFromLocalStorage, setToLocalStorage } from "@/utils/localStorage";
 import axios from "axios";
 
 const axiosInstance = axios.create();
@@ -28,14 +29,26 @@ axiosInstance.interceptors.response.use(
         }
 
         return responseObj;
-    }, function (error) {
-        const responseObj: TGenericErrorResponse = {
-            statusCode: error?.response?.data?.statusCode || 500,
-            message: error?.response?.data?.message || "Something went wrong!",
-            errorMessages: error?.response?.data?.message
-        }
+    },
+    async function (error: any) {
+        const config = error.config;
 
-        return responseObj;
+        if (error?.response?.status === 500 && !config.sent) {
+            config.sent = true;
+            const response = await getNewAccessToken();
+            const accessToken = response?.data?.accessToken;
+            config.headers["Authorization"] = accessToken;
+            setToLocalStorage(authKey, accessToken);
+            return axiosInstance(config);
+        } else {
+            const responseObj: TGenericErrorResponse = {
+                statusCode: error?.response?.data?.statusCode || 500,
+                message: error?.response?.data?.message || "Something went wrong!",
+                errorMessages: error?.response?.data?.message
+            }
+
+            return responseObj;
+        }
     });
 
 export default axiosInstance;

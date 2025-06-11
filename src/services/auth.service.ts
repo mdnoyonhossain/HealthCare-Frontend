@@ -1,4 +1,5 @@
 import { authKey } from "@/constants/authKey"
+import axiosInstance from "@/helpers/axios/axiosInstance";
 import { decodedToken } from "@/utils/jwt";
 import { getFromLocalStorage, removeFromLocalStorage, setToLocalStorage } from "@/utils/localStorage"
 
@@ -28,4 +29,13 @@ export const isLoggedIn = () => {
 
 export const removeUser = () => {
     return removeFromLocalStorage(authKey);
+}
+
+export const getNewAccessToken = async () => {
+    return await axiosInstance({
+        url: `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/refresh-token`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
+    })
 }

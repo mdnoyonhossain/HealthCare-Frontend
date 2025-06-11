@@ -1,4 +1,3 @@
-"use server";
 import { FieldValues } from "react-hook-form";
 
 const loginUser = async (payload: FieldValues) => {
@@ -8,7 +7,7 @@ const loginUser = async (payload: FieldValues) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(payload),
-        cache: "no-store"
+        credentials: "include"
     });
     const userInfo = await res.json();
 
