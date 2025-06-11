@@ -14,6 +14,7 @@ import { useGetAllDoctorsQuery, useSoftDeleteDoctorMutation } from "@/redux/api/
 import { TDoctor } from "@/types/doctor";
 import { TMeta } from "@/types";
 import { useDebounced } from "@/redux/hooks";
+import Link from "next/link";
 
 const DoctorsPage = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -157,6 +158,8 @@ const DoctorsPage = () => {
                     }}
                 >
                     <Button
+                        LinkComponent={Link}
+                        href={`/dashboard/admin/doctors/edit/${row.id}`}
                         variant="outlined"
                         size="small"
                         sx={{

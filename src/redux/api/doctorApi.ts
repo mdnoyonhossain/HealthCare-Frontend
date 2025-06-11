@@ -31,11 +31,10 @@ const doctorApi = baseApi.injectEndpoints({
             providesTags: [tagTypes.doctor]
         }),
         updateDoctor: build.mutation({
-            query: ({ id, data }) => ({
-                url: `/doctor/${id}`,
+            query: (data) => ({
+                url: `/doctor/${data.id}`,
                 method: "PATCH",
-                contentType: "application/json",
-                data
+                data: data.body
             }),
             invalidatesTags: [tagTypes.doctor]
         }),
