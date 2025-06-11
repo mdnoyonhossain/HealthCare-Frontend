@@ -6,7 +6,7 @@ import { genderItems } from "@/types";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import { AlertCircle, Check } from "lucide-react";
-import { useState } from "react";
+import { use, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { useGetSingleDoctorQuery, useUpdateDoctorMutation } from "@/redux/api/doctorApi";
@@ -14,16 +14,17 @@ import SkeletonLoading from "@/components/Loading/SkeletonLoading";
 import { useRouter } from "next/navigation";
 
 type TDoctorUpdateParams = {
-    params: {
+    params: Promise<{
         doctorId: string;
-    }
-}
+    }>;
+};
 
 const DoctorUpdatePage = ({ params }: TDoctorUpdateParams) => {
     const router = useRouter();
+    const { doctorId } = use(params);
     const [isLoading, setIsLoading] = useState(false);
     const [updateDoctor] = useUpdateDoctorMutation();
-    const { data: getSingleDoctor, isLoading: doctorLoading } = useGetSingleDoctorQuery(params?.doctorId);
+    const { data: getSingleDoctor, isLoading: doctorLoading } = useGetSingleDoctorQuery(doctorId);
 
     if (doctorLoading) {
         return <SkeletonLoading />
@@ -32,7 +33,7 @@ const DoctorUpdatePage = ({ params }: TDoctorUpdateParams) => {
     const handleUpdateDoctor = async (data: FieldValues) => {
         data.appointmentFee = Number(data.appointmentFee);
         data.experience = Number(data.experience);
-        data.id = params?.doctorId;
+        data.id = doctorId;
         setIsLoading(true);
 
         try {
