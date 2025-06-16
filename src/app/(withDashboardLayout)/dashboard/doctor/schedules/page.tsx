@@ -11,11 +11,11 @@ import { toast } from "sonner";
 import { AlertCircle, Check } from "lucide-react";
 import { TMeta } from "@/types";
 import { useDebounced } from "@/redux/hooks";
-import { useDeleteScheduleMutation, useGetAllSchedulesQuery } from "@/redux/api/scheduleApi";
 import { dateFormatter } from "@/utils/dateFormatter";
 import dayjs from "dayjs";
 import { TGetAllSchedulesResponse, TScheduleFrom } from "@/types/schedule";
 import CreateDoctorScheduleModal from "./components/CreateDoctorScheduleModal";
+import { useDeleteDoctorScheduleMutation, useGetAllDoctorSchedulesQuery } from "@/redux/api/doctorSchedule";
 
 const DoctorSchedulesPage = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -23,7 +23,7 @@ const DoctorSchedulesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [resetSpinning, setResetSpinning] = useState(false);
-    const [allSchedule, setAllSchedule] = useState<any>([]);
+    const [allDoctorSchedule, setAllDoctorSchedule] = useState<any>([]);
 
     const debouncedTerm = useDebounced({ searchQuery: searchInput, delay: 600 });
     const query: Record<string, any> = {};
@@ -31,34 +31,33 @@ const DoctorSchedulesPage = () => {
         query["startDate"] = searchTerm;
     }
 
-    const { data: getAllSchedules = [], isLoading } = useGetAllSchedulesQuery({ ...query });
-    const [deleteSchedule] = useDeleteScheduleMutation();
+    const { data: getAllDoctorSchedules = [], isLoading } = useGetAllDoctorSchedulesQuery({ ...query });
+    const [deleteDoctorSchedule] = useDeleteDoctorScheduleMutation();
 
     let schedules: TGetAllSchedulesResponse[] = [];
     let meta: TMeta | undefined = undefined;
 
-    if (!Array.isArray(getAllSchedules)) {
-        schedules = getAllSchedules?.schedules?.data ?? [];
-        meta = getAllSchedules?.meta;
+    if (!Array.isArray(getAllDoctorSchedules)) {
+        schedules = getAllDoctorSchedules?.doctorSchedules?.data ?? [];
+        meta = getAllDoctorSchedules?.meta;
     }
 
     useEffect(() => {
         const updateData = schedules?.map((schedule: any, index: number) => {
             return {
-                sl: index + 1,
-                id: schedule?.id,
-                startDate: dateFormatter(schedule?.startDateTime),
-                endDate: dateFormatter(schedule?.endDateTime),
-                startTime: dayjs(schedule?.startDateTime).format('hh:mm a'),
-                endTime: dayjs(schedule?.endDateTime).format('hh:mm a'),
+                id: schedule?.scheduleId,
+                startDate: dateFormatter(schedule?.schedule?.startDateTime),
+                endDate: dateFormatter(schedule?.schedule?.endDateTime),
+                startTime: dayjs(schedule?.schedule?.startDateTime).format('hh:mm a'),
+                endTime: dayjs(schedule?.schedule?.endDateTime).format('hh:mm a'),
             };
         });
 
-        setAllSchedule(updateData);
+        setAllDoctorSchedule(updateData);
     }, [schedules]);
 
     const suggestions = useMemo(() => {
-        return allSchedule?.filter((d: TScheduleFrom) => {
+        return allDoctorSchedule?.filter((d: TScheduleFrom) => {
             const startDateStr = d?.startDate ? new Date(d.startDate).toISOString().split('T')[0] : '';
             const endDateStr = d?.endDate ? new Date(d.endDate).toISOString().split('T')[0] : '';
             const startTimeStr = d?.startTime || '';
@@ -71,21 +70,21 @@ const DoctorSchedulesPage = () => {
                 endTimeStr.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }) || [];
-    }, [allSchedule, searchTerm]);
+    }, [allDoctorSchedule, searchTerm]);
 
     const handleScheduleDelete = async (id: string) => {
         try {
-            const res = await deleteSchedule(id).unwrap();
-            if (res?.id) {
-                toast.success("Schedule Deletion Successful", {
+            const res = await deleteDoctorSchedule(id);
+            if (res) {
+                toast.success("Dcotor Schedule Deletion Successful", {
                     description: "The schedules record has been successfully deleted.",
                     duration: 5000,
                     icon: <Check className="h-4 w-4 text-green-500" />,
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
                 });
             }
-            else if (!res?.id) {
-                toast.error("Schedule Deletion Faild", {
+            else if (!res) {
+                toast.error("Dcotor Schedule Deletion Faild", {
                     description: "The system could not verify the deletion of the schedule. Please refresh and try again.",
                     position: "top-center",
                     duration: 4000,
@@ -95,7 +94,7 @@ const DoctorSchedulesPage = () => {
             }
         }
         catch (err) {
-            toast.error("Schedule Deletion Failed", {
+            toast.error("Dcotor Schedule Deletion Failed", {
                 description: "An unexpected error occurred while attempting to delete the schedule. Please try again later or contact support.",
                 position: "top-center",
                 duration: 4000,
@@ -106,7 +105,6 @@ const DoctorSchedulesPage = () => {
     }
 
     const columns: GridColDef[] = [
-        { field: 'sl', headerName: 'SL', maxWidth: 60, flex: 1 },
         {
             field: "startDate",
             headerName: "Start Date",
@@ -456,7 +454,7 @@ const DoctorSchedulesPage = () => {
 
             <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", mt: 2, mb: 4 }}>
                 <DataGrid
-                    rows={suggestions?.length ? suggestions : allSchedule}
+                    rows={suggestions?.length ? suggestions : allDoctorSchedule}
                     columns={columns}
                     loading={isLoading}
                     autoHeight

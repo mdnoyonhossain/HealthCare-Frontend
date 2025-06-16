@@ -20,7 +20,7 @@ export const doctorScheduleApi = baseApi.injectEndpoints({
                     params: arg,
                 };
             },
-            transformResponse: (response: [], meta: TMeta) => ({ doctorSchedules: response, meta }),
+            transformResponse: (response: any, meta: TMeta) => ({ doctorSchedules: response, meta }),
             providesTags: [tagTypes.doctorSchedule],
         }),
         getSingleDoctorSchedule: build.query({
