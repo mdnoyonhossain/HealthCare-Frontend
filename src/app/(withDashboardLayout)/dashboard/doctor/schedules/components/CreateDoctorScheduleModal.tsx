@@ -1,49 +1,47 @@
 "use client"
-import HCChipSelectField from "@/components/Forms/HCChipSelectField";
-import HCDatePicker from "@/components/Forms/HCDatePicker";
 import HCForm from "@/components/Forms/HCForm";
 import HCModal from "@/components/Shared/HCModal/HCModal"
-import { useCreateScheduleMutation } from "@/redux/api/scheduleApi";
-import { dateFormatter } from "@/utils/dateFormatter";
-import { timeFormatter } from "@/utils/timeFormatter";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useGetAllSchedulesQuery } from "@/redux/api/scheduleApi";
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { Button, Grid } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import { AlertCircle, Check } from "lucide-react";
 import { useState } from "react";
-import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import { date, z } from "zod";
+import { DatePicker } from "@mui/x-date-pickers";
+import MultipleSelectFieldChip from "./MultipleSelectFieldChip";
+import { useCreateDoctorScheduleMutation } from "@/redux/api/doctorSchedule";
 
 type TSchedulesModal = {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const createDoctorScheduleValidationSchema = z.object({
-    startDate: z.date({ required_error: "Start date is required" }),
-    endDate: z.date({ required_error: "End date is required" }),
-    startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Start time must be in HH:mm format"),
-    endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "End time must be in HH:mm format"),
-});
-
 const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [createSchedule] = useCreateScheduleMutation();
+    const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).toISOString());
+    const [selectedScheduleIds, setSelectedScheduleIds] = useState<string[]>([]);
+    const [createDoctorSchedule] = useCreateDoctorScheduleMutation();
 
-    const handleCreateDoctorSchedule = async (values: FieldValues) => {
+    const query: Record<string, any> = {};
+    if (!!selectedDate) {
+        query['startDate'] = dayjs(selectedDate).hour(0).minute(0).millisecond(0).toISOString();
+        query['endDate'] = dayjs(selectedDate).hour(23).minute(59).millisecond(999).toISOString();
+    }
+
+    const { data: allSchedules } = useGetAllSchedulesQuery(query);
+    const schedules = allSchedules?.schedules?.data
+
+    const handleCreateDoctorSchedule = async () => {
         setIsLoading(true);
 
-        values.startDate = dateFormatter(values.startDate);
-        values.endDate = dateFormatter(values.endDate);
-        values.startTime = timeFormatter(values.startTime);
-        values.endTime = timeFormatter(values.endTime);
-
         try {
-            const res = await createSchedule(values);
+            const res = await createDoctorSchedule({ scheduleIds: selectedScheduleIds });
             if (res) {
                 toast.success("Doctor schedule created successfully", {
-                    description: `Scheduled from ${values.startDate} ${values.startTime} to ${values.endDate} ${values.endTime}.`,
+                    description: "The doctor's schedule has been created successfully",
                     duration: 5000,
                     icon: <Check className="h-4 w-4 text-green-500" />,
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
@@ -54,7 +52,7 @@ const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
             }
             else if (!res) {
                 toast.error("Doctor schedule created failed", {
-                    description: "An unexpected error occurred while creating the schedule. Please try again.",
+                    description: "We couldn't create the doctor's schedule. Please try again.",
                     position: "top-center",
                     duration: 6000,
                     icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
@@ -79,13 +77,29 @@ const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
 
     return (
         <HCModal open={open} setOpen={setOpen} title="Create Doctor Schedules">
-            <HCForm onSubmit={handleCreateDoctorSchedule} /**resolver={zodResolver(createScheduleValidationSchema)} defaultValues={{ startDate: "", endDate: "", startTime: "", endTime: "" }} */>
+            <HCForm onSubmit={handleCreateDoctorSchedule}>
                 <Grid container spacing={2} mt={2} mb={1}>
                     <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                        <HCDatePicker name="startDate" label="Start Date" variant="outlined" size="small" fullWidth />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Available Schedule Date"
+                                value={dayjs(selectedDate)}
+                                onChange={(newValue) => setSelectedDate(dayjs(newValue).toISOString())}
+                                slotProps={{
+                                    textField: {
+                                        size: "small",
+                                        sx: { width: '100%' },
+                                    },
+                                }}
+                            />
+                        </LocalizationProvider>
                     </Grid>
                     <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                        <HCChipSelectField name="scheduleIds" label="Select Time" items={["Oliver","Olisfdsaver", "asfdsaOliver", "Van", "April", "Kelly"]} required />
+                        <MultipleSelectFieldChip
+                            schedules={schedules}
+                            selectedScheduleIds={selectedScheduleIds}
+                            setSelectedScheduleIds={setSelectedScheduleIds}
+                        />
                     </Grid>
 
                 </Grid>
