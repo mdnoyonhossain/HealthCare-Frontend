@@ -69,7 +69,67 @@ const Profile = () => {
                     />
                 </Box>
 
-                
+                <Box mt={2}>
+                    {updateMyProfileLoading ? (
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            disabled
+                            startIcon={<CloudUploadIcon />}
+                            sx={{
+                                py: 1.5,
+                                fontWeight: "bold",
+                                fontSize: "15px",
+                                textTransform: "none",
+                                color: "#666",
+                                borderColor: "#ccc",
+                                "& .MuiButton-startIcon": {
+                                    color: "#999",
+                                },
+                            }}
+                        >
+                            Uploading...
+                        </Button>
+                    ) : (
+                        <Button
+                            component="label"
+                            variant="outlined"
+                            fullWidth
+                            sx={{
+                                fontWeight: "bold",
+                                fontSize: "15px",
+                                textTransform: "none",
+                                backgroundColor: "#F9FAFB",
+                                borderColor: "#008767",
+                                color: "#008767",
+                                "&:hover": {
+                                    backgroundColor: "#E6F4F1",
+                                    borderColor: "#008767",
+                                },
+                            }}
+                        >
+                            <AutoFileUploader
+                                name='file'
+                                label='Choose Your Profile Photo'
+                                icon={<CloudUploadIcon />}
+                                onFileUpload={fileUploadHandler}
+                                variant='text'
+                                sx={{
+                                    fontWeight: "bold",
+                                    fontSize: "15px",
+                                    textTransform: "none",
+                                    backgroundColor: "#F9FAFB",
+                                    borderColor: "#008767",
+                                    color: "#008767",
+                                    "&:hover": {
+                                        backgroundColor: "#E6F4F1",
+                                        borderColor: "#008767",
+                                    },
+                                }}
+                            />
+                        </Button>
+                    )}
+                </Box>
 
                 <Button
                     fullWidth
