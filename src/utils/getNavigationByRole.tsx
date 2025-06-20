@@ -10,6 +10,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Navigation } from '@toolpad/core/AppProvider';
 import { TUserRole } from '@/types';
 import { USER_ROLE } from '@/constants/role';
@@ -18,6 +19,7 @@ const getNavigationByRole = (role: TUserRole): Navigation => {
     const commonItems: Navigation = [
         { kind: 'header', title: 'Main items' },
         { segment: `dashboard/${role}`, title: 'Dashboard', icon: <DashboardIcon /> },
+        { segment: `dashboard/${role}/profile`, title: 'Profile', icon: <AccountBoxIcon /> },
     ];
 
     switch (role) {

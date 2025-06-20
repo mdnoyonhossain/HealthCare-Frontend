@@ -18,7 +18,7 @@ const userApi = baseApi.injectEndpoints({
             providesTags: [tagTypes.user]
         }),
         updateMyProfile: build.mutation({
-            query: ({ id, data }) => ({
+            query: (data) => ({
                 url: "/user/update-my-profile",
                 method: "PATCH",
                 contentType: "multipart/form-data",
