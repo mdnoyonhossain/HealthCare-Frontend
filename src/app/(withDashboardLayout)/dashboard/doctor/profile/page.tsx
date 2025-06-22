@@ -9,11 +9,13 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { CalendarMonth, Cancel, CheckCircle, Update, WarningAmber } from "@mui/icons-material";
 import AutoFileUploader from "@/components/Forms/AutoFileUploader";
-import { modifyPayload } from "@/utils/modifyPayload";
 import { toast } from "sonner";
 import { AlertCircle, Check } from "lucide-react";
+import ProfileUpdateModal from "./components/ProfileUpdateModal";
+import { useState } from "react";
 
 const Profile = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const { data: getMyProfile, isLoading } = useGetMyProfileQuery({});
     const [updateMyProfile, { isLoading: updateMyProfileLoading }] = useUpdateMyProfileMutation();
 
@@ -154,10 +156,11 @@ const Profile = () => {
                             },
                         },
                     }}
-                // onClick={() => setIsModalOpen(true)}
+                    onClick={() => setIsModalOpen(true)}
                 >
                     Edit Profile
                 </Button>
+                <ProfileUpdateModal open={isModalOpen} setOpen={setIsModalOpen} id={getMyProfile?.id} />
 
                 <Typography variant='h6' color='primary.main' mt={4} mb={2}>
                     Account Information
