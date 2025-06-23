@@ -6,7 +6,7 @@ import { useGetSingleDoctorQuery, useUpdateDoctorMutation } from "@/redux/api/do
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Grid } from "@mui/material";
 import { AlertCircle, Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -31,15 +31,23 @@ const UpdateMyProfilevalidationSchema = z.object({
     gender: z.string().optional(),
     qualification: z.string().optional(),
     currentWorkingPlace: z.string().optional(),
-    designaton: z.string().optional()
+    designaton: z.string().optional(),
+    address: z.string().optional(),
 });
 
 const ProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedSpecialtiesIds, setSelectedSpecialtiesIds] = useState([]);
+    const [selectedSpecialtiesIds, setSelectedSpecialtiesIds] = useState<string[]>([]);
+
+    const { data: getSingleDoctorData, refetch, isSuccess } = useGetSingleDoctorQuery(id);
     const { data: getAllSpecialties } = useGetAllSpecialtiesQuery({});
-    const { data: getSingleDoctorData } = useGetSingleDoctorQuery(id);
-    const [updateDoctor, { isLoading: updateDoctorLoading }] = useUpdateDoctorMutation();
+    const [updateDoctor] = useUpdateDoctorMutation();
+
+    useEffect(() => {
+        if (!isSuccess) return;
+
+        setSelectedSpecialtiesIds(getSingleDoctorData?.doctorSpecialties?.map((speciality: any) => speciality?.specialitiesId));
+    }, [isSuccess]);
 
     const handleUpdateMyProfile = async (data: FieldValues) => {
         const specialties = selectedSpecialtiesIds?.map((specialitiesId: string) => ({
@@ -84,6 +92,7 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
                 });
 
                 setIsLoading(false);
+                refetch();
                 setOpen(false);
             }
             else if (!res?.id) {
@@ -119,7 +128,7 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
                         <HCInput type="text" name="name" label="Doctor Name" variant="outlined" size="small" fullWidth />
                     </Grid>
                     <Grid size={{ sm: 4, md: 4, xs: 12 }}>
-                        <HCInput type="email" name="email" label="Email Address" variant="outlined" size="small" fullWidth />
+                        <HCInput type="email" name="email" disabled={true} label="Email Address" variant="outlined" size="small" fullWidth />
                     </Grid>
                     <Grid size={{ sm: 4, md: 4, xs: 12 }}>
                         <HCInput type="text" name="contactNumber" label="Contact Number" variant="outlined" size="small" fullWidth />
@@ -133,7 +142,7 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
                         <HCInput type="text" name="address" label="Address" variant="outlined" size="small" fullWidth />
                     </Grid>
                     <Grid size={{ sm: 4, md: 4, xs: 12 }}>
-                        <HCInput type="text" name="registrationNumber" label="Registration Number" variant="outlined" size="small" fullWidth />
+                        <HCInput type="text" name="registrationNumber" disabled={true} label="Registration Number" variant="outlined" size="small" fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} mt={2} mb={3}>

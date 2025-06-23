@@ -38,7 +38,7 @@ export default function MultipleSelectChip({ allSpecialties, setSelectedIds, sel
             <FormControl sx={{ width: '100%' }}>
                 <InputLabel
                     id='demo-multiple-chip-label'
-                    sx={{ mt: selectedIds.length > 0 ? 0 : -1 }}
+                    sx={{ mt: selectedIds?.length > 0 ? 0 : -1 }}
                 >
                     Specialties
                 </InputLabel>
@@ -57,16 +57,16 @@ export default function MultipleSelectChip({ allSpecialties, setSelectedIds, sel
                     }
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {selected.map((value: any) => (
+                            {selected?.map((value: any) => (
                                 <Chip
                                     size='small'
                                     key={value}
                                     label={
-                                        allSpecialties.find(
-                                            (item: any) => item.id === value
+                                        allSpecialties?.find(
+                                            (item: any) => item?.id === value
                                         )
-                                            ? `${allSpecialties.find(
-                                                (item: any) => item.id === value
+                                            ? `${allSpecialties?.find(
+                                                (item: any) => item?.id === value
                                             )?.title
                                             }`
                                             : ''
@@ -81,7 +81,7 @@ export default function MultipleSelectChip({ allSpecialties, setSelectedIds, sel
                         <MenuItem
                             key={item?.id}
                             value={item.id}
-                            style={getStyles(item.id, selectedIds, theme)}
+                            style={getStyles(item?.id, selectedIds, theme)}
                         >
                             {item?.title}
                         </MenuItem>
