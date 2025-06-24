@@ -20,7 +20,7 @@ const scheduleApi = baseApi.injectEndpoints({
                 method: "GET",
                 params: arg
             }),
-            transformResponse: (response: { data: TGetAllSchedulesResponse[] }, meta: TMeta) => ({ schedules: response, meta }),
+            transformResponse: (response: { data: TGetAllSchedulesResponse[], meta: TMeta }, meta: TMeta) => ({ schedules: response, meta }),
             providesTags: [tagTypes.schedule]
         }),
         getSingleSchedule: build.query({

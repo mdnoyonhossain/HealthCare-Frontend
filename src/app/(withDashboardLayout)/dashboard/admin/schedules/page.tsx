@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListItem, ClickAwayListener, CircularProgress, ListItemButton, ListItemText, Chip, Rating } from "@mui/material";
+import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListItem, ClickAwayListener, CircularProgress, ListItemButton, ListItemText, Chip, Rating, Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -24,12 +24,21 @@ const SchedulesPage = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [resetSpinning, setResetSpinning] = useState(false);
     const [allSchedule, setAllSchedule] = useState<any>([]);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
+    const [sortOrder, setSortOrder] = useState("asc");
+    const [sortBy, setSortBy] = useState("startDateTime");
 
     const debouncedTerm = useDebounced({ searchQuery: searchInput, delay: 600 });
     const query: Record<string, any> = {};
     if (!!debouncedTerm) {
         query["startDate"] = searchTerm;
     }
+
+    query['page'] = page;
+    query['limit'] = limit;
+    query['sortOrder'] = sortOrder;
+    query['sortBy'] = sortBy;
 
     const { data: getAllSchedules = [], isLoading } = useGetAllSchedulesQuery({ ...query });
     const [deleteSchedule] = useDeleteScheduleMutation();
@@ -39,13 +48,18 @@ const SchedulesPage = () => {
 
     if (!Array.isArray(getAllSchedules)) {
         schedules = getAllSchedules?.schedules?.data ?? [];
-        meta = getAllSchedules?.meta;
+        meta = getAllSchedules?.schedules?.meta;
     }
+
+    const pageCount: number = meta?.total ? Math.ceil(meta.total / limit) : 1;
+
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
 
     useEffect(() => {
         const updateData = schedules?.map((schedule: any, index: number) => {
             return {
-                sl: index + 1,
                 id: schedule?.id,
                 startDate: dateFormatter(schedule?.startDateTime),
                 endDate: dateFormatter(schedule?.endDateTime),
@@ -106,7 +120,6 @@ const SchedulesPage = () => {
     }
 
     const columns: GridColDef[] = [
-        { field: 'sl', headerName: 'SL', maxWidth: 60, flex: 1 },
         {
             field: "startDate",
             headerName: "Start Date",
@@ -292,19 +305,37 @@ const SchedulesPage = () => {
                 </Box>
 
                 <Button
+                    // sx={{
+                    //     padding: "10px 15px",
+                    //     color: "white",
+                    //     fontWeight: "bold",
+                    //     backgroundColor: "#2CB0ED",
+                    //     textTransform: "none",
+                    //     transition: "all 0.3s ease",
+                    //     whiteSpace: "nowrap",
+                    //     "&:hover": {
+                    //         backgroundColor: "#1995cf",
+                    //         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                    //         ".icon": {
+                    //             transform: "rotate(90deg)",
+                    //         },
+                    //     },
+                    // }}
                     sx={{
-                        padding: "10px 15px",
-                        color: "white",
+                        px: 3,
+                        py: 1.5,
                         fontWeight: "bold",
-                        backgroundColor: "#2CB0ED",
+                        fontSize: "15px",
+                        backgroundColor: "#008767",
+                        color: "#fff",
                         textTransform: "none",
-                        transition: "all 0.3s ease",
-                        whiteSpace: "nowrap",
+                        transition: "all 0.5s ease",
+                        boxShadow: "none",
                         "&:hover": {
-                            backgroundColor: "#1995cf",
+                            backgroundColor: "#008767",
                             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                             ".icon": {
-                                transform: "rotate(90deg)",
+                                transform: "rotate(120deg)",
                             },
                         },
                     }}
@@ -462,7 +493,7 @@ const SchedulesPage = () => {
                     autoHeight
                     getRowHeight={() => 'auto'}
                     disableRowSelectionOnClick
-                    hideFooter
+                    hideFooterPagination
                     sx={{
                         backgroundColor: "transparent",
                         borderRadius: 2,
@@ -505,6 +536,62 @@ const SchedulesPage = () => {
                         "& .MuiDataGrid-cell:focus-within": {
                             outline: "none",
                         }
+                    }}
+                    slots={{
+                        footer: () => {
+                            return (
+                                <Box
+                                    sx={{
+                                        mt: 2,
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            backdropFilter: 'blur(10px)',
+                                            backgroundColor: 'rgba(225, 241, 249)',
+                                            border: '1px solid rgba(255, 255, 255, 0.4)',
+                                            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.1)',
+                                            borderRadius: '16px',
+                                            px: 4,
+                                            py: 1.5,
+                                        }}
+                                    >
+                                        <Pagination
+                                            count={pageCount}
+                                            page={page}
+                                            onChange={handlePaginationChange}
+                                            variant="text"
+                                            shape="rounded"
+                                            showFirstButton
+                                            showLastButton
+                                            sx={{
+                                                '& .MuiPaginationItem-root': {
+                                                    fontWeight: 500,
+                                                    borderRadius: '50%',
+                                                    minWidth: 36,
+                                                    height: 36,
+                                                    color: '#1e3a8a',
+                                                    transition: 'all 0.2s ease-in-out',
+                                                },
+                                                '& .MuiPaginationItem-root:hover': {
+                                                    backgroundColor: '#c7d2fe',
+                                                },
+                                                '& .Mui-selected': {
+                                                    backgroundColor: '#2CB0ED !important',
+                                                    color: '#fff',
+                                                    fontWeight: 600,
+                                                },
+                                                '& .MuiPaginationItem-icon': {
+                                                    color: '#1e3a8a',
+                                                },
+                                            }}
+                                        />
+                                    </Box>
+                                </Box>
+                            );
+                        },
                     }}
                 />
             </Box>

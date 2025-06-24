@@ -6,26 +6,18 @@ import HCModal from "@/components/Shared/HCModal/HCModal"
 import { useCreateScheduleMutation } from "@/redux/api/scheduleApi";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { timeFormatter } from "@/utils/timeFormatter";
-import { zodResolver } from "@hookform/resolvers/zod";
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { Button, Grid } from "@mui/material";
+import dayjs from "dayjs";
 import { AlertCircle, Check } from "lucide-react";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import { date, z } from "zod";
 
 type TSchedulesModal = {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-
-const createScheduleValidationSchema = z.object({
-    startDate: z.date({ required_error: "Start date is required" }),
-    endDate: z.date({ required_error: "End date is required" }),
-    startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Start time must be in HH:mm format"),
-    endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "End time must be in HH:mm format"),
-});
 
 const CreateScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -40,10 +32,10 @@ const CreateScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
         values.endTime = timeFormatter(values.endTime);
 
         try {
-            const res = await createSchedule(values);
-            if (res) {
+            const res = await createSchedule(values).unwrap();
+            if (res?.length) {
                 toast.success("Schedule created successfully", {
-                    description: `Scheduled from ${values.startDate} ${values.startTime} to ${values.endDate} ${values.endTime}.`,
+                    description: "Schedule has been created successfully. You can now view it in the data table.",
                     duration: 5000,
                     icon: <Check className="h-4 w-4 text-green-500" />,
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
@@ -52,7 +44,7 @@ const CreateScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
                 setIsLoading(false);
                 setOpen(false);
             }
-            else if (!res) {
+            else if (!res?.length) {
                 toast.error("Schedule created failed", {
                     description: "An unexpected error occurred while creating the schedule. Please try again.",
                     position: "top-center",
@@ -79,7 +71,7 @@ const CreateScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
 
     return (
         <HCModal open={open} setOpen={setOpen} title="Create Schedules">
-            <HCForm onSubmit={handleCreateSchedule} /**resolver={zodResolver(createScheduleValidationSchema)} defaultValues={{ startDate: "", endDate: "", startTime: "", endTime: "" }} */>
+            <HCForm onSubmit={handleCreateSchedule}>
                 <Grid container spacing={2} mt={2} mb={1}>
                     <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                         <HCDatePicker name="startDate" label="Start Date" variant="outlined" size="small" fullWidth />
@@ -109,16 +101,22 @@ const CreateScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
                         }
                         disabled={isLoading}
                         sx={{
-                            color: 'white',
-                            backgroundColor: '#2CB0ED',
-                            padding: { xs: "6px 16px", sm: "6px 50px" },
+                            mt: 0.5,
+                            py: 1,
+                            fontWeight: "bold",
                             fontSize: "15px",
-                            margin: "10px 0 8px 0",
-                            textTransform: "capitalize",
-                            '&:hover': {
-                                backgroundColor: '#2196f3',
-                                boxShadow: "none"
-                            },
+                            backgroundColor: "#008767",
+                            color: "#fff",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            boxShadow: "none",
+                            "&:hover": {
+                                backgroundColor: "#008767",
+                                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                                ".icon": {
+                                    transform: "rotate(270deg)",
+                                },
+                            }
                         }}
                     >
                         {isLoading ? 'Creating Schedule...' : 'Schedule'}
@@ -129,16 +127,22 @@ const CreateScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
                         type="submit"
                         startIcon={<EventAvailableIcon />}
                         sx={{
-                            color: 'white',
-                            backgroundColor: '#2CB0ED',
-                            padding: { xs: "6px 16px", sm: "6px 50px" },
+                            mt: 0.5,
+                            py: 1,
+                            fontWeight: "bold",
                             fontSize: "15px",
-                            margin: "10px 0 8px 0",
-                            textTransform: "capitalize",
-                            '&:hover': {
-                                backgroundColor: '#2196f3',
-                                boxShadow: "none"
-                            },
+                            backgroundColor: "#008767",
+                            color: "#fff",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            boxShadow: "none",
+                            "&:hover": {
+                                backgroundColor: "#008767",
+                                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                                ".icon": {
+                                    transform: "rotate(270deg)",
+                                },
+                            }
                         }}
                     >
                         Create Schedule
