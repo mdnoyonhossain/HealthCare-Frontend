@@ -144,7 +144,7 @@ const CreateDoctorModal = ({ open, setOpen }: TDoctorModal) => {
                         <HCInput type="text" name="doctor.qualification" label="Qualification" variant="outlined" size="small" fullWidth />
                     </Grid>
                     <Grid size={{ sm: 4, md: 4, xs: 12 }}>
-                        <HCInput type="text" name="doctor.currentWorkingPlace" label="CurrentWorkingPlace" variant="outlined" size="small" fullWidth />
+                        <HCInput type="text" name="doctor.currentWorkingPlace" label="Current Working Place" variant="outlined" size="small" fullWidth />
                     </Grid>
                     <Grid size={{ sm: 4, md: 4, xs: 12 }}>
                         <HCInput type="text" name="doctor.designaton" label="Designation" variant="outlined" size="small" fullWidth />
@@ -163,16 +163,22 @@ const CreateDoctorModal = ({ open, setOpen }: TDoctorModal) => {
                         }
                         disabled={isLoading}
                         sx={{
-                            color: 'white',
-                            backgroundColor: '#2CB0ED',
-                            padding: { xs: "6px 16px", sm: "6px 50px" },
+                            mt: 2,
+                            py: 1,
+                            fontWeight: "bold",
                             fontSize: "15px",
-                            margin: "10px 0 8px 0",
-                            textTransform: "capitalize",
-                            '&:hover': {
-                                backgroundColor: '#2196f3',
-                                boxShadow: "none"
-                            },
+                            backgroundColor: "#008767",
+                            color: "#fff",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            boxShadow: "none",
+                            "&:hover": {
+                                backgroundColor: "#008767",
+                                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                                ".icon": {
+                                    transform: "rotate(270deg)",
+                                },
+                            }
                         }}
                     >
                         {isLoading ? 'Creating Doctor...' : 'Doctor'}
@@ -183,16 +189,22 @@ const CreateDoctorModal = ({ open, setOpen }: TDoctorModal) => {
                         type="submit"
                         startIcon={<MedicalServicesIcon />}
                         sx={{
-                            color: 'white',
-                            backgroundColor: '#2CB0ED',
-                            padding: { xs: "6px 16px", sm: "6px 50px" },
+                            mt: 2,
+                            py: 1,
+                            fontWeight: "bold",
                             fontSize: "15px",
-                            margin: "10px 0 8px 0",
-                            textTransform: "capitalize",
-                            '&:hover': {
-                                backgroundColor: '#2196f3',
-                                boxShadow: "none"
-                            },
+                            backgroundColor: "#008767",
+                            color: "#fff",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            boxShadow: "none",
+                            "&:hover": {
+                                backgroundColor: "#008767",
+                                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                                ".icon": {
+                                    transform: "rotate(270deg)",
+                                },
+                            }
                         }}
                     >
                         Create Doctor

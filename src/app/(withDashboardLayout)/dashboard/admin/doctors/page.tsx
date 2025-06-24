@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListItem, ClickAwayListener, CircularProgress, ListItemButton, ListItemText, Chip, Rating } from "@mui/material";
+import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListItem, ClickAwayListener, CircularProgress, ListItemButton, ListItemText, Chip, Rating, Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -22,12 +22,21 @@ const DoctorsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [resetSpinning, setResetSpinning] = useState(false);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
+    const [sortOrder, setSortOrder] = useState("desc");
+    const [sortBy, setSortBy] = useState("updatedAt");
 
     const debouncedTerm = useDebounced({ searchQuery: searchInput, delay: 600 });
     const query: Record<string, any> = {};
     if (!!debouncedTerm) {
         query["searchTerm"] = searchTerm;
     }
+
+    query['page'] = page;
+    query['limit'] = limit;
+    query['sortOrder'] = sortOrder;
+    query['sortBy'] = sortBy;
 
     const { data: getAllDoctors = [], isLoading } = useGetAllDoctorsQuery({ ...query });
     const [deleteDoctor] = useSoftDeleteDoctorMutation();
@@ -39,6 +48,12 @@ const DoctorsPage = () => {
         doctors = getAllDoctors?.doctors ?? [];
         meta = getAllDoctors?.meta;
     }
+
+    const pageCount: number = meta?.total ? Math.ceil(meta.total / limit) : 1;
+
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
 
     const suggestions = useMemo(() => {
         return doctors?.filter((d: TDoctor) =>
@@ -278,18 +293,20 @@ const DoctorsPage = () => {
 
                 <Button
                     sx={{
-                        padding: "10px 15px",
-                        color: "white",
+                        px: 3,
+                        py: 1.5,
                         fontWeight: "bold",
-                        backgroundColor: "#2CB0ED",
+                        fontSize: "15px",
+                        backgroundColor: "#008767",
+                        color: "#fff",
                         textTransform: "none",
-                        transition: "all 0.3s ease",
-                        whiteSpace: "nowrap",
+                        transition: "all 0.5s ease",
+                        boxShadow: "none",
                         "&:hover": {
-                            backgroundColor: "#1995cf",
+                            backgroundColor: "#008767",
                             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                             ".icon": {
-                                transform: "rotate(90deg)",
+                                transform: "rotate(120deg)",
                             },
                         },
                     }}
@@ -432,7 +449,7 @@ const DoctorsPage = () => {
                     autoHeight
                     getRowHeight={() => 'auto'}
                     disableRowSelectionOnClick
-                    hideFooter
+                    hideFooterPagination
                     sx={{
                         backgroundColor: "transparent",
                         borderRadius: 2,
@@ -475,6 +492,62 @@ const DoctorsPage = () => {
                         "& .MuiDataGrid-cell:focus-within": {
                             outline: "none",
                         }
+                    }}
+                    slots={{
+                        footer: () => {
+                            return (
+                                <Box
+                                    sx={{
+                                        mt: 2,
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            backdropFilter: 'blur(10px)',
+                                            backgroundColor: 'rgba(225, 241, 249)',
+                                            border: '1px solid rgba(255, 255, 255, 0.4)',
+                                            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.1)',
+                                            borderRadius: '16px',
+                                            px: 4,
+                                            py: 1.5,
+                                        }}
+                                    >
+                                        <Pagination
+                                            count={pageCount}
+                                            page={page}
+                                            onChange={handlePaginationChange}
+                                            variant="text"
+                                            shape="rounded"
+                                            showFirstButton
+                                            showLastButton
+                                            sx={{
+                                                '& .MuiPaginationItem-root': {
+                                                    fontWeight: 500,
+                                                    borderRadius: '50%',
+                                                    minWidth: 36,
+                                                    height: 36,
+                                                    color: '#1e3a8a',
+                                                    transition: 'all 0.2s ease-in-out',
+                                                },
+                                                '& .MuiPaginationItem-root:hover': {
+                                                    backgroundColor: '#c7d2fe',
+                                                },
+                                                '& .Mui-selected': {
+                                                    backgroundColor: '#2CB0ED !important',
+                                                    color: '#fff',
+                                                    fontWeight: 600,
+                                                },
+                                                '& .MuiPaginationItem-icon': {
+                                                    color: '#1e3a8a',
+                                                },
+                                            }}
+                                        />
+                                    </Box>
+                                </Box>
+                            );
+                        },
                     }}
                 />
             </Box>
