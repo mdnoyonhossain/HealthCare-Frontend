@@ -39,7 +39,6 @@ const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
 
         try {
             const res = await createDoctorSchedule({ scheduleIds: selectedScheduleIds }).unwrap();
-            console.log(res.count);
             if (res?.count) {
                 toast.success("Doctor schedule created successfully", {
                     description: "The doctor's schedule has been created successfully",

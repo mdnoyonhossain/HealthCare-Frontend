@@ -193,30 +193,6 @@ const SchedulesPage = () => {
                         sx={{
                             px: 1.5,
                             py: 0.5,
-                            color: '#000000',
-                            border: 'none',
-                            textTransform: 'none',
-                            fontWeight: 600,
-                            minWidth: '70px',
-                            backgroundColor: '#E5FAE5',
-                            transition: 'all 0.3s ease',
-                            '&:hover': {
-                                backgroundColor: '#E5FAE5',
-                                border: '1px solid #1E7BA5',
-                                boxShadow: '0 4px 10px rgba(34, 197, 94, 0.4)',
-                            },
-                        }}
-                    >
-                        <EditIcon sx={{ fontSize: 18, mr: 0.5 }} />
-                        Edit
-                    </Button>
-
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                            px: 1.5,
-                            py: 0.5,
                             color: '#EF4444',
                             border: '1px solid #EF4444',
                             textTransform: 'none',

@@ -236,7 +236,7 @@ const Navbar = () => {
                   </MenuItem>
                   <MenuItem
                     component={Link}
-                    href="/profile"
+                    href={`/dashboard/${userInfo?.role}/profile`}
                     onClick={handleMenuClose}
                     sx={{ gap: 1, borderRadius: 1 }}
                   >
