@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListItem, ClickAwayListener, CircularProgress, ListItemButton, ListItemText, Chip, Rating } from "@mui/material";
+import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListItem, ClickAwayListener, CircularProgress, ListItemButton, ListItemText, Chip, Rating, Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -24,12 +24,17 @@ const DoctorSchedulesPage = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [resetSpinning, setResetSpinning] = useState(false);
     const [allDoctorSchedule, setAllDoctorSchedule] = useState<any>([]);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
 
     const debouncedTerm = useDebounced({ searchQuery: searchInput, delay: 600 });
     const query: Record<string, any> = {};
     if (!!debouncedTerm) {
         query["startDate"] = searchTerm;
     }
+
+    query['page'] = page;
+    query['limit'] = limit;
 
     const { data: getAllDoctorSchedules = [], isLoading } = useGetAllDoctorSchedulesQuery({ ...query });
     const [deleteDoctorSchedule] = useDeleteDoctorScheduleMutation();
@@ -39,8 +44,14 @@ const DoctorSchedulesPage = () => {
 
     if (!Array.isArray(getAllDoctorSchedules)) {
         schedules = getAllDoctorSchedules?.doctorSchedules?.data ?? [];
-        meta = getAllDoctorSchedules?.meta;
+        meta = getAllDoctorSchedules?.doctorSchedules?.meta;
     }
+
+    const pageCount: number = meta?.total ? Math.ceil(meta.total / limit) : 1;
+
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
 
     useEffect(() => {
         const updateData = schedules?.map((schedule: any, index: number) => {
@@ -460,7 +471,7 @@ const DoctorSchedulesPage = () => {
                     autoHeight
                     getRowHeight={() => 'auto'}
                     disableRowSelectionOnClick
-                    hideFooter
+                    hideFooterPagination
                     sx={{
                         backgroundColor: "transparent",
                         borderRadius: 2,
@@ -503,6 +514,62 @@ const DoctorSchedulesPage = () => {
                         "& .MuiDataGrid-cell:focus-within": {
                             outline: "none",
                         }
+                    }}
+                    slots={{
+                        footer: () => {
+                            return (
+                                <Box
+                                    sx={{
+                                        mt: 2,
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            backdropFilter: 'blur(10px)',
+                                            backgroundColor: 'rgba(225, 241, 249)',
+                                            border: '1px solid rgba(255, 255, 255, 0.4)',
+                                            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.1)',
+                                            borderRadius: '16px',
+                                            px: 4,
+                                            py: 1.5,
+                                        }}
+                                    >
+                                        <Pagination
+                                            count={pageCount}
+                                            page={page}
+                                            onChange={handlePaginationChange}
+                                            variant="text"
+                                            shape="rounded"
+                                            showFirstButton
+                                            showLastButton
+                                            sx={{
+                                                '& .MuiPaginationItem-root': {
+                                                    fontWeight: 500,
+                                                    borderRadius: '50%',
+                                                    minWidth: 36,
+                                                    height: 36,
+                                                    color: '#1e3a8a',
+                                                    transition: 'all 0.2s ease-in-out',
+                                                },
+                                                '& .MuiPaginationItem-root:hover': {
+                                                    backgroundColor: '#c7d2fe',
+                                                },
+                                                '& .Mui-selected': {
+                                                    backgroundColor: '#2CB0ED !important',
+                                                    color: '#fff',
+                                                    fontWeight: 600,
+                                                },
+                                                '& .MuiPaginationItem-icon': {
+                                                    color: '#1e3a8a',
+                                                },
+                                            }}
+                                        />
+                                    </Box>
+                                </Box>
+                            );
+                        },
                     }}
                 />
             </Box>
