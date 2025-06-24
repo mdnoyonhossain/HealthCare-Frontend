@@ -38,8 +38,9 @@ const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
         setIsLoading(true);
 
         try {
-            const res = await createDoctorSchedule({ scheduleIds: selectedScheduleIds });
-            if (res) {
+            const res = await createDoctorSchedule({ scheduleIds: selectedScheduleIds }).unwrap();
+            console.log(res.count);
+            if (res?.count) {
                 toast.success("Doctor schedule created successfully", {
                     description: "The doctor's schedule has been created successfully",
                     duration: 5000,
@@ -50,7 +51,7 @@ const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
                 setIsLoading(false);
                 setOpen(false);
             }
-            else if (!res) {
+            else if (!res.count) {
                 toast.error("Doctor schedule created failed", {
                     description: "We couldn't create the doctor's schedule. Please try again.",
                     position: "top-center",
@@ -117,13 +118,13 @@ const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
                         disabled={isLoading}
                         sx={{
                             color: 'white',
-                            backgroundColor: '#2CB0ED',
+                            backgroundColor: '#008767',
                             padding: { xs: "6px 16px", sm: "6px 50px" },
                             fontSize: "15px",
                             margin: "10px 0 8px 0",
                             textTransform: "capitalize",
                             '&:hover': {
-                                backgroundColor: '#2196f3',
+                                backgroundColor: '#008767',
                                 boxShadow: "none"
                             },
                         }}
@@ -137,13 +138,13 @@ const CreateDoctorScheduleModal = ({ open, setOpen }: TSchedulesModal) => {
                         startIcon={<EventAvailableIcon />}
                         sx={{
                             color: 'white',
-                            backgroundColor: '#2CB0ED',
+                            backgroundColor: '#008767',
                             padding: { xs: "6px 16px", sm: "6px 50px" },
                             fontSize: "15px",
                             margin: "10px 0 8px 0",
                             textTransform: "capitalize",
                             '&:hover': {
-                                backgroundColor: '#2196f3',
+                                backgroundColor: '#008767',
                                 boxShadow: "none"
                             },
                         }}

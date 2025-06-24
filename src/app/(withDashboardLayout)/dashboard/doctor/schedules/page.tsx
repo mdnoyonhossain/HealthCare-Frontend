@@ -302,25 +302,27 @@ const DoctorSchedulesPage = () => {
 
                 <Button
                     sx={{
-                        padding: "10px 15px",
-                        color: "white",
+                        px: 3,
+                        py: 1.5,
                         fontWeight: "bold",
-                        backgroundColor: "#2CB0ED",
+                        fontSize: "15px",
+                        backgroundColor: "#008767",
+                        color: "#fff",
                         textTransform: "none",
-                        transition: "all 0.3s ease",
-                        whiteSpace: "nowrap",
+                        transition: "all 0.5s ease",
+                        boxShadow: "none",
                         "&:hover": {
-                            backgroundColor: "#1995cf",
+                            backgroundColor: "#008767",
                             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                             ".icon": {
-                                transform: "rotate(90deg)",
+                                transform: "rotate(120deg)",
                             },
                         },
                     }}
                     onClick={() => setIsModalOpen(true)}
                 >
                     <Box display="flex" alignItems="center" gap="6px">
-                        <AddCircleOutlineIcon className="icon" sx={{ transition: "transform 0.3s ease" }} />
+                        <AddCircleOutlineIcon className="icon" sx={{ transition: "transform 0.5s ease" }} />
                         Create Doctor Schedule
                     </Box>
                 </Button>

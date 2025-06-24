@@ -184,17 +184,21 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
                         }
                         disabled={isLoading}
                         sx={{
-                            color: 'white',
-                            backgroundColor: '#2CB0ED',
-                            padding: { xs: "10px 20px", sm: "10px 40px" },
-                            fontSize: "16px",
-                            fontWeight: 600,
-                            margin: "10px 0 8px 0",
-                            textTransform: "capitalize",
-                            '&:hover': {
-                                backgroundColor: '#2196f3',
-                                boxShadow: "none"
-                            },
+                            py: 1,
+                            fontWeight: "bold",
+                            fontSize: "15px",
+                            backgroundColor: "#008767",
+                            color: "#fff",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            boxShadow: "none",
+                            "&:hover": {
+                                backgroundColor: "#008767",
+                                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                                ".icon": {
+                                    transform: "rotate(270deg)",
+                                },
+                            }
                         }}
                     >
                         {isLoading ? 'Updating Profile...' : 'Profile'}
@@ -205,17 +209,21 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
                         type="submit"
                         startIcon={<MedicalServicesIcon />}
                         sx={{
-                            color: 'white',
-                            backgroundColor: '#2CB0ED',
-                            padding: { xs: "10px 20px", sm: "10px 40px" },
-                            fontSize: "16px",
-                            fontWeight: 600,
-                            margin: "10px 0 8px 0",
-                            textTransform: "capitalize",
-                            '&:hover': {
-                                backgroundColor: '#2196f3',
-                                boxShadow: "none"
-                            },
+                            py: 1,
+                            fontWeight: "bold",
+                            fontSize: "15px",
+                            backgroundColor: "#008767",
+                            color: "#fff",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            boxShadow: "none",
+                            "&:hover": {
+                                backgroundColor: "#008767",
+                                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                                ".icon": {
+                                    transform: "rotate(270deg)",
+                                },
+                            }
                         }}
                     >
                         Update Profile
