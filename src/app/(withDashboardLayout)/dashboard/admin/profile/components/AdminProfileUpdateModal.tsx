@@ -9,7 +9,7 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useGetSingleAdminQuery, useUpdateAdminMutation } from "@/redux/api/adminApi";
 
 type TUpdateModalProps = {
@@ -114,7 +114,7 @@ const AdminProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
                             isLoading ? (
                                 <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             ) : (
-                                <MedicalServicesIcon />
+                                <AccountBoxIcon />
                             )
                         }
                         disabled={isLoading}
@@ -142,7 +142,7 @@ const AdminProfileUpdateModal = ({ open, setOpen, id }: TUpdateModalProps) => {
                     <Button
                         fullWidth
                         type="submit"
-                        startIcon={<MedicalServicesIcon />}
+                        startIcon={<AccountBoxIcon />}
                         sx={{
                             py: 1,
                             fontWeight: "bold",
