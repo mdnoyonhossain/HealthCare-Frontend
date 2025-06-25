@@ -90,7 +90,6 @@ const SchedulesPage = () => {
     const handleScheduleDelete = async (id: string) => {
         try {
             const res = await deleteSchedule(id).unwrap();
-            console.log(res);
             if (res?.id) {
                 toast.success("Schedule Deletion Successful", {
                     description: "The schedules record has been successfully deleted.",

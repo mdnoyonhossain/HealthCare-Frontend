@@ -11,6 +11,7 @@ import CreateSpecialistModal from "./components/CreateSpecialistModal";
 import { useDeleteSpecialistMutation, useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
 import { toast } from "sonner";
 import { AlertCircle, Check } from "lucide-react";
+import Link from "next/link";
 
 const SpecialtiesPage = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -99,6 +100,8 @@ const SpecialtiesPage = () => {
           }}
         >
           <Button
+            LinkComponent={Link}
+            href={`/dashboard/admin/specialties/edit/${row?.id}`}
             variant="outlined"
             size="small"
             sx={{
