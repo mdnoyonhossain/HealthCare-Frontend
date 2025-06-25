@@ -116,7 +116,7 @@ const DoctorUpdatePage = ({ params }: TDoctorUpdateParams) => {
                         <HCInput type="text" name="name" label="Doctor Name" variant="outlined" size="small" fullWidth />
                     </Grid>
                     <Grid size={{ sm: 4, md: 6, xs: 12 }}>
-                        <HCInput type="email" name="email" label="Email Address" variant="outlined" size="small" fullWidth />
+                        <HCInput type="email" name="email" disabled={true} label="Email Address" variant="outlined" size="small" fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} mt={2} mb={3}>

@@ -90,6 +90,7 @@ const SchedulesPage = () => {
     const handleScheduleDelete = async (id: string) => {
         try {
             const res = await deleteSchedule(id).unwrap();
+            console.log(res);
             if (res?.id) {
                 toast.success("Schedule Deletion Successful", {
                     description: "The schedules record has been successfully deleted.",
@@ -100,7 +101,7 @@ const SchedulesPage = () => {
             }
             else if (!res?.id) {
                 toast.error("Schedule Deletion Faild", {
-                    description: "The system could not verify the deletion of the schedule. Please refresh and try again.",
+                    description: "This schedule appears to be already booked or in use and cannot be deleted.",
                     position: "top-center",
                     duration: 4000,
                     icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
