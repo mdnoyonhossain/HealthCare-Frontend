@@ -14,12 +14,14 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Navigation } from '@toolpad/core/AppProvider';
 import { TUserRole } from '@/types';
 import { USER_ROLE } from '@/constants/role';
+import { KeyIcon, KeySquareIcon } from 'lucide-react';
 
 const getNavigationByRole = (role: TUserRole): Navigation => {
     const commonItems: Navigation = [
         { kind: 'header', title: 'Main items' },
         { segment: `dashboard/${role}`, title: 'Dashboard', icon: <DashboardIcon /> },
         { segment: `dashboard/${role}/profile`, title: 'Profile', icon: <AccountBoxIcon /> },
+        { segment: `dashboard/change-password`, title: 'Security', icon: <KeySquareIcon /> },
     ];
 
     switch (role) {
