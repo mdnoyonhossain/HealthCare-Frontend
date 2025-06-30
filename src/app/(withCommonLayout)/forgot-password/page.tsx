@@ -86,7 +86,7 @@ const ForgotPassword = () => {
                                     <Typography
                                         variant="h4"
                                         fontWeight={600}
-                                        fontSize={26}
+                                        fontSize={25}
                                         sx={{ textDecoration: "none" }}
                                     >
                                         <Box component="span" color="primary.main">F</Box>orgot

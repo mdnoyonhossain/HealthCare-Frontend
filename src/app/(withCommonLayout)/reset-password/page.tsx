@@ -1,49 +1,60 @@
 "use client";
 import HCForm from "@/components/Forms/HCForm";
 import HCInput from "@/components/Forms/HCInput";
-import loginUser from "@/services/actions/loginUser";
-import { getUserInfo, storeUserInfo } from "@/services/auth.service";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
-import { AlertCircle, Check, LogIn } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { AlertCircle, Check, KeySquareIcon, RotateCcwKeyIcon } from "lucide-react";
+import KeyIcon from '@mui/icons-material/Key';
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useResetPasswordMutation } from "@/redux/api/authApi";
+import { authKey } from "@/constants/authKey";
+import { deleteCookies } from "@/services/actions/deleteCookies";
 
-const userLoginValidationSchema = z.object({
-    email: z.string().min(1, "Email is required").email("Enter a valid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters long"),
+const resetPasswordValidationSchema = z.object({
+    password: z.string().min(6, 'New Password Must be at least 6 characters long'),
 });
 
-const LoginPage = () => {
+const ResetPassword = () => {
     const navigate = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const searchParams = useSearchParams();
+    const [resetPassword] = useResetPasswordMutation();
 
-    const handleLogin = async (data: FieldValues) => {
+    const userId = searchParams.get('userId');
+    const token = searchParams.get('token');
+
+    useEffect(() => {
+        if (!token) return;
+        localStorage.setItem(authKey, token);
+    }, [token]);
+
+    const handleForgotPassword = async (data: FieldValues) => {
         setIsLoading(true);
+        const updatedData = { ...data, id: userId };
 
         try {
-            const res = await loginUser(data);
+            const res = await resetPassword(updatedData);
             if (res?.data) {
-                toast.success("Login successful", {
-                    description: `Welcome back! ${res?.message} Redirecting to your dashboard...`,
+                toast.success("Password has been successfully reset.", {
+                    description: "Password has been successfully reset. Please use your new credentials to login.",
                     duration: 5000,
                     icon: <Check className="h-4 w-4 text-green-500" />,
                     style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
                 });
 
-                if (res?.data?.accessToken) {
-                    storeUserInfo({ accessToken: res?.data?.accessToken })
-                }
+                localStorage.removeItem(authKey);
+                deleteCookies([authKey, 'refreshToken']);
 
                 setIsLoading(false);
+                navigate.push('/login');
             }
-            else if (!res?.success) {
-                toast.error("Login failed", {
-                    description: "Invalid email or password. Please try again.",
+            else if (!res?.data) {
+                toast.error("Password Reset Failed", {
+                    description: "Please try again.",
                     position: "top-center",
                     duration: 4000,
                     icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
@@ -85,39 +96,37 @@ const LoginPage = () => {
                                 justifyContent: "center",
                                 alignItems: "center"
                             }}>
-                                <Box>
-                                    <Typography
-                                        component={Link}
-                                        href="/"
-                                        variant="h4"
-                                        fontWeight={600}
-                                        sx={{ textDecoration: "none" }}
-                                    >
-                                        <Box component="span" color="primary.main">H</Box>ealth
-                                        <Box component="span" color="primary.main">C</Box>are
-                                    </Typography>
+                                <Box
+                                    sx={{
+                                        marginTop: "-30px",
+                                        marginBottom: "-15px",
+                                        '& svg': {
+                                            width: 100,
+                                            height: 100,
+                                        },
+                                    }}
+                                >
+                                    <KeyIcon sx={{ color: 'primary.main' }} />
                                 </Box>
                                 <Box>
-                                    <Typography variant="body2" color="text.secondary" mt={0.3} mb={0.5}>
-                                        Enter your credentials to access your account
+                                    <Typography
+                                        variant="h4"
+                                        fontWeight={600}
+                                        fontSize={28}
+                                        sx={{ textDecoration: "none" }}
+                                    >
+                                        <Box component="span" color="primary.main">R</Box>eset
+                                        <Box component="span" color="primary.main"> P</Box>assword
                                     </Typography>
                                 </Box>
                             </Stack>
                             <Box>
-                                <HCForm onSubmit={handleLogin} resolver={zodResolver(userLoginValidationSchema)} defaultValues={{ email: "", password: "" }}>
+                                <HCForm onSubmit={handleForgotPassword} resolver={zodResolver(resetPasswordValidationSchema)} defaultValues={{ password: "" }}>
                                     <Grid container spacing={2} mt={2} mb={1}>
-                                        <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="email" name="email" label="Email" variant="outlined" size="small" fullWidth />
-                                        </Grid>
-                                        <Grid size={{ sm: 6, md: 6, xs: 12 }}>
-                                            <HCInput type="password" name="password" label="Password" variant="outlined" size="small" fullWidth />
+                                        <Grid size={{ sm: 12, md: 12, xs: 12 }}>
+                                            <HCInput type="password" name="password" label="New Password" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                     </Grid>
-                                    <Link href="forgot-password">
-                                        <Typography variant="body2" align="right" className="text-[#2CB0ED] hover:underline cursor-pointer" mb={1}>
-                                            Forgot password?
-                                        </Typography>
-                                    </Link>
                                     {isLoading ? (
                                         <Button
                                             fullWidth
@@ -126,7 +135,7 @@ const LoginPage = () => {
                                                 isLoading ? (
                                                     <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                                 ) : (
-                                                    <LogIn size={18} />
+                                                    <KeySquareIcon size={18} />
                                                 )
                                             }
                                             disabled={isLoading}
@@ -135,6 +144,7 @@ const LoginPage = () => {
                                                 backgroundColor: '#2CB0ED',
                                                 padding: { xs: "6px 16px", sm: "6px 50px" },
                                                 fontSize: "15px",
+                                                textTransform: "capitalize",
                                                 margin: "10px 0 8px 0",
                                                 '&:hover': {
                                                     backgroundColor: '#2196f3',
@@ -142,18 +152,19 @@ const LoginPage = () => {
                                                 },
                                             }}
                                         >
-                                            {isLoading ? 'Logging in...' : 'Login'}
+                                            {isLoading ? 'Reset Password...' : 'Reset Password'}
                                         </Button>
                                     ) : (
                                         <Button
                                             fullWidth
                                             type="submit"
-                                            startIcon={<LogIn size={18} />}
+                                            startIcon={<RotateCcwKeyIcon size={18} />}
                                             sx={{
                                                 color: 'white',
                                                 backgroundColor: '#2CB0ED',
                                                 padding: { xs: "6px 16px", sm: "6px 50px" },
                                                 fontSize: "15px",
+                                                textTransform: "capitalize",
                                                 margin: "10px 0 8px 0",
                                                 '&:hover': {
                                                     backgroundColor: '#2196f3',
@@ -161,15 +172,9 @@ const LoginPage = () => {
                                                 },
                                             }}
                                         >
-                                            Login
+                                            Reset Password
                                         </Button>
                                     )}
-                                    <Typography variant="body2" color="text.secondary" align="center" mt={0.3}>
-                                        Don&apos;t have an account?{" "}
-                                        <Link href="/register" className="text-[#2CB0ED] hover:underline">
-                                            Create account
-                                        </Link>
-                                    </Typography>
                                 </HCForm>
                             </Box>
                         </Box>
@@ -180,4 +185,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default ResetPassword;
