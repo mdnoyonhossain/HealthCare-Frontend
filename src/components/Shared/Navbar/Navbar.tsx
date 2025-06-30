@@ -1,5 +1,5 @@
 "use client";
-import { getUserInfo, removeUser } from "@/services/auth.service";
+import { getUserInfo } from "@/services/auth.service";
 import { Box, Button, Drawer, IconButton, Menu, MenuItem, Skeleton, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { AlignJustify, LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LoginIcon from '@mui/icons-material/Login';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import logoutUser from "@/services/actions/logoutUser";
 
 const Navbar = () => {
   const theme = useTheme();
@@ -16,7 +17,7 @@ const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [userInfo, setUserInfo] = useState<{ email?: string, role?: string } | null>(null);
-  const [isHydrated, setIsHydrated] = useState(false); // Prevent hydration mismatch
+  const [isHydrated, setIsHydrated] = useState(false);
   const navigate = useRouter();
 
   useEffect(() => {
@@ -41,10 +42,9 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    removeUser();
+    logoutUser(navigate)
     setUserInfo(null);
-    navigate.refresh();
-    navigate.push('/login');
+    navigate.push('/login')
   };
 
   if (!isHydrated) {

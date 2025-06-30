@@ -40,6 +40,11 @@ const LoginPage = () => {
                 }
 
                 setIsLoading(false);
+
+                const userRoleLocalDecoded = getUserInfo();
+                if (userRoleLocalDecoded?.role) {
+                    navigate.push(`/dashboard/${userRoleLocalDecoded?.role}`);
+                }
             }
             else if (!res?.success) {
                 toast.error("Login failed", {
