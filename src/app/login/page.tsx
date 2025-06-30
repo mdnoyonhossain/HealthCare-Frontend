@@ -118,9 +118,11 @@ const LoginPage = () => {
                                             <HCInput type="password" name="password" label="Password" variant="outlined" size="small" fullWidth />
                                         </Grid>
                                     </Grid>
-                                    <Typography variant="body2" align="right" className="text-[#2CB0ED] hover:underline cursor-pointer" mb={1}>
-                                        Forgot password?
-                                    </Typography>
+                                    <Link href="forgot-password">
+                                        <Typography variant="body2" align="right" className="text-[#2CB0ED] hover:underline cursor-pointer" mb={1}>
+                                            Forgot password?
+                                        </Typography>
+                                    </Link>
                                     {isLoading ? (
                                         <Button
                                             fullWidth
