@@ -5,6 +5,8 @@ import { jwtDecode } from 'jwt-decode';
 
 type Role = keyof typeof roleBasedPrivateRoutes;
 
+const AuthRoutes = ['/login', '/register'];
+
 const commonPrivateRoutes = [
     '/dashboard',
     '/dashboard/change-password'
@@ -21,8 +23,13 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const accessToken = (await cookies()).get('accessToken')?.value;
+
     if (!accessToken) {
-        return NextResponse.redirect(new URL('/login', request.url));
+        if (AuthRoutes.includes(pathname)) {
+            return NextResponse.next();
+        } else {
+            return NextResponse.redirect(new URL('/login', request.url));
+        }
     }
 
     if (accessToken && commonPrivateRoutes.includes(pathname)) {
@@ -47,5 +54,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: '/dashboard/:page*',
+    matcher: ['/login', '/register', '/dashboard/:page*'],
 }
