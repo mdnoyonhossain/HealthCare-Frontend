@@ -39,12 +39,7 @@ const LoginPage = () => {
                     storeUserInfo({ accessToken: res?.data?.accessToken })
                 }
 
-                const userRoleLocalDecoded = getUserInfo();
                 setIsLoading(false);
-
-                if (userRoleLocalDecoded?.role) {
-                    navigate.push(`/dashboard/${userRoleLocalDecoded?.role}`);
-                }
             }
             else if (!res?.success) {
                 toast.error("Login failed", {
