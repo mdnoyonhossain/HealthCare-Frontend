@@ -66,7 +66,7 @@ const ChangePasswordPage = () => {
     }
 
     return (
-        <div className="flex items-center justify-center p-4">
+        <div className="flex items-center justify-center p-6">
             <div className="w-full max-w-[700px]">
                 <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
                     <Stack sx={{
@@ -86,8 +86,8 @@ const ChangePasswordPage = () => {
                             }}>
                                 <Box
                                     sx={{
-                                        marginTop: "-30px",
-                                        marginBottom: "-13px",
+                                        marginTop: "-25px",
+                                        marginBottom: "-10px",
                                         '& svg': {
                                             width: 100,
                                             height: 100,
@@ -110,7 +110,7 @@ const ChangePasswordPage = () => {
                             </Stack>
                             <Box>
                                 <HCForm onSubmit={handleChangePassword} resolver={zodResolver(changePasswordValidationSchema)} defaultValues={{ oldPassword: "", newPassword: "" }}>
-                                    <Grid container spacing={2} mt={2} mb={2}>
+                                    <Grid container spacing={2} mt={2} mb={1}>
                                         <Grid size={{ sm: 6, md: 6, xs: 12 }}>
                                             <HCInput type="password" name="oldPassword" label="Old Password" variant="outlined" size="small" fullWidth />
                                         </Grid>

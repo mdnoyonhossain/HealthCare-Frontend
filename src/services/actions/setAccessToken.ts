@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 const setAccessToken = async (token: string, option?: any) => {
     (await cookies()).set(authKey, token);
 
+    if (option && option.userRole === "patient") {
+        redirect(option.redirect);
+    }
     if (option && option.passwordChangeRequired) {
         redirect('/dashboard/change-password');
     }

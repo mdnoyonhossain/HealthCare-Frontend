@@ -107,7 +107,7 @@ const ForgotPassword = () => {
                             <Box>
                                 {!isSuccess && (
                                     <HCForm onSubmit={handleForgotPassword} resolver={zodResolver(forgotPasswordValidationSchema)} defaultValues={{ email: "" }}>
-                                        <Grid container spacing={2} mt={2} mb={2}>
+                                        <Grid container spacing={2} mt={2} mb={1}>
                                             <Grid size={{ sm: 12, md: 12, xs: 12 }}>
                                                 <HCInput type="email" name="email" label="Your Email" variant="outlined" size="small" fullWidth />
                                             </Grid>

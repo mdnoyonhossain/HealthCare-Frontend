@@ -98,8 +98,8 @@ const ResetPassword = () => {
                             }}>
                                 <Box
                                     sx={{
-                                        marginTop: "-30px",
-                                        marginBottom: "-15px",
+                                        marginTop: "-25px",
+                                        marginBottom: "-10px",
                                         '& svg': {
                                             width: 100,
                                             height: 100,
@@ -112,7 +112,7 @@ const ResetPassword = () => {
                                     <Typography
                                         variant="h4"
                                         fontWeight={600}
-                                        fontSize={28}
+                                        fontSize={26}
                                         sx={{ textDecoration: "none" }}
                                     >
                                         <Box component="span" color="primary.main">R</Box>eset

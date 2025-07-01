@@ -1,9 +1,5 @@
-import { authKey } from "@/constants/authKey";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import setAccessToken from "./setAccessToken";
-import { getUserInfo } from "../auth.service";
 import { jwtDecode } from "jwt-decode";
 
 const loginUser = async (payload: FieldValues) => {
@@ -17,20 +13,20 @@ const loginUser = async (payload: FieldValues) => {
     });
     const userInfo = await res.json();
 
-    const userRoleLocalDecoded = getUserInfo();
-
     const passwordChangeRequired = userInfo?.data?.needPasswordChange;
-
     let decodeData = userInfo?.data?.accessToken;
-    
+
     if (decodeData) {
         decodeData = jwtDecode(decodeData) as any;
     }
-    
+
+    const userRole = decodeData?.role?.toLowerCase();
+
     if (userInfo?.data?.accessToken) {
         setAccessToken(userInfo?.data?.accessToken, {
-            redirect: `/dashboard/${decodeData?.role?.toLowerCase()}`,
-            passwordChangeRequired
+            redirect: `/dashboard/${userRole}`,
+            passwordChangeRequired,
+            userRole
         });
     }
 
