@@ -42,7 +42,7 @@ const fadeUpVariant = {
 
 const WhyChooseUs = () => {
     return (
-        <section className="bg-gray-50 px-4 py-14 sm:px-6 lg:px-8">
+        <section className="bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     className="text-center mb-12"

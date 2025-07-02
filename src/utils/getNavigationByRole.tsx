@@ -14,7 +14,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Navigation } from '@toolpad/core/AppProvider';
 import { TUserRole } from '@/types';
 import { USER_ROLE } from '@/constants/role';
-import { KeyIcon, KeySquareIcon } from 'lucide-react';
+import { KeySquareIcon } from 'lucide-react';
 
 const getNavigationByRole = (role: TUserRole): Navigation => {
     const commonItems: Navigation = [

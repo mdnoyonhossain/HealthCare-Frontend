@@ -17,6 +17,8 @@ export const getUserInfo = () => {
             ...decodeData,
             role: decodeData?.role?.toLowerCase()
         }
+    } else {
+        return '';
     }
 }
 

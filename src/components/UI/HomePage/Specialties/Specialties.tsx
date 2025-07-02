@@ -62,7 +62,7 @@ const Specialties = async () => {
                     ))}
                 </Stack>
                 <div className="text-center mt-10">
-                    <Button
+                    {/* <Button
                         LinkComponent={Link}
                         href="/specialties"
                         variant="outlined"
@@ -75,6 +75,35 @@ const Specialties = async () => {
                                 size={18}
                             />
                         </span>
+                    </Button> */}
+                    <Button
+                        LinkComponent={Link}
+                        href="/specialties"
+                        variant="outlined"
+                        endIcon={
+                            <ArrowRight
+                                className="icon transition-transform duration-300"
+                                style={{ transition: "transform 0.4s ease" }}
+                            />
+                        }
+                        sx={{
+                            px: 3,
+                            py: 1.5,
+                            fontWeight: "bold",
+                            fontSize: "15px",
+                            color: "#000",
+                            borderColor: "#ccc",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            "&:hover": {
+                                borderColor: "#008767",
+                                ".icon": {
+                                    transform: "translateX(5px)",
+                                },
+                            },
+                        }}
+                    >
+                        View Specialties
                     </Button>
                 </div>
             </div>

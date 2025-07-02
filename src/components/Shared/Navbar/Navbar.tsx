@@ -1,7 +1,7 @@
 "use client";
 import { getUserInfo } from "@/services/auth.service";
 import { Box, Button, Drawer, IconButton, Menu, MenuItem, Skeleton, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { AlignJustify, LayoutDashboard, LogOut, User } from "lucide-react";
+import { AlignJustify, KeySquareIcon, LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -242,6 +242,15 @@ const Navbar = () => {
                   >
                     <User size={18} />
                     Profile
+                  </MenuItem>
+                  <MenuItem
+                    component={Link}
+                    href={`/dashboard/change-password`}
+                    onClick={handleMenuClose}
+                    sx={{ gap: 1, borderRadius: 1 }}
+                  >
+                    <KeySquareIcon size={18} />
+                    Security
                   </MenuItem>
                   <MenuItem
                     onClick={() => {

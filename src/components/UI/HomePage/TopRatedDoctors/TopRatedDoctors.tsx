@@ -77,15 +77,30 @@ const TopRatedDoctors = async () => {
                         LinkComponent={Link}
                         href="/doctors"
                         variant="outlined"
-                        className="group border border-gray-400 px-6 py-2 rounded-md text-black font-semibold text-[17px] hover:border-blue-500 transition"
-                    >
-                        <span className="flex items-center gap-2">
-                            View Doctors
+                        endIcon={
                             <ArrowRight
-                                className="transition-transform duration-300 group-hover:translate-x-1"
-                                size={18}
+                                className="icon transition-transform duration-300"
+                                style={{ transition: "transform 0.4s ease" }}
                             />
-                        </span>
+                        }
+                        sx={{
+                            px: 3,
+                            py: 1.5,
+                            fontWeight: "bold",
+                            fontSize: "15px",
+                            color: "#000",
+                            borderColor: "#ccc",
+                            textTransform: "none",
+                            transition: "all 0.4s ease",
+                            "&:hover": {
+                                borderColor: "#008767",
+                                ".icon": {
+                                    transform: "translateX(5px)",
+                                },
+                            },
+                        }}
+                    >
+                        View Doctors
                     </Button>
                 </div>
             </div>
