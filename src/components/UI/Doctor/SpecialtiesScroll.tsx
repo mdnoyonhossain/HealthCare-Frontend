@@ -3,14 +3,22 @@ import SkeletonLoading from "@/components/Loading/SkeletonLoading";
 import { useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
 import { Box, Tab, Tabs } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SpecialtiesScroll = ({ specialties }: { specialties: string }) => {
     const { data: allSpecialties } = useGetAllSpecialtiesQuery({});
-    const [value, setValue] = useState(specialties || "");
     const router = useRouter();
+    const [value, setValue] = useState<string | false>(false);
 
-    if (!allSpecialties) return <SkeletonLoading />;
+    useEffect(() => {
+        if (allSpecialties && allSpecialties.length > 0) {
+            const titles = allSpecialties.map((s: any) => s.title);
+            const matched = titles.includes(specialties) ? specialties : titles[0];
+            setValue(matched);
+        }
+    }, [allSpecialties, specialties]);
+
+    if (!allSpecialties || value === false) return <SkeletonLoading />;
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
