@@ -28,11 +28,11 @@ const Doctors = async ({ searchParams }: TSearchSpecialties) => {
                         my: 3
                     }}
                 />
-                <SpecialtiesScroll specialties={searchParams.specialties} />
+                <SpecialtiesScroll specialties={searchParams?.specialties} />
                 <Box className="bg-gray-50" sx={{ mt: 4, p: 3 }}>
                     {
                         doctorsData?.data?.map((doctor: TDoctor, index: number) => (
-                            <Box key={doctor.id}>
+                            <Box key={doctor?.id}>
                                 <DoctorCard doctor={doctor} />
                             </Box>
                         ))
