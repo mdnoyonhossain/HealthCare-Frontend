@@ -4,7 +4,6 @@ import { Box, Typography, Button, TextField, InputAdornment, Paper, List, ListIt
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { toast } from "sonner";

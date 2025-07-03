@@ -1,7 +1,8 @@
-import { Box, Chip, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import defaultDoctorImg from "@/assets/images/defautlDoctor.jpg";
 import { MedicalServices, Phone, School, StarRate, Work, WorkHistory } from '@mui/icons-material';
+import DoctorScheduleSlots from '../components/DoctorScheduleSlots';
 
 type PropTypes = {
     params: {
@@ -29,7 +30,7 @@ const DoctorsProfilePage = async ({ params }: PropTypes) => {
     const { data: doctor } = await res.json();
 
     const specialties = doctor?.doctorSpecialties?.map((ds: any) => ds?.specialties?.title) ?? [];
-    
+
     return (
         <section className="sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
@@ -92,18 +93,16 @@ const DoctorsProfilePage = async ({ params }: PropTypes) => {
                                     </Stack>
                                 </Box>
 
-                                <Box sx={{ borderBottom: '2px dashed', borderColor: 'grey.400', my: 3 }} />
+                                <Divider sx={{ my: { xs: 3, sm: 2 }, borderStyle: 'dashed', borderColor: 'grey.400' }} />
 
-                                {/* Working at with icon */}
                                 <Stack direction="row" alignItems="center" gap={1} mb={1}>
                                     <Work color="primary" fontSize="small" />
                                     <Typography sx={{ fontWeight: 600 }}>Working at</Typography>
                                 </Stack>
                                 <Typography sx={{ ml: 3 }}>{doctor?.currentWorkingPlace}</Typography>
 
-                                <Box sx={{ borderBottom: '2px dashed', borderColor: 'grey.400', my: 3 }} />
+                                <Divider sx={{ my: { xs: 3, sm: 2 }, borderStyle: 'dashed', borderColor: 'grey.400' }} />
 
-                                {/* Consultation Fee with icon */}
                                 <Stack direction="row" alignItems="center" gap={1} mb={1}>
                                     <MedicalServices color="primary" fontSize="small" />
                                     <Typography
@@ -173,6 +172,7 @@ const DoctorsProfilePage = async ({ params }: PropTypes) => {
                         </Grid>
                     </Stack>
                 </Box>
+                <DoctorScheduleSlots id={doctor?.id} />
             </div>
         </section>
     );

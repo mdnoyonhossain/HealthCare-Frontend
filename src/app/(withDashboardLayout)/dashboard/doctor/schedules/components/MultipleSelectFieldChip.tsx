@@ -74,11 +74,11 @@ export default function MultipleSelectFieldChip({ schedules, selectedScheduleIds
                 >
                     {schedules?.map((schedule: any) => (
                         <MenuItem
-                            key={schedule.id}
-                            value={schedule.id}
-                            style={getStyles(schedule.id, selectedScheduleIds, theme)}
+                            key={schedule?.id}
+                            value={schedule?.id}
+                            style={getStyles(schedule?.id, selectedScheduleIds, theme)}
                         >
-                            {`${getTimeIn12HourFormat(schedule.startDateTime)} - ${getTimeIn12HourFormat(schedule.endDateTime)}`}
+                            {`${getTimeIn12HourFormat(schedule?.startDateTime)} - ${getTimeIn12HourFormat(schedule?.endDateTime)}`}
                         </MenuItem>
                     ))}
                 </Select>

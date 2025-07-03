@@ -1,5 +1,5 @@
 import { TDoctor } from "@/types/doctor";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import defaultDoctorImg from "@/assets/images/defautlDoctor.jpg";
 import { EventAvailable, Visibility } from "@mui/icons-material";
 import Image from "next/image";
@@ -87,13 +87,7 @@ const DoctorCard = ({ doctor }: { doctor: TDoctor }) => {
                             </Box>
                         )}
                     </Box>
-                    <Box
-                        sx={{
-                            borderBottom: "2px dashed",
-                            borderColor: "grey.400",
-                            my: 2,
-                        }}
-                    />
+                    <Divider sx={{ my: { xs: 1, sm: 2 }, borderStyle: 'dashed', borderColor: 'grey.400' }} />
                     <Stack
                         direction={{ xs: "column", sm: "row" }}
                         justifyContent="space-between"
@@ -169,15 +163,7 @@ const DoctorCard = ({ doctor }: { doctor: TDoctor }) => {
                         {doctor?.currentWorkingPlace}
                     </Typography>
                 </Box>
-
-                <Box
-                    sx={{
-                        borderBottom: "2px dashed",
-                        borderColor: "grey.400",
-                        my: 2,
-                    }}
-                />
-
+                <Divider sx={{ my: { xs: 1, sm: 2 }, borderStyle: 'dashed', borderColor: 'grey.400' }} />
                 <Stack
                     direction={{ xs: "column", sm: "row" }}
                     justifyContent="space-between"

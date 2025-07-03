@@ -1,7 +1,7 @@
 import DoctorCard from "@/components/UI/Doctor/DoctorCard";
 import SpecialtiesScroll from "@/components/UI/Doctor/SpecialtiesScroll";
 import { TDoctor } from "@/types/doctor";
-import { Box } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 
 type TSearchSpecialties = {
     searchParams: {
@@ -21,13 +21,7 @@ const Doctors = async ({ searchParams }: TSearchSpecialties) => {
     return (
         <section className="sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <Box
-                    sx={{
-                        borderBottom: "2px dashed",
-                        borderColor: "grey.400",
-                        my: 3
-                    }}
-                />
+                <Divider sx={{ my: { xs: 1, sm: 2, md: 3 }, border: "1px", borderStyle: 'dashed', borderColor: 'grey.400' }} />
                 <SpecialtiesScroll specialties={searchParams?.specialties} />
                 <Box className="bg-gray-50" sx={{ mt: 4, p: 3 }}>
                     {
