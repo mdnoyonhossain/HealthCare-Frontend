@@ -31,16 +31,9 @@ const appointmentApi = baseApi.injectEndpoints({
                     params: arg,
                 };
             },
-            transformResponse: (response: [], meta: TMeta) => ({ appointments: response, meta, }),
+            transformResponse: (response: any, meta: TMeta) => ({ appointments: response, meta, }),
             providesTags: [tagTypes.appointment],
         }),
-        //getSingleAppointment: build.query({
-        //     query: (id: string | string[] | undefined) => ({
-        //         url: `/appointment/${id}`,
-        //         method: "GET",
-        //     }),
-        //     providesTags: [tagTypes.appointment],
-        // }),
         appointmentStatusChange: build.mutation({
             query: (data) => ({
                 url: `/appointment/status/${data.id}`,
@@ -49,13 +42,6 @@ const appointmentApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [tagTypes.appointment],
         }),
-        // deleteAppointment: build.mutation({
-        //     query: (id) => ({
-        //         url: `/appointment/soft/${id}`,
-        //         method: "DELETE",
-        //     }),
-        //     invalidatesTags: [tagTypes.appointment],
-        // }),
     }),
 });
 
