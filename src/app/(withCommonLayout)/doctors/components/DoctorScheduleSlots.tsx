@@ -10,6 +10,10 @@ import { useGetAllDoctorSchedulesQuery } from '@/redux/api/doctorSchedule';
 import { TDoctorSchedule } from '@/types/doctorSchedules';
 import { dateFormatter } from '@/utils/dateFormatter';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import { useCreateAppointmentMutation } from '@/redux/api/appointmentApi';
+import { toast } from 'sonner';
+import { AlertCircle, Check } from 'lucide-react';
+import { useInitialPaymentMutation } from '@/redux/api/paymentApi';
 
 dayjs.extend(utc);
 
@@ -29,6 +33,8 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
 
     const { data, isLoading } = useGetAllDoctorSchedulesQuery(getQuery(today));
     const { data: nextData, isLoading: isNextLoading } = useGetAllDoctorSchedulesQuery(getQuery(tomorrow));
+    const [createAppointment] = useCreateAppointmentMutation();
+    const [initialPayment] = useInitialPaymentMutation();
 
     const todaySlots = data?.doctorSchedules?.data?.filter((d: TDoctorSchedule) => !d.isBooked) || [];
     const tomorrowSlots = nextData?.doctorSchedules?.data?.filter((d: TDoctorSchedule) => !d.isBooked) || [];
@@ -91,16 +97,53 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
         );
     };
 
-    const handleBookAppointment = () => {
-        if (todayScheduleId) {
-            console.log('Booking today with scheduleId:', todayScheduleId);
+    const handleBookAppointment = async () => {
+        try {
+            if (id && todayScheduleId) {
+                const res = await createAppointment({ doctorId: id, scheduleId: todayScheduleId }).unwrap();
+                console.log(res);
+                if (res?.id) {
+                    toast.success("Appointment booked successfully.", {
+                        description: res?.message,
+                        duration: 5000,
+                        icon: <Check className="h-4 w-4 text-green-500" />,
+                        style: { background: "#E5FAE5", border: "1px solid #BBF7D0" }
+                    });
+
+                    const response = await initialPayment(res?.id).unwrap();
+                    if (response?.paymentUrl) {
+                        router.push(response?.paymentUrl);
+                    }
+                }
+                else if (!res?.id) {
+                    toast.error("Appointment booked failed", {
+                        description: `Expected a record, found none.`,
+                        position: "top-center",
+                        duration: 6000,
+                        icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+                        style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+                    });
+                }
+            }
         }
-        if (tomorrowScheduleId) {
-            console.log('Booking tomorrow with scheduleId:', tomorrowScheduleId);
+        catch (err: any) {
+            toast.error("Something went wrong", {
+                description: err?.message || "Unable to appointment at this time.",
+                position: "top-center",
+                duration: 4000,
+                icon: <AlertCircle className="h-4 w-4 text-[#991B1B]" />,
+                style: { background: '#FDF1F1', border: "1px solid #FECACA" }
+            });
         }
-        if (!todayScheduleId && !tomorrowScheduleId) {
-            alert('Please select a slot to book.');
-        }
+        // if (todayScheduleId) {
+        //     console.log('Booking today with scheduleId:', { scheduleId: todayScheduleId, doctorId: id });
+        // }
+        // if (tomorrowScheduleId) {
+        //     console.log('Booking tomorrow with scheduleId:', tomorrowScheduleId);
+        // }
+        // if (!todayScheduleId && !tomorrowScheduleId) {
+        //     alert('Please select a slot to book.');
+        // }
     };
 
     return (

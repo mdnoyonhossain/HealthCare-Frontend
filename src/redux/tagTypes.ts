@@ -23,5 +23,5 @@ export const tagTypesList = [
     tagTypes.appointment,
     tagTypes.payment,
     tagTypes.prescription,
-    tagTypes.review,
+    tagTypes.review
 ];
