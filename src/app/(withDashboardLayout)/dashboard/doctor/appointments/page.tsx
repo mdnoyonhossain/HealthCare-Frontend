@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Chip, Pagination, IconButton, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { TMeta } from "@/types";
@@ -9,12 +9,21 @@ import { dateFormatter } from "@/utils/dateFormatter";
 import Link from "next/link";
 import VideocamIcon from '@mui/icons-material/Videocam';
 import { getTimeIn12HourFormat } from "../../doctor/schedules/components/MultipleSelectFieldChip";
+import { getUserInfo } from "@/services/auth.service";
 
 const DoctorAppointmentsPage = () => {
+    const [userRole, setUserRole] = useState<{ email?: string, role?: string } | null>(null);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
     const [sortOrder, setSortOrder] = useState("asc");
     const [sortBy, setSortBy] = useState("createdAt");
+
+    useEffect(() => {
+        const { role } = getUserInfo();
+        if (role) {
+            setUserRole(role);
+        }
+    }, []);
 
     const query: Record<string, any> = {};
     query['page'] = page;
@@ -129,8 +138,8 @@ const DoctorAppointmentsPage = () => {
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => {
-                const isPaid = row.paymentStatus === 'PAID';
-                const statusLabel = row.paymentStatus.toLowerCase().replace(/^\w/, (c: any) => c.toUpperCase());
+                const isPaid = row?.paymentStatus === 'PAID';
+                const statusLabel = row?.paymentStatus?.toLowerCase().replace(/^\w/, (c: any) => c?.toUpperCase());
                 return (
                     <Chip
                         label={statusLabel}
@@ -156,15 +165,15 @@ const DoctorAppointmentsPage = () => {
             align: 'center',
             headerAlign: 'center',
             renderCell: ({ row }) => {
-                const isPaid = row.paymentStatus === 'PAID';
+                const isPaid = row?.paymentStatus === 'PAID';
 
                 return (
                     <Tooltip title={isPaid ? 'Join Video Call' : 'Payment Required'} arrow>
                         <span>
                             <IconButton
                                 component={isPaid ? Link : 'button'}
-                                href={isPaid ? `/video-call/${row.videoCallingId}` : undefined}
-                                target={isPaid ? '_blank' : undefined}
+                                // href={isPaid ? `/video?videoCallingId=${row?.videoCallingId}` : undefined}
+                                href={isPaid ? `/video?videoCallingId=${row?.videoCallingId}&role=${userRole}` : undefined}
                                 rel={isPaid ? 'noopener noreferrer' : undefined}
                                 disabled={!isPaid}
                                 sx={{
