@@ -9,7 +9,8 @@ const AuthRoutes = ['/login', '/register'];
 
 const commonPrivateRoutes = [
     '/dashboard',
-    '/dashboard/change-password'
+    '/dashboard/change-password',
+    '/doctors'
 ];
 
 const roleBasedPrivateRoutes = {
@@ -54,5 +55,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/login', '/register', '/dashboard/:page*'],
+    matcher: ['/login', '/register', '/dashboard/:page*', '/doctors/:page*'],
 }
