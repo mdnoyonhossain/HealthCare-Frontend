@@ -30,7 +30,7 @@ const Specialties = async () => {
                 >
                     {specialties?.data?.slice(0, 6)?.map((specialty: TSpecialties) => (
                         <Box
-                            key={specialty.id}
+                            key={specialty?.id}
                             sx={{
                                 flex: "1 1 150px",
                                 maxWidth: "200px",
@@ -53,29 +53,17 @@ const Specialties = async () => {
                                     borderRadius: "10px",
                                 }
                             }}
+                            component={Link}
+                            href={`/doctors?specialties=${specialty?.title}`}
                         >
                             <Image src={specialty.icon} width={100} height={100} alt="Specialty Icon" />
                             <Typography component="p" mt={1.5} fontWeight={600} fontSize={18}>
-                                {specialty.title}
+                                {specialty?.title}
                             </Typography>
                         </Box>
                     ))}
                 </Stack>
                 <div className="text-center mt-10">
-                    {/* <Button
-                        LinkComponent={Link}
-                        href="/specialties"
-                        variant="outlined"
-                        className="group border border-gray-400 px-6 py-2 rounded-md text-black font-semibold text-[17px] hover:border-blue-500 transition"
-                    >
-                        <span className="flex items-center gap-2">
-                            View Specialties
-                            <ArrowRight
-                                className="transition-transform duration-300 group-hover:translate-x-1"
-                                size={18}
-                            />
-                        </span>
-                    </Button> */}
                     <Button
                         LinkComponent={Link}
                         href="/specialties"
