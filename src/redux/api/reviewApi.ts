@@ -18,7 +18,7 @@ const reviewApi = baseApi.injectEndpoints({
                 method: "GET",
                 params: arg
             }),
-            transformResponse: (response: any) => ({ reviews: response }),
+            transformResponse: (response: any, meta: TMeta) => ({ reviews: response, meta }),
             providesTags: [tagTypes.review]
         })
     })
