@@ -165,7 +165,7 @@ const DoctorAppointmentsPage = () => {
             headerAlign: 'center',
             align: 'center',
             renderCell: ({ row }) => {
-                const avgRating = row?.doctor?.averageRating;
+                const avgRating = row?.review?.rating;
 
                 return <Box
                     sx={{
@@ -179,7 +179,7 @@ const DoctorAppointmentsPage = () => {
                         color: '#22c55e',
                     }}
                 >
-                    ⭐ {avgRating.toFixed(1)} / 5
+                    {typeof avgRating === 'number' ? `⭐ ${avgRating.toFixed(1)} / 5` : 'N/A'}
                 </Box>
             }
         },
