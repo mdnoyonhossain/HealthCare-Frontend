@@ -10,6 +10,7 @@ import Link from "next/link";
 import VideocamIcon from '@mui/icons-material/Videocam';
 import { getTimeIn12HourFormat } from "../../doctor/schedules/components/MultipleSelectFieldChip";
 import { getUserInfo } from "@/services/auth.service";
+import CreateReview from "./components/CreateReview";
 
 const PatientAppointmentsPage = () => {
     const [userRole, setUserRole] = useState<{ email?: string, role?: string } | null>(null);
@@ -17,10 +18,12 @@ const PatientAppointmentsPage = () => {
     const [limit, setLimit] = useState(5);
     const [sortOrder, setSortOrder] = useState("asc");
     const [sortBy, setSortBy] = useState("createdAt");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
 
     useEffect(() => {
         const { role } = getUserInfo();
-        if(role){
+        if (role) {
             setUserRole(role);
         }
     }, []);
@@ -49,6 +52,11 @@ const PatientAppointmentsPage = () => {
         setPage(value);
     };
 
+    const handleOpenReviewModal = (appointmentId: string) => {
+        setSelectedAppointmentId(appointmentId);
+        setIsModalOpen(true);
+    };
+
     const columns: GridColDef[] = [
         {
             field: 'doctorName',
@@ -73,7 +81,7 @@ const PatientAppointmentsPage = () => {
             field: 'appointmentDate',
             headerName: 'Appointment Date',
             flex: 1,
-            minWidth: 170,
+            minWidth: 140,
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => (
@@ -133,8 +141,8 @@ const PatientAppointmentsPage = () => {
         {
             field: 'paymentStatus',
             headerName: 'Payment Status',
-            flex: 1,
-            minWidth: 140,
+            flex: 0.7,
+            minWidth: 100,
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => {
@@ -156,6 +164,34 @@ const PatientAppointmentsPage = () => {
                     />
                 );
             },
+        },
+        {
+            field: 'review',
+            headerName: 'Review',
+            flex: 0.7,
+            minWidth: 140,
+            headerAlign: 'center',
+            align: 'center',
+            renderCell: ({ row }) => (
+                <IconButton
+                    onClick={() => handleOpenReviewModal(row?.id)}
+                    sx={{
+                        backgroundColor: '#f3f4f6',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '20px',
+                        px: 2,
+                        py: 0.5,
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        color: '#3B82F6',
+                        '&:hover': {
+                            backgroundColor: '#e0f2fe',
+                        },
+                    }}
+                >
+                    Give Review
+                </IconButton>
+            )
         },
         {
             field: 'videoCall',
@@ -238,6 +274,8 @@ const PatientAppointmentsPage = () => {
                     </Typography>
                 </Box>
             </Box>
+
+            <CreateReview open={isModalOpen} setOpen={setIsModalOpen} selectedAppointmentId={selectedAppointmentId} />
 
             <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", mt: 2, mb: 4 }}>
                 <DataGrid

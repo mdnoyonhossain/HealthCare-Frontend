@@ -73,7 +73,7 @@ const DoctorAppointmentsPage = () => {
             field: 'appointmentDate',
             headerName: 'Appointment Date',
             flex: 1,
-            minWidth: 170,
+            minWidth: 140,
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => (
@@ -133,8 +133,8 @@ const DoctorAppointmentsPage = () => {
         {
             field: 'paymentStatus',
             headerName: 'Payment Status',
-            flex: 1,
-            minWidth: 140,
+            flex: 0.7,
+            minWidth: 100,
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => {
@@ -158,6 +158,32 @@ const DoctorAppointmentsPage = () => {
             },
         },
         {
+            field: 'rating',
+            headerName: 'Rating',
+            flex: 0.7,
+            minWidth: 140,
+            headerAlign: 'center',
+            align: 'center',
+            renderCell: ({ row }) => {
+                const avgRating = row?.doctor?.averageRating;
+
+                return <Box
+                    sx={{
+                        px: 2,
+                        py: 0.5,
+                        backgroundColor: '#f0fdf4',
+                        border: '1px solid #bbf7d0',
+                        borderRadius: '20px',
+                        fontWeight: 600,
+                        fontSize: '13px',
+                        color: '#22c55e',
+                    }}
+                >
+                    ⭐ {avgRating.toFixed(1)} / 5
+                </Box>
+            }
+        },
+        {
             field: 'videoCall',
             headerName: 'Join Call',
             flex: 0.7,
@@ -172,7 +198,6 @@ const DoctorAppointmentsPage = () => {
                         <span>
                             <IconButton
                                 component={isPaid ? Link : 'button'}
-                                // href={isPaid ? `/video?videoCallingId=${row?.videoCallingId}` : undefined}
                                 href={isPaid ? `/video?videoCallingId=${row?.videoCallingId}&role=${userRole}` : undefined}
                                 rel={isPaid ? 'noopener noreferrer' : undefined}
                                 disabled={!isPaid}

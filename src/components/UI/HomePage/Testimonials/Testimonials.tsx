@@ -1,62 +1,34 @@
 "use client";
 import React from "react";
-import { Star } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ReusableUI/carousel";
 import { Card, CardContent } from "@/components/ReusableUI/card";
-
-const testimonials = [
-    {
-        name: "Jennifer K.",
-        date: "May 15, 2024",
-        rating: 5,
-        content:
-            "The doctors here are incredibly professional and caring. I've never felt more comfortable discussing my health concerns.",
-    },
-    {
-        name: "Robert T.",
-        date: "April 3, 2024",
-        rating: 5,
-        content:
-            "From the moment I walked in, the staff made me feel welcome. My treatment plan was well explained and effective.",
-    },
-    {
-        name: "Lisa M.",
-        date: "March 22, 2024",
-        rating: 5,
-        content:
-            "I've been bringing my family here for years. The pediatric care is exceptional and my children actually look forward to their check-ups!",
-    },
-    {
-        name: "Michael B.",
-        date: "February 18, 2024",
-        rating: 5,
-        content:
-            "The new online booking system is fantastic. I was able to schedule my appointment and receive prompt care when I needed it most.",
-    },
-    {
-        name: "Sarah P.",
-        date: "January 9, 2024",
-        rating: 5,
-        content:
-            "After struggling with my condition for years, the specialists here finally helped me find relief. I'm forever grateful for their expertise.",
-    },
-];
-
-const StarRating = ({ rating }: { rating: number }) => {
-    return (
-        <div className="flex">
-            {[...Array(5)].map((_, i) => (
-                <Star
-                    key={i}
-                    className={`w-5 h-5 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                        }`}
-                />
-            ))}
-        </div>
-    );
-};
+import SkeletonLoading from "@/components/Loading/SkeletonLoading";
+import { Rating } from "@mui/material";
+import { useGetAllReviewsQuery } from "@/redux/api/reviewApi";
 
 const Testimonials = () => {
+    const { data: getAllReviews, isLoading, isError } = useGetAllReviewsQuery({});
+
+    if (isLoading) {
+        return <SkeletonLoading />;
+    }
+
+    if (isError) {
+        return (
+            <div className="text-center text-red-500 py-10">
+                Failed to load testimonials. Please try again later.
+            </div>
+        );
+    }
+
+    if (!getAllReviews?.reviews?.length) {
+        return (
+            <div className="text-center text-gray-500 py-10">
+                No testimonials available at the moment.
+            </div>
+        );
+    }
+
     return (
         <section className="bg-[#EFF6FF] px-4 py-10 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
@@ -75,21 +47,21 @@ const Testimonials = () => {
                     className="max-w-6xl mx-auto"
                 >
                     <CarouselContent className="-ml-4">
-                        {testimonials.map((testimonial, index) => (
+                        {getAllReviews?.reviews?.map((testimonial: any) => (
                             <CarouselItem
-                                key={index}
+                                key={testimonial?.id}
                                 className="pl-4 basis-full sm:basis-full md:basis-1/2 lg:basis-1/3"
                             >
                                 <Card className="bg-white border border-gray-100 h-full shadow-sm hover:shadow-md transition-shadow">
                                     <CardContent className="p-6 flex flex-col h-full">
                                         <div className="flex justify-between items-start mb-4">
                                             <div>
-                                                <h3 className="font-semibold text-gray-800">{testimonial.name}</h3>
-                                                <p className="text-sm text-gray-500">{testimonial.date}</p>
+                                                <h3 className="font-semibold text-gray-800">{testimonial?.patient?.name}</h3>
+                                                <p className="text-sm text-gray-500">{testimonial?.date}</p>
                                             </div>
-                                            <StarRating rating={testimonial.rating} />
+                                            <Rating name="half-rating-read" defaultValue={testimonial?.rating} precision={0.5} readOnly />
                                         </div>
-                                        <p className="text-gray-600 italic flex-grow">{testimonial.content}</p>
+                                        <p className="text-gray-600 italic flex-grow">{testimonial?.comment}</p>
                                     </CardContent>
                                 </Card>
                             </CarouselItem>

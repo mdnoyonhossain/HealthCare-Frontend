@@ -12,9 +12,11 @@ type THCInput = {
     placeholder?: string;
     required?: boolean;
     disabled?: boolean;
+    multiline?: boolean;
+    rows?: number;
 }
 
-const HCInput = ({ name, type = "text", label, variant = "outlined", size = "small", fullWidth, sx, placeholder, required, disabled }: THCInput) => {
+const HCInput = ({ name, type = "text", label, variant = "outlined", size = "small", fullWidth, sx, placeholder, required, disabled, multiline, rows }: THCInput) => {
     const { control } = useFormContext();
 
     return (
@@ -33,6 +35,8 @@ const HCInput = ({ name, type = "text", label, variant = "outlined", size = "sma
                     placeholder={placeholder}
                     required={required}
                     disabled={disabled}
+                    multiline={multiline}
+                    rows={rows}
                     value={field.value ?? ""}
                     error={!!error?.message}
                     helperText={error?.message}
