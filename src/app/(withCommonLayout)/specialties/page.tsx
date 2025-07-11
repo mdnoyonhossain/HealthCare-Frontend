@@ -1,5 +1,4 @@
-import { ArrowRight } from "lucide-react";
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,7 +8,7 @@ type TSpecialties = {
     icon: string;
 };
 
-const Specialties = async () => {
+const SpecialtiesPage = async () => {
     const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/specialties`,
         {
@@ -32,8 +31,8 @@ const Specialties = async () => {
                 </p>
             </div>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                {specialties?.data?.slice(0, 5)?.map((specialty: TSpecialties) => (
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {specialties?.data?.map((specialty: TSpecialties) => (
                     <Link
                         key={specialty?.id}
                         href={`/doctors?specialties=${specialty?.title}`}
@@ -64,39 +63,8 @@ const Specialties = async () => {
                     </Link>
                 ))}
             </div>
-            <div className="text-center mt-10">
-                <Button
-                    LinkComponent={Link}
-                    href="/specialties"
-                    variant="outlined"
-                    endIcon={
-                        <ArrowRight
-                            className="icon transition-transform duration-300"
-                            style={{ transition: "transform 0.4s ease" }}
-                        />
-                    }
-                    sx={{
-                        px: 3,
-                        py: 1.5,
-                        fontWeight: "bold",
-                        fontSize: "15px",
-                        color: "#000",
-                        borderColor: "#ccc",
-                        textTransform: "none",
-                        transition: "all 0.4s ease",
-                        "&:hover": {
-                            borderColor: "#008767",
-                            ".icon": {
-                                transform: "translateX(5px)",
-                            },
-                        },
-                    }}
-                >
-                    View Specialties
-                </Button>
-            </div>
         </section>
     );
 };
 
-export default Specialties;
+export default SpecialtiesPage;
