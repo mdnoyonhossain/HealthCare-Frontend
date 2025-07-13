@@ -101,7 +101,6 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
         try {
             if (id && todayScheduleId) {
                 const res = await createAppointment({ doctorId: id, scheduleId: todayScheduleId }).unwrap();
-                console.log(res);
                 if (res?.id) {
                     toast.success("Appointment booked successfully.", {
                         description: res?.message,

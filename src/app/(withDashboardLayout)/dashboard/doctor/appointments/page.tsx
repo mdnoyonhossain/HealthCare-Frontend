@@ -54,7 +54,7 @@ const DoctorAppointmentsPage = () => {
             field: 'patientName',
             headerName: 'Patient Name',
             flex: 1,
-            minWidth: 200,
+            minWidth: 190,
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => (
@@ -92,7 +92,7 @@ const DoctorAppointmentsPage = () => {
             field: 'appointmentTime',
             headerName: 'Appointment Time',
             flex: 1,
-            minWidth: 200,
+            minWidth: 150,
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => {
@@ -131,33 +131,6 @@ const DoctorAppointmentsPage = () => {
             },
         },
         {
-            field: 'paymentStatus',
-            headerName: 'Payment Status',
-            flex: 0.7,
-            minWidth: 100,
-            headerAlign: 'left',
-            align: 'left',
-            renderCell: ({ row }) => {
-                const isPaid = row?.paymentStatus === 'PAID';
-                const statusLabel = row?.paymentStatus?.toLowerCase().replace(/^\w/, (c: any) => c?.toUpperCase());
-                return (
-                    <Chip
-                        label={statusLabel}
-                        color={isPaid ? 'success' : 'error'}
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                            fontWeight: 600,
-                            fontSize: '12px',
-                            height: 24,
-                            borderRadius: '20px',
-                            px: 1.5,
-                        }}
-                    />
-                );
-            },
-        },
-        {
             field: 'rating',
             headerName: 'Rating',
             flex: 0.7,
@@ -182,6 +155,60 @@ const DoctorAppointmentsPage = () => {
                     {typeof avgRating === 'number' ? `⭐ ${avgRating.toFixed(1)} / 5` : 'N/A'}
                 </Box>
             }
+        },
+        {
+            field: 'prescription',
+            headerName: 'Prescription',
+            flex: 0.7,
+            minWidth: 160,
+            align: 'center',
+            headerAlign: 'center',
+            renderCell: ({ row }) => {
+                const appointmentId = row?.id;
+                const hasPrescription = !!row?.prescription?.id;
+
+                return (
+                    <Tooltip
+                        title={hasPrescription ? "Prescription already completed" : "Create prescription"}
+                        arrow
+                    >
+                        <span>
+                            <IconButton
+                                component={Link}
+                                href={
+                                    hasPrescription
+                                        ? `/dashboard/doctor/prescription/${appointmentId}`
+                                        : `/dashboard/doctor/prescription/${appointmentId}`
+                                }
+                                disabled={hasPrescription}
+                                sx={{
+                                    px: 2,
+                                    py: 1,
+                                    background: hasPrescription ? 'rgba(156, 163, 175, 0.2)' : 'rgba(34, 197, 94, 0.1)',
+                                    border: `1px solid ${hasPrescription ? 'rgba(156, 163, 175, 0.3)' : 'rgba(34, 197, 94, 0.3)'
+                                        }`,
+                                    borderRadius: '30px',
+                                    color: hasPrescription ? '#9ca3af' : '#22c55e',
+                                    fontWeight: 600,
+                                    transition: 'all 0.3s ease-in-out',
+                                    pointerEvents: hasPrescription ? 'none' : 'auto',
+                                    '&:hover': {
+                                        background: hasPrescription
+                                            ? 'rgba(156, 163, 175, 0.2)'
+                                            : 'linear-gradient(90deg, #22c55e 0%, #16a34a 100%)',
+                                        color: hasPrescription ? '#9ca3af' : '#fff',
+                                        transform: hasPrescription ? 'none' : 'scale(1.05)',
+                                    },
+                                }}
+                            >
+                                <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                                    {hasPrescription ? 'Completed' : 'Prescription'}
+                                </Typography>
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                );
+            },
         },
         {
             field: 'videoCall',

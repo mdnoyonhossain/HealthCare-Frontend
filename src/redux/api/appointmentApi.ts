@@ -32,7 +32,7 @@ const appointmentApi = baseApi.injectEndpoints({
                 };
             },
             transformResponse: (response: any, meta: TMeta) => ({ appointments: response, meta, }),
-            providesTags: [tagTypes.appointment],
+            providesTags: [tagTypes.appointment, tagTypes.prescription],
         }),
         appointmentStatusChange: build.mutation({
             query: (data) => ({
