@@ -28,20 +28,25 @@ const getNavigationByRole = (role: TUserRole): Navigation => {
         case USER_ROLE.SUPER_ADMIN:
             return [
                 ...commonItems,
-                { segment: 'orders', title: 'Orders', icon: <ShoppingCartIcon /> },
-                { segment: 'users', title: 'Users', icon: <PeopleIcon /> },
+                { kind: 'header', title: 'Manage' },
+                { segment: `dashboard/${role}/specialties`, title: 'Specialties', icon: <MedicalInformationIcon /> },
+                { segment: `dashboard/${role}/doctors`, title: 'Doctors', icon: <MedicalServicesIcon /> },
+
                 { kind: 'divider' },
-                { kind: 'header', title: 'Analytics' },
-                {
-                    segment: 'reports',
-                    title: 'Reports',
-                    icon: <BarChartIcon />,
-                    children: [
-                        { segment: 'sales', title: 'Sales', icon: <DescriptionIcon /> },
-                        { segment: 'traffic', title: 'Traffic', icon: <DescriptionIcon /> },
-                    ],
-                },
-                { segment: 'integrations', title: 'Integrations', icon: <LayersIcon /> },
+
+                { kind: 'header', title: 'Scheduling' },
+                { segment: `dashboard/${role}/schedules`, title: 'Schedules', icon: <EventAvailableIcon /> },
+                { segment: `dashboard/${role}/appointments`, title: 'Appointments', icon: <CalendarMonthIcon /> },
+
+                { kind: 'divider' },
+
+                { kind: 'header', title: 'Feedback' },
+                { segment: `dashboard/${role}/reviews`, title: 'Reviews', icon: <RateReviewIcon /> },
+
+                { kind: 'divider' },
+
+                { kind: 'header', title: 'Prescription' },
+                { segment: `dashboard/${role}/prescriptions`, title: 'Prescriptions', icon: <DescriptionIcon /> },
             ];
 
         case USER_ROLE.ADMIN:
