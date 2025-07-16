@@ -13,10 +13,10 @@ const DoctorPage = () => {
     if (!data) return <SkeletonLoading />;
 
     const stats = [
-        { label: 'Appointments', value: data.appointmentCount, color: '#42a5f5' },
-        { label: 'Patients', value: data.patientCount, color: '#66bb6a' },
-        { label: 'Reviews', value: data.reviewCount, color: '#ffa726' },
-        { label: 'Revenue', value: `$${data.totalRevenue._sum.amount}`, color: '#ef5350' },
+        { label: 'Appointments', value: data?.appointmentCount, color: '#42a5f5' },
+        { label: 'Patients', value: data?.patientCount, color: '#66bb6a' },
+        { label: 'Reviews', value: data?.reviewCount, color: '#ffa726' },
+        { label: 'Revenue', value: `$${data?.totalRevenue?._sum?.amount}`, color: '#ef5350' },
     ];
 
     const pieChartData = data?.formatedAppointmentStatusDistribution?.map((item: any, index: number) => ({

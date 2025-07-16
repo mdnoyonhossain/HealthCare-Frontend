@@ -14,11 +14,11 @@ const AdminPage = () => {
     if (!data) return <SkeletonLoading />;
 
     const stats = [
-        { label: 'Appointments', value: data.appointmentCount, color: '#42a5f5' },
-        { label: 'Patients', value: data.patientCount, color: '#66bb6a' },
-        { label: 'Doctors', value: data.doctorCount, color: '#ffa726' },
-        { label: 'Payments', value: data.paymentCount, color: '#ab47bc' },
-        { label: 'Revenue', value: `$${data.totalRevenue._sum.amount}`, color: '#ef5350' },
+        { label: 'Appointments', value: data?.appointmentCount, color: '#42a5f5' },
+        { label: 'Patients', value: data?.patientCount, color: '#66bb6a' },
+        { label: 'Doctors', value: data?.doctorCount, color: '#ffa726' },
+        { label: 'Payments', value: data?.paymentCount, color: '#ab47bc' },
+        { label: 'Revenue', value: `$${data?.totalRevenue?._sum?.amount}`, color: '#ef5350' },
     ];
 
     const barChartData = {
