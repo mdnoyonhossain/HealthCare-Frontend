@@ -4,13 +4,13 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { TMeta } from "@/types";
 import SkeletonLoading from "@/components/Loading/SkeletonLoading";
 import { useState } from "react";
-import { useGetMyPrescriptionsQuery } from "@/redux/api/prescriptionApi";
+import { useGetAllPrescriptionsQuery } from "@/redux/api/prescriptionApi";
 import DownloadIcon from '@mui/icons-material/Download';
 import { dateFormatter } from "@/utils/dateFormatter";
 import { getTimeIn12HourFormat } from "../../doctor/schedules/components/MultipleSelectFieldChip";
 import { downloadPrescriptionPDF } from "@/utils/downloadPrescriptionPDF";
 
-const PatientPrescriptionPage = () => {
+const AdminPrescriptionPage = () => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
     const [sortOrder, setSortOrder] = useState("desc");
@@ -22,17 +22,17 @@ const PatientPrescriptionPage = () => {
     query['sortOrder'] = sortOrder;
     query['sortBy'] = sortBy;
 
-    const { data: getMyPrescriptions = [], isLoading } = useGetMyPrescriptionsQuery({ ...query });
+    const { data: getAllPrescriptions = [], isLoading } = useGetAllPrescriptionsQuery({ ...query });
 
     if (isLoading) {
         return <SkeletonLoading />
     }
-    let reviews: [] = [];
+    let prescriptions: [] = [];
     let meta: TMeta | undefined = undefined;
 
-    if (!Array.isArray(getMyPrescriptions)) {
-        reviews = getMyPrescriptions?.prescriptions ?? [];
-        meta = getMyPrescriptions?.meta;
+    if (!Array.isArray(getAllPrescriptions)) {
+        prescriptions = getAllPrescriptions?.prescriptions ?? [];
+        meta = getAllPrescriptions?.meta;
     }
 
     const pageCount: number = meta?.total ? Math.ceil(meta.total / limit) : 1;
@@ -62,65 +62,23 @@ const PatientPrescriptionPage = () => {
             ),
         },
         {
-            field: 'appointmentDate',
-            headerName: 'Appointment Date',
+            field: 'patientName',
+            headerName: 'Patient Name',
             flex: 1,
-            minWidth: 150,
+            minWidth: 200,
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => (
                 <span
                     style={{
-                        fontWeight: 500,
+                        fontWeight: 'bold',
                         fontSize: '13px',
-                        color: '#475569',
+                        color: '#020817',
                     }}
                 >
-                    {dateFormatter(row?.appointment?.schedule?.startDateTime)}
+                    {row?.patient?.name || 'N/A'}
                 </span>
             ),
-        },
-        {
-            field: 'appointmentTime',
-            headerName: 'Appointment Time',
-            flex: 1,
-            minWidth: 150,
-            headerAlign: 'left',
-            align: 'left',
-            renderCell: ({ row }) => {
-                const start = row?.appointment?.schedule?.startDateTime;
-                const end = row?.appointment?.schedule?.endDateTime;
-                if (!start || !end) return 'N/A';
-
-                return (
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Chip
-                            label={getTimeIn12HourFormat(start)}
-                            size="small"
-                            sx={{
-                                backgroundColor: '#E1E8F5',
-                                color: '#3B82F6',
-                                fontWeight: 500,
-                                fontSize: '12px',
-                                borderRadius: '30px',
-                                height: 24,
-                            }}
-                        />
-                        <Chip
-                            label={getTimeIn12HourFormat(end)}
-                            size="small"
-                            sx={{
-                                backgroundColor: '#F3E2E3',
-                                color: '#EF4444',
-                                fontWeight: 500,
-                                fontSize: '12px',
-                                borderRadius: '30px',
-                                height: 24,
-                            }}
-                        />
-                    </Box>
-                );
-            },
         },
         {
             field: 'followUpDate',
@@ -232,7 +190,7 @@ const PatientPrescriptionPage = () => {
 
             <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", mt: 2, mb: 4 }}>
                 <DataGrid
-                    rows={reviews}
+                    rows={prescriptions}
                     loading={isLoading}
                     autoHeight
                     getRowHeight={() => 'auto'}
@@ -347,4 +305,4 @@ const PatientPrescriptionPage = () => {
     );
 };
 
-export default PatientPrescriptionPage;
+export default AdminPrescriptionPage;

@@ -62,6 +62,11 @@ const getNavigationByRole = (role: TUserRole): Navigation => {
 
                 { kind: 'header', title: 'Feedback' },
                 { segment: `dashboard/${role}/reviews`, title: 'Reviews', icon: <RateReviewIcon /> },
+
+                { kind: 'divider' },
+
+                { kind: 'header', title: 'Prescription' },
+                { segment: `dashboard/${role}/prescriptions`, title: 'Prescriptions', icon: <DescriptionIcon /> },
             ];
 
         case USER_ROLE.DOCTOR:
