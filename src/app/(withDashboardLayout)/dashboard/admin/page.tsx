@@ -24,15 +24,15 @@ const AdminPage = () => {
     const barChartData = {
         xAxis: [{
             scaleType: 'band' as const,
-            data: data.bartChartData.map((d: any) => new Date(d.month).toLocaleDateString())
+            data: data?.bartChartData?.map((d: any) => new Date(d?.month).toLocaleDateString())
         }],
         series: [{
             label: 'Appointments',
-            data: data.bartChartData.map((d: any) => d.count)
+            data: data?.bartChartData?.map((d: any) => d?.count)
         }]
     };
 
-    const pieChartData = data.pieChartData.map((item: any, index: any) => ({
+    const pieChartData = data?.pieChartData?.map((item: any, index: any) => ({
         id: index,
         value: item.count,
         label: item.status
@@ -69,14 +69,14 @@ const AdminPage = () => {
             </Paper>
 
             <Grid container spacing={3} mb={6}>
-                {stats.map((item, i) => (
+                {stats?.map((item, i) => (
                     <Grid sx={{ xs: 12, sm: 6, md: 4, lg: 2.4 }} key={i}>
                         <Paper
                             elevation={3}
                             sx={{
                                 p: 3,
                                 borderRadius: 3,
-                                bgcolor: item.color,
+                                bgcolor: item?.color,
                                 color: 'white',
                                 textAlign: 'center',
                                 transition: 'transform 0.2s ease-in-out',
@@ -85,9 +85,9 @@ const AdminPage = () => {
                                 }
                             }}
                         >
-                            <Typography variant="subtitle1">{item.label}</Typography>
+                            <Typography variant="subtitle1">{item?.label}</Typography>
                             <Typography variant="h5" fontWeight="bold">
-                                {item.value}
+                                {item?.value}
                             </Typography>
                         </Paper>
                     </Grid>
@@ -118,7 +118,7 @@ const AdminPage = () => {
                                 xAxis={barChartData.xAxis}
                                 series={[{
                                     label: 'Appointments',
-                                    data: barChartData.series[0].data,
+                                    data: barChartData?.series[0].data,
                                     color: '#1976d2',
                                 }]}
                             />
@@ -146,15 +146,15 @@ const AdminPage = () => {
                         <Box sx={{ flexGrow: 1 }}>
                             <PieChart
                                 series={[{
-                                    data: pieChartData.map((item: any) => ({
+                                    data: pieChartData?.map((item: any) => ({
                                         ...item,
-                                        color: item.label === 'SCHEDULED' ? '#d32f2f' : '#f57c00'
+                                        color: item?.label === 'SCHEDULED' ? '#d32f2f' : '#f57c00'
                                     })),
-                                    arcLabel: (item) => `${item.value}`,
+                                    arcLabel: (item) => `${item?.value}`,
                                 }]}
                                 height={isMobile ? 250 : 300}
                                 sx={{
-                                    [`& .${pieArcLabelClasses.root}`]: {
+                                    [`& .${pieArcLabelClasses?.root}`]: {
                                         fill: '#333',
                                         fontSize: 14,
                                     },
