@@ -37,7 +37,6 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
     const [initialPayment] = useInitialPaymentMutation();
 
     const todaySlots = data?.doctorSchedules?.data?.filter((d: TDoctorSchedule) => !d.isBooked) || [];
-    const tomorrowSlots = nextData?.doctorSchedules?.data?.filter((d: TDoctorSchedule) => !d.isBooked) || [];
 
     const renderSlotButtons = (slots: TDoctorSchedule[], isToday: boolean) => {
         const selectedId = isToday ? todayScheduleId : tomorrowScheduleId;
@@ -134,15 +133,6 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
                 style: { background: '#FDF1F1', border: "1px solid #FECACA" }
             });
         }
-        // if (todayScheduleId) {
-        //     console.log('Booking today with scheduleId:', { scheduleId: todayScheduleId, doctorId: id });
-        // }
-        // if (tomorrowScheduleId) {
-        //     console.log('Booking tomorrow with scheduleId:', tomorrowScheduleId);
-        // }
-        // if (!todayScheduleId && !tomorrowScheduleId) {
-        //     alert('Please select a slot to book.');
-        // }
     };
 
     return (
@@ -195,15 +185,6 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
 
                 <Divider sx={{ my: { xs: 3, sm: 4 }, borderStyle: 'dashed', borderColor: 'grey.400' }} />
 
-                {/* Tomorrow */}
-                <Typography
-                    variant="subtitle1"
-                    fontWeight={600}
-                    sx={{ fontSize: { xs: '1rem', sm: '1.125rem' } }}
-                >
-                    Tomorrow: {dateFormatter(tomorrow.toISOString())} ({dayjs(tomorrow).format('dddd')})
-                </Typography>
-                {renderSlotButtons(tomorrowSlots, false)}
                 <Button
                     onClick={handleBookAppointment}
                     variant="contained"

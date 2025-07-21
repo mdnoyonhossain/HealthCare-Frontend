@@ -27,10 +27,10 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { label: "Consultation", href: "/consultation" },
-    { label: "Health Plans", href: "/health-plans" },
-    { label: "Diagnostics", href: "/diagnostics" },
-    { label: "NGOs", href: "/ngos" },
+    { label: "Consultation", href: "/doctors" },
+    { label: "Doctor Specialties", href: "/specialties" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
   ];
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
