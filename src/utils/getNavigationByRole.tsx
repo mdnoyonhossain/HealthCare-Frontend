@@ -6,6 +6,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ElderlyIcon from '@mui/icons-material/Elderly';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Navigation } from '@toolpad/core/AppProvider';
 import { TUserRole } from '@/types';
@@ -24,9 +26,15 @@ const getNavigationByRole = (role: TUserRole): Navigation => {
         case USER_ROLE.SUPER_ADMIN:
             return [
                 ...commonItems,
-                { kind: 'header', title: 'Manage' },
-                { segment: `dashboard/${role}/specialties`, title: 'Specialties', icon: <MedicalInformationIcon /> },
+                { kind: 'header', title: 'User Manage' },
+                { segment: `dashboard/${role}/admins`, title: 'Admins', icon: <AdminPanelSettingsIcon /> },
                 { segment: `dashboard/${role}/doctors`, title: 'Doctors', icon: <MedicalServicesIcon /> },
+                { segment: `dashboard/${role}/patients`, title: 'Patients', icon: <ElderlyIcon /> },
+
+                { kind: 'divider' },
+
+                { kind: 'header', title: 'Specialties' },
+                { segment: `dashboard/${role}/specialties`, title: 'Specialties', icon: <MedicalInformationIcon /> },
 
                 { kind: 'divider' },
 
@@ -50,8 +58,14 @@ const getNavigationByRole = (role: TUserRole): Navigation => {
                 ...commonItems,
 
                 { kind: 'header', title: 'Manage' },
-                { segment: `dashboard/${role}/specialties`, title: 'Specialties', icon: <MedicalInformationIcon /> },
+                { segment: `dashboard/${role}/admins`, title: 'Admins', icon: <AdminPanelSettingsIcon /> },
                 { segment: `dashboard/${role}/doctors`, title: 'Doctors', icon: <MedicalServicesIcon /> },
+                { segment: `dashboard/${role}/patients`, title: 'Patients', icon: <ElderlyIcon /> },
+
+                { kind: 'divider' },
+
+                { kind: 'header', title: 'Specialties' },
+                { segment: `dashboard/${role}/specialties`, title: 'Specialties', icon: <MedicalInformationIcon /> },
 
                 { kind: 'divider' },
 

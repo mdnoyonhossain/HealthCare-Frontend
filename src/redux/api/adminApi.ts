@@ -1,7 +1,7 @@
-import { TMeta } from "@/types";
+import { TAdmin } from "@/types/admin";
 import { tagTypes } from "../tagTypes";
 import baseApi from "./baseApi";
-import { TAdmin } from "@/types/admin";
+import { TMeta } from "@/types";
 
 const adminApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
