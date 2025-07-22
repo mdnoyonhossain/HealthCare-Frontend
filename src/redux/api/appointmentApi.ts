@@ -20,7 +20,7 @@ const appointmentApi = baseApi.injectEndpoints({
                     params: arg,
                 };
             },
-            transformResponse: (response: [], meta: TMeta) => ({ appointments: response, meta, }),
+            transformResponse: (response: any) => ({ appointments: response }),
             providesTags: [tagTypes.appointment],
         }),
         getMyAppointments: build.query({

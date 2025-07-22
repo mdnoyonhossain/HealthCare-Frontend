@@ -4,11 +4,11 @@ import { Box, Button, Drawer, IconButton, Menu, MenuItem, Skeleton, Stack, Typog
 import { AlignJustify, KeySquareIcon, LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import LoginIcon from '@mui/icons-material/Login';
-import HowToRegIcon from '@mui/icons-material/HowToReg';
+import { useRouter, usePathname } from "next/navigation";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LoginIcon from "@mui/icons-material/Login";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import logoutUser from "@/services/actions/logoutUser";
 
 const Navbar = () => {
@@ -16,9 +16,10 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [userInfo, setUserInfo] = useState<{ email?: string, role?: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<{ email?: string; role?: string } | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const navigate = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsHydrated(true);
@@ -28,7 +29,7 @@ const Navbar = () => {
 
   const navLinks = [
     { label: "Consultation", href: "/doctors" },
-    { label: "Doctor Specialties", href: "/specialties" },
+    { label: "Specialties", href: "/specialties" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ];
@@ -42,20 +43,15 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    logoutUser(navigate)
+    logoutUser(navigate);
     setUserInfo(null);
-    navigate.push('/login')
+    navigate.push("/login");
   };
 
   if (!isHydrated) {
     return (
       <div className="max-w-7xl mx-auto px-6">
-        <Stack
-          py={2}
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Stack py={2} direction="row" justifyContent="space-between" alignItems="center">
           <Skeleton variant="text" width={120} height={30} />
           <Skeleton variant="rectangular" width={40} height={40} />
         </Stack>
@@ -65,12 +61,7 @@ const Navbar = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-6">
-      <Stack
-        py={2}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      <Stack py={2} direction="row" justifyContent="space-between" alignItems="center">
         <Typography
           component={Link}
           href="/"
@@ -87,25 +78,23 @@ const Navbar = () => {
             <IconButton onClick={() => setDrawerOpen(true)}>
               <AlignJustify strokeWidth={3} />
             </IconButton>
-            <Drawer
-              anchor="right"
-              open={drawerOpen}
-              onClose={() => setDrawerOpen(false)}
-            >
-              <Stack
-                p={2}
-                width={250}
-                height="100%"
-                spacing={2}
-                className="bg-blue-50"
-              >
+            <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+              <Stack p={2} width={250} height="100%" spacing={2} className="bg-blue-50">
                 {navLinks.map((link) => (
                   <Typography
                     key={link.label}
                     component={Link}
                     href={link.href}
                     onClick={() => setDrawerOpen(false)}
-                    sx={{ textDecoration: "none" }}
+                    sx={{
+                      textDecoration: "none",
+                      fontWeight: pathname.startsWith(link.href) ? "bold" : "normal",
+                      color: pathname.startsWith(link.href) ? "primary.main" : "inherit",
+                      backgroundColor: pathname.startsWith(link.href) ? "#E5FAE5" : "transparent",
+                      borderRadius: "5px",
+                      px: 1,
+                      py: 0.5,
+                    }}
                   >
                     {link.label}
                   </Typography>
@@ -135,29 +124,28 @@ const Navbar = () => {
                       href="/login"
                       onClick={() => setDrawerOpen(false)}
                       sx={{
-                        textTransform: 'none',
-                        fontWeight: 'bold',
-                        padding: '6px 12px',
+                        textTransform: "none",
+                        fontWeight: "bold",
+                        padding: "6px 12px",
                       }}
                     >
                       <LoginIcon sx={{ fontSize: 18, mr: 1 }} />
                       Login
                     </Button>
-
                     <Button
                       variant="contained"
                       LinkComponent={Link}
                       href="/register"
                       onClick={() => setDrawerOpen(false)}
                       sx={{
-                        color: 'white',
-                        fontWeight: 'bold',
-                        textTransform: 'none',
-                        padding: '6px 12px',
-                        backgroundColor: '#2CB0ED',
-                        '&:hover': {
-                          backgroundColor: '#2CB0ED',
-                          boxShadow: 'none',
+                        color: "white",
+                        fontWeight: "bold",
+                        textTransform: "none",
+                        padding: "6px 12px",
+                        backgroundColor: "#2CB0ED",
+                        "&:hover": {
+                          backgroundColor: "#2CB0ED",
+                          boxShadow: "none",
                         },
                       }}
                     >
@@ -179,9 +167,12 @@ const Navbar = () => {
                 sx={{
                   textDecoration: "none",
                   padding: "8px 10px",
+                  fontWeight: pathname.startsWith(link.href) ? "bold" : "normal",
+                  color: pathname.startsWith(link.href) ? "primary.main" : "inherit",
+                  backgroundColor: pathname.startsWith(link.href) ? "#E5FAE5" : "transparent",
+                  borderRadius: "5px",
                   "&:hover": {
                     backgroundColor: "#E5FAE5",
-                    borderRadius: "5px",
                   },
                 }}
               >
@@ -276,11 +267,11 @@ const Navbar = () => {
                 <Button
                   variant="outlined"
                   sx={{
-                    marginRight: '-15px',
-                    padding: '7px 15px',
-                    color: 'black',
-                    textTransform: 'none',
-                    fontWeight: 'bold',
+                    marginRight: "-15px",
+                    padding: "7px 15px",
+                    color: "black",
+                    textTransform: "none",
+                    fontWeight: "bold",
                   }}
                   LinkComponent={Link}
                   href="/login"
@@ -292,14 +283,14 @@ const Navbar = () => {
                 </Button>
                 <Button
                   sx={{
-                    padding: '7px 15px',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    backgroundColor: '#2CB0ED',
-                    textTransform: 'none',
-                    '&:hover': {
-                      backgroundColor: '#2CB0ED',
-                      boxShadow: 'none',
+                    padding: "7px 15px",
+                    color: "white",
+                    fontWeight: "bold",
+                    backgroundColor: "#2CB0ED",
+                    textTransform: "none",
+                    "&:hover": {
+                      backgroundColor: "#2CB0ED",
+                      boxShadow: "none",
                     },
                   }}
                   LinkComponent={Link}
