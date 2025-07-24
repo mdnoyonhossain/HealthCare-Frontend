@@ -137,7 +137,7 @@ const DoctorCard = ({ doctor }: { doctor: TDoctor }) => {
                                 },
                             }}
                             component={Link}
-                            href={`/checkout/${doctor?.id}`}
+                            href={`/doctors/${doctor?.id}`}
                         >
                             Book Now
                         </Button>

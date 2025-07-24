@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import * as React from 'react';
 import { createTheme } from '@mui/material/styles';
-import { AppProvider, Navigation } from '@toolpad/core/AppProvider';
+import { AppProvider, Navigation, type Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import { usePathname, useRouter } from 'next/navigation';
@@ -10,6 +10,8 @@ import { Box, Typography } from '@mui/material';
 import getNavigationByRole from '@/utils/getNavigationByRole';
 import { TUserRole } from '@/types';
 import { getUserInfo } from '@/services/auth.service';
+import { authKey } from '@/constants/authKey';
+import { deleteCookies } from '@/services/actions/deleteCookies';
 
 const dashboardHCTheme = createTheme({
     colorSchemes: {
@@ -22,7 +24,7 @@ const dashboardHCTheme = createTheme({
                 text: {
                     primary: '#333',
                     secondary: '#555',
-                }
+                },
             },
         },
     },
@@ -64,22 +66,44 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
     }), [pathname, nextRouter]);
 
     const [isHydrated, setIsHydrated] = React.useState(false);
-    const [userRole, setUserRole] = React.useState("");
+    const [userRole, setUserRole] = React.useState<TUserRole | null>(null);
+    const [session, setSession] = React.useState<Session | null>(null);
 
     React.useEffect(() => {
         setIsHydrated(true);
-        const { role } = getUserInfo();
-        setUserRole(role);
+        const user = getUserInfo();
+        if (user?.role) {
+            setUserRole(user.role);
+            setSession({
+                user: {
+                    name: user.role || "Unknown",
+                    email: user.email || "unknown@email.com",
+                    image: user.image || "",
+                },
+            });
+        }
     }, []);
+
+    const authentication = React.useMemo(() => ({
+        signIn: () => { },
+        signOut: () => {
+            localStorage.removeItem(authKey);
+            deleteCookies([authKey, 'refreshToken']);
+            nextRouter.refresh();
+            nextRouter.push('/');
+        },
+    }), []);
 
     if (!userRole) {
         return <SkeletonLoading />;
     }
 
-    const NAVIGATION: Navigation = getNavigationByRole(userRole as TUserRole);
+    const NAVIGATION: Navigation = getNavigationByRole(userRole);
 
     return (
         <AppProvider
+            session={session}
+            authentication={authentication}
             navigation={NAVIGATION}
             router={router}
             theme={dashboardHCTheme}
@@ -99,7 +123,11 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
             }}
         >
             <DashboardLayout>
-                <PageContainer breadcrumbs={[]} title="" sx={{ backgroundColor: "#FCFDFF", minHeight: '100vh' }}>
+                <PageContainer
+                    breadcrumbs={[]}
+                    title=""
+                    sx={{ backgroundColor: "#FCFDFF", minHeight: '100vh' }}
+                >
                     {isHydrated ? children : <SkeletonLoading />}
                 </PageContainer>
             </DashboardLayout>

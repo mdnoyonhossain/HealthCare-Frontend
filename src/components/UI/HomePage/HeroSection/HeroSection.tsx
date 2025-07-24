@@ -33,7 +33,7 @@ const HeroSection = () => {
                                     }}
                                     className="font-medium fade-in-up delay-200"
                                 >
-                                    <Link href="/consultation">Book Consultation</Link>
+                                    <Link href="/doctors">Book Consultation</Link>
                                 </Button>
                                 <Button variant="outlined" className="font-medium fade-in-up delay-200">
                                     <Link href="/about">About Us</Link>
